@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parkour Progress</title>
+    <link rel="stylesheet" href="playersstyles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="#"><img src="https://cdn.discordapp.com/icons/913838786947977256/31e403312e7ac1efd09c901d391a3538.webp" alt="Logo" class="logo-image"></a>
+            <a href="#">Parkour Progress - Players</a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="staff.html">Staff</a></li>
+                <li><a href="maps.html">Maps</a></li>
+                <li><a href="players.html">Players</a></li>
+            </ul>
+        </nav>
+        <div class="discord-container">
+            <div class="discord-button">
+                <a href="https://discord.gg/n6uxKDMsNZ" target="_blank">
+                    <i class="fab fa-discord"></i> Join Discord
+                </a>
+            </div>
+            <div class="discord-widget">
+                <iframe src="https://discord.com/widget?id=913838786947977256&theme=dark" width="350" height="650" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+            </div>
+        </div>
+    </header>
+    <main class="main-background">
+        <section class="description">
+            <h1>Player Profile</h1>
+            <p>To display Player's profile, please enter desired idkn Game Name below.</p>  
+            <input type="text" name="player-name" id="player-name" placeholder="Player Name">
+            <button id="search-button">Search</button>
+            <p id="result-message"></p>
+        </section>
+    </main> 
+    <footer>
+        <h2>Parkour Progress 2025</h2>
+        <h3>Crafted by <a href="https://discord.com/users/1073146518481162240" target="_blank">ImChill1n</a></h3>
+    </footer>
+</body>
+<script>
+    document.getElementById("search-button").addEventListener("click", async () => {
+    const name = document.getElementById("player-name").value;
+
+    if (name.includes(" ")) {
+        document.getElementById("result-message").textContent = "Name cannot contain spaces.";
+        resultMessage.style.color = "red";
+        return;
+    }
+
+    if (name == "") {
+        document.getElementById("result-message").textContent = "Name cannot be empty.";
+        resultMessage.style.color = "red";
+        return;
+    }
+
+    const response = await fetch("/check_player", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name })
+    });
+
+    const result = await response.json();
+    const resultMessage = document.getElementById("result-message");
+
+    if (result.exists) {
+        resultMessage.textContent = `Player ${name} exists.`;
+        resultMessage.style.color = "green";
+    } else {
+        resultMessage.textContent = `Player ${name} does not exist.`;
+        resultMessage.style.color = "red";
+    }
+});
+</script>
+</html>
