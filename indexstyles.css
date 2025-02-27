@@ -221,9 +221,10 @@ nav ul li a:hover::after {
     border-radius: 5px;
     box-shadow: 0px 0px 10px 4px black inset;
     text-align: left;
-    margin-top: 10px;
-    max-width: 10cm;
+    margin-top: 100px;
+    max-width: 20cm;
     border: 3px solid gray;
+    max-height: 7cm;
 }
 
 .description2 h1 {
@@ -239,6 +240,9 @@ nav ul li a:hover::after {
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
     line-height: 1.6;
+    display: inline-block;
+    white-space: nowrap;
+    padding: 5px 10px;
 }
 
 @media (max-width: 768px) {

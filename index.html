@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parkour Progress</title>
+    <title>Parkour Progress - Home</title>
     <link rel="stylesheet" href="indexstyles.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -48,20 +48,8 @@
         </div>
         <div class="container">
             <section class="description2">
-                <h1>Basic Info</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae dolorem obcaecati amet nobis id dolor! Dolorum, cumque sapiente enim laboriosam qui deleniti expedita ipsa, fugiat quibusdam laborum dolorem voluptas suscipit?</p>
-            </section>
-            <section class="description2">
-                <h1>Basic Info</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae dolorem obcaecati amet nobis id dolor! Dolorum, cumque sapiente enim laboriosam qui deleniti expedita ipsa, fugiat quibusdam laborum dolorem voluptas suscipit?</p>
-            </section>  
-            <section class="description2">
-                <h1>Basic Info</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae dolorem obcaecati amet nobis id dolor! Dolorum, cumque sapiente enim laboriosam qui deleniti expedita ipsa, fugiat quibusdam laborum dolorem voluptas suscipit?</p>
-            </section>  
-            <section class="description2">
-                <h1>Basic Info</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae dolorem obcaecati amet nobis id dolor! Dolorum, cumque sapiente enim laboriosam qui deleniti expedita ipsa, fugiat quibusdam laborum dolorem voluptas suscipit?</p>
+                <h1>Latest Victors</h1>
+                <p id="latest_victors"></p>
             </section>
         </div>  
     </main> 
@@ -69,5 +57,19 @@
         <h2>Parkour Progress 2025</h2>
         <h3>Crafted by <a href="https://discord.com/users/1073146518481162240" target="_blank">ImChill1n</a></h3>
     </footer>
+<script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const response = await fetch("/load_latest", { method: "POST" });
+            const data = await response.json();
+        
+            const victorsList = data.victors.map((victor, index) => {
+                const date = new Date(victor.date);
+                const formattedDate = date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+                return `${index + 1}. ${victor.player_name} - ${victor.map_name} - ${formattedDate}`;
+            });
+        
+            document.getElementById("latest_victors").innerHTML = victorsList.join("<br>");
+        });
+</script>   
 </body>
 </html>

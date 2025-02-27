@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parkour Progress</title>
+    <title>Parkour Progress - Players</title>
     <link rel="stylesheet" href="playersstyles.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -13,7 +13,7 @@
     <header>
         <div class="logo">
             <a href="#"><img src="https://cdn.discordapp.com/icons/913838786947977256/31e403312e7ac1efd09c901d391a3538.webp" alt="Logo" class="logo-image"></a>
-            <a href="#">Parkour Progress - Players</a>
+            <a href="#">Parkour Progress</a>
         </div>
         <nav>
             <ul>
@@ -37,10 +37,16 @@
     <main class="main-background">
         <section class="description">
             <h1>Player Profile</h1>
-            <p>To display Player's profile, please enter desired In Game Name below.</p>  
+            <p>To display Player's profile, please enter desired idkn Game Name below.</p>  
             <input type="text" name="player-name" id="player-name" placeholder="Player Name">
             <button id="search-button">Search</button>
             <p id="result-message"></p>
+        </section>
+        <section class="info">
+            <h1>Player Profile</h1>
+            <p id="country"></p>
+            <p id="Discord Profile"></p>
+            <p id=""></p>
         </section>
     </main> 
     <footer>
@@ -50,7 +56,8 @@
 </body>
 <script>
     document.getElementById("search-button").addEventListener("click", async () => {
-    const name = document.getElementById("player-name").value;
+    const name1 = document.getElementById("player-name").value;
+    const name = name1.trim();
 
     if (name.includes(" ")) {
         document.getElementById("result-message").textContent = "Name cannot contain spaces.";
@@ -64,7 +71,7 @@
         return;
     }
 
-    const response = await fetch("/check_player", {
+    const response = await fetch("/load_py", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: name })
