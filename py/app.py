@@ -119,7 +119,7 @@ def load_py():
         return jsonify({"info": None, "error": "No name provided"}), 400
 
     info = load_player_info(name)
-    return jsonify({"info": info})
+    return info
 
 @app.route("/load_latest", methods=["POST"])
 def load_latest():
