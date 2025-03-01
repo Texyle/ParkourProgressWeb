@@ -117,7 +117,7 @@ document.getElementById("search-button").addEventListener("click", async () => {
         if (user_info.ok) {
             resultMessage.textContent = "Success";
             resultMessage.style.color = "green";
-            ign.innerHTML = `<b>IGN:</b> ${us_info.Name}`;
+            ign.innerHTML = `<b>IGN:</b> ${us_info.Nick}`;
             country.innerHTML = `<b>Country:</b> ${us_info.CountryCode || "Unknown"}`;
             avatar.src = `https://vzge.me/full/${name}`;
 
