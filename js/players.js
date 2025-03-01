@@ -89,6 +89,7 @@ document.getElementById("search-button").addEventListener("click", async () => {
         modal.style.height = "6cm";
         resultMessage.textContent = "Name cannot contain spaces.";
         resultMessage.style.color = "red";
+        box.style.display = "none";
         return;
     }
 
@@ -96,6 +97,7 @@ document.getElementById("search-button").addEventListener("click", async () => {
         resultMessage.textContent = "Name cannot be empty.";
         resultMessage.style.color = "red";
         modal.style.height = "6cm";
+        box.style.display = "none";
         return;
     }
 
@@ -115,7 +117,7 @@ document.getElementById("search-button").addEventListener("click", async () => {
         if (user_info.ok) {
             resultMessage.textContent = "Success";
             resultMessage.style.color = "green";
-            ign.innerHTML = `<b>IGN:</b> ${name}`;
+            ign.innerHTML = `<b>IGN:</b> ${us_info.nick}`;
             country.innerHTML = `<b>Country:</b> ${us_info.CountryCode || "Unknown"}`;
             avatar.src = `https://vzge.me/full/${name}`;
 
