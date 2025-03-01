@@ -39,7 +39,7 @@ def load_player_info(name):
     cursor = conn.cursor(dictionary=True)
 
     query = """
-    SELECT Player.DiscordID, Player.CountryCode, SELECT Player.Name AS Nick
+    SELECT Player.DiscordID, Player.CountryCode, Player.Name AS Nick
     FROM Player 
     WHERE Player.Name = %s
     """
