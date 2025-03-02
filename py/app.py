@@ -152,7 +152,7 @@ def fetch_latest_victors():
     
 def fetch_map(name):
     try:
-        cursor = get_cursor()
+        cursor = get_cursor(dictionary=True)
         
         query = """
         SELECT * FROM Map
@@ -165,7 +165,7 @@ def fetch_map(name):
         
         cursor.close()
 
-        return {"map": map}
+        return map
     
     except Error as e:
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")

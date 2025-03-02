@@ -7,7 +7,8 @@ async function loadData(name) {
 
     const map = await response.json();
 
-    console.log(map);
+    console.log(map.ScreenshotURL);
+    document.body.style.backgroundImage = `url(${map.ScreenshotURL})`;
 }
 
 document.addEventListener("DOMContentLoaded", function() {
