@@ -3,7 +3,7 @@ from mysql.connector import Error
 from flask import Flask, request, jsonify, send_from_directory
 import pycountry
 from datetime import datetime
-from database import connection
+from database import get_cursor
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 PROJECT_DIR = os.path.dirname(BASE_DIR)  
@@ -14,7 +14,7 @@ app = Flask(__name__, static_url_path="", static_folder=PROJECT_DIR)
 
 def check_player_exists(name):
     try:
-        cursor = connection.get_cursor()
+        cursor = get_cursor()
         
         query = "SELECT 1 FROM Player WHERE Name = %s LIMIT 1"
         cursor.execute(query, (name,))
@@ -28,7 +28,7 @@ def check_player_exists(name):
 
 def load_player_info(name):
     try:
-        cursor = connection.get_cursor(dictionary=True)
+        cursor = get_cursor(dictionary=True)
 
         query = """
         SELECT Player.DiscordID, Player.CountryCode, Player.Name AS Nick
@@ -55,7 +55,7 @@ def load_player_info(name):
 
 def get_maps_in_prog(name):
     try:
-        cursor = connection.get_cursor(dictionary=True)
+        cursor = get_cursor(dictionary=True)
 
         query = """
         SELECT Map.Name AS MapName, Section.Name AS SectionName
@@ -82,7 +82,7 @@ def get_maps_in_prog(name):
     
 def get_victor_maps(*args):
     try:
-        cursor = connection.get_cursor(dictionary=True)
+        cursor = get_cursor(dictionary=True)
         name = args[0]
         gamemode = args[1]
 
@@ -119,7 +119,7 @@ def get_victor_maps(*args):
         
 def load_latest_victors():
     try:
-        cursor = connection.get_cursor()
+        cursor = get_cursor()
         
         query = """
         SELECT Player.Name AS PlayerName, Map.Name AS MapName, Victor.Date AS Date FROM Victor
