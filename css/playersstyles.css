@@ -191,18 +191,6 @@ nav ul li a:hover::after {
     place-items: center;
 }
 
-.modal {
-    background-color: rgba(44, 42, 42, 0.965);
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px 4px black inset;
-    text-align: left;
-    border: 3px solid gray;
-    box-sizing: border-box;
-    max-width: 20cm;
-    height: 5cm;
-}
-
 .info-container {
     gap: 20px;
     display: none;
@@ -333,42 +321,48 @@ nav ul li a:hover::after {
     transform: scale(1.05);
 }
 
-input[type="text"] {
-    width: 80%;
-    padding: 10px;
+.modal {
+    background-color: rgba(44, 42, 42, 0.965);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 4px black inset;
+    text-align: left;
+    border: 3px solid gray;
+    box-sizing: border-box;
+    max-width: 20cm;
+    height: 5cm;
+}
+
+.input-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.input-container input[type="text"] {
+    width: 100%;
+    padding: 10px 10px 10px 40px; 
     margin: 10px 0;
     box-sizing: border-box;
     border: 2px solid #ccc;
     border-radius: 4px;
     background-color: #f8f8f8;
-    font-size: 16px;
+    font-size: 18px;
     transition: border-color 0.3s ease-in-out;
 }
 
-input[type="text"]:focus {
+.input-container input[type="text"]:focus {
     border-color: #555;
     outline: none;
 }
 
-#search-button {
-    background-color: #4CAF50; 
-    border: none;
-    color: white;
-    padding: 11px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 18px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
-    font-family: 'Montserrat', sans-serif;
-}
-
-#search-button:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
+.input-container .fa-magnifying-glass {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: black;
+    font-size: 20px;
 }
 
 .modal h1 {
@@ -390,6 +384,44 @@ input[type="text"]:focus {
     color: red;
     text-align: center;
     margin-right: 40px;
+}
+
+.input-container {
+    position: relative; 
+    display: inline-block;
+    width: 100%;
+}
+
+.suggestions-box {
+    position: absolute;
+    width: 100%;
+    max-height: 200px; 
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    font-family: 'Montserrat', sans-serif;
+    display: none;
+    top: 100%;
+    left: 0;
+}
+
+.suggestions-box::-webkit-scrollbar {
+    width: 0;
+}
+
+.suggestions-box .suggestion {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    color: black;
+    transition: background 0.2s;
+}
+
+.suggestions-box .suggestion:hover {
+    background: #e0e0e0;
 }
 
 @media (max-width: 768px) {

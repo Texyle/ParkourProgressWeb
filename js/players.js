@@ -74,8 +74,7 @@ function resetGamemodeButtons(name) {
     });
 }
 
-document.getElementById("search-button").addEventListener("click", async () => {
-
+async function performSearch() {
     const modal = document.querySelector(".modal");
     const resultMessage = document.getElementById("result-message");
     const box = document.querySelector(".info-container");
@@ -152,5 +151,72 @@ document.getElementById("search-button").addEventListener("click", async () => {
         resultMessage.style.color = "red";
         modal.style.height = "6cm";
         box.style.display = "none";
+    } 
+}
+
+document.getElementById("player-name").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        performSearch();
+        document.getElementById("suggestions-box").style.display = "none";
+    }
+});
+
+let players = [];
+
+async function fetchPlayers() {
+    try {
+        const response = await fetch("/load_players", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" }
+        });
+
+        let data = await response.json();
+        players = data.map(entry => entry[0]); 
+    } catch (error) {
+        console.error("Error fetching players:", error);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", fetchPlayers);
+
+const inputField = document.getElementById("player-name");
+const suggestionsBox = document.createElement("div");
+suggestionsBox.classList.add("suggestions-box");
+inputField.parentNode.appendChild(suggestionsBox);
+
+inputField.addEventListener("input", function () {
+    const query = this.value.trim();
+    if (query.length === 0) {
+        suggestionsBox.style.display = "none";
+        return;
+    }
+
+    const filteredPlayers = players
+        .filter(name => name.toLowerCase().startsWith(query.toLowerCase()))
+        .slice(0, 5);
+
+    if (filteredPlayers.length === 0) {
+        suggestionsBox.style.display = "none";
+        return;
+    }
+
+    suggestionsBox.innerHTML = filteredPlayers
+        .map(name => `<div class="suggestion">${name}</div>`)
+        .join("");
+
+    suggestionsBox.style.display = "block";
+
+    document.querySelectorAll(".suggestion").forEach(item => {
+        item.addEventListener("click", function () {
+            inputField.value = this.textContent;
+            suggestionsBox.style.display = "none";
+            performSearch(); 
+        });
+    });
+});
+
+document.addEventListener("click", function (e) {
+    if (!inputField.contains(e.target) && !suggestionsBox.contains(e.target)) {
+        suggestionsBox.style.display = "none";
     }
 });

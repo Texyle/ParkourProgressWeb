@@ -13,19 +13,24 @@ IMAGES_DIR = os.path.join(PROJECT_DIR, "images")
 
 app = Flask(__name__, static_url_path="", static_folder=PROJECT_DIR)
 
-def check_player_exists(name):
+def fetch_all_players():
     try:
-        cursor = get_cursor()
-        
-        query = "SELECT 1 FROM Player WHERE Name = %s LIMIT 1"
-        cursor.execute(query, (name,))
-        player = cursor.fetchone()
-        
+        cursor = get_cursor(dictionary=False)
+
+        query = "SELECT Player.Name AS Nick FROM Player"
+
+        cursor.execute(query)
+        nicks = cursor.fetchall()
         cursor.close()
+
+        if nicks is None:
+            return None
         
-        return player
-    except Error:
-        app.logger.error(e.msg)
+        return nicks
+    
+    except Error as e:
+        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
 
 def fetch_player_info(name):
     try:
@@ -171,17 +176,6 @@ def fetch_map(name):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
 
-@app.route("/check_player", methods=["POST"])
-def check_player():
-    data = request.json
-    name = data.get("name") 
-
-    if not name:
-        return jsonify({"exists": False, "error": "No name provided"}), 400
-
-    exists = check_player_exists(name)
-    return jsonify({"exists": exists})
-
 @app.route("/load_victories", methods=["POST"])
 def load_victories():
     data = request.json
@@ -239,6 +233,11 @@ def load_map():
     name = data.get("name")
 
     return fetch_map(name)
+
+@app.route("/load_players", methods=["POST"])
+def load_players():
+
+    return jsonify(fetch_all_players()), 200
 
 @app.route("/")
 def home():

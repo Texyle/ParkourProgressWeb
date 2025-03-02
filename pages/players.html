@@ -38,8 +38,11 @@
         <section class="modal">
             <h1>Player Profile</h1>
             <p>To display Player's profile, please enter desired In Game Name below.</p>
-            <input type="text" name="player-name" id="player-name" placeholder="Player Name">
-            <button id="search-button">Search</button>
+            <div class="input-container">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" name="player-name" id="player-name" autocomplete="off">
+                <div id="suggestions" class="suggestions-box"></div>
+            </div>
             <p id="result-message"></p>
         </section>
         <div class="info-container">
