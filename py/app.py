@@ -3,6 +3,7 @@ import mysql.connector
 from flask import Flask, request, jsonify, send_from_directory
 import pycountry
 from datetime import datetime
+from database import connection
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 PROJECT_DIR = os.path.dirname(BASE_DIR)  
@@ -12,31 +13,18 @@ IMAGES_DIR = os.path.join(PROJECT_DIR, "images")
 app = Flask(__name__, static_url_path="", static_folder=PROJECT_DIR)
 
 def check_player_exists(name):
-    conn = mysql.connector.connect(
-        host="193.124.204.44", 
-        database="progressbot",
-        user="user",
-        password="I2F0HN3Ffe")
-
-    cursor = conn.cursor()
+    cursor = connection.get_cursor()
     
     query = "SELECT 1 FROM Player WHERE Name = %s LIMIT 1"
     cursor.execute(query, (name,))
     player = cursor.fetchone()
     
     cursor.close()
-    conn.close()
     
     return player
 
 def load_player_info(name):
-    conn = mysql.connector.connect(
-        host="193.124.204.44", 
-        database="progressbot",
-        user="user",
-        password="I2F0HN3Ffe")
-
-    cursor = conn.cursor(dictionary=True)
+    cursor = connection.get_cursor(dictionary=True)
 
     query = """
     SELECT Player.DiscordID, Player.CountryCode, Player.Name AS Nick
@@ -47,7 +35,6 @@ def load_player_info(name):
     cursor.execute(query, (name,))
     info = cursor.fetchone()
     cursor.close()
-    conn.close()
 
     if info is None:
         return None
@@ -61,14 +48,7 @@ def load_player_info(name):
     return info
 
 def get_maps_in_prog(name):
-
-    conn = mysql.connector.connect(
-        host="193.124.204.44", 
-        database="progressbot",
-        user="user",
-        password="I2F0HN3Ffe")
-
-    cursor = conn.cursor(dictionary=True)
+    cursor = connection.get_cursor(dictionary=True)
 
     query = """
     SELECT Map.Name AS MapName, Section.Name AS SectionName
@@ -85,7 +65,6 @@ def get_maps_in_prog(name):
     cursor.execute(query, (name,))
     prog = cursor.fetchall()
     cursor.close()
-    conn.close()
 
     if prog is None:
         return None
@@ -93,14 +72,7 @@ def get_maps_in_prog(name):
     return prog
     
 def get_victor_maps(*args):
-
-    conn = mysql.connector.connect(
-        host="193.124.204.44", 
-        database="progressbot",
-        user="user",
-        password="I2F0HN3Ffe")
-
-    cursor = conn.cursor(dictionary=True)
+    cursor = connection.get_cursor(dictionary=True)
     name = args[0]
     gamemode = args[1]
 
@@ -121,7 +93,6 @@ ORDER BY Date ASC
     cursor.execute(query, (name, gamemode))
     victor = cursor.fetchall()
     cursor.close()
-    conn.close()
 
     if victor is None:
         return None
@@ -134,14 +105,7 @@ ORDER BY Date ASC
     return victor
 
 def load_latest_victors():
-
-    conn = mysql.connector.connect(
-        host="193.124.204.44", 
-        database="progressbot",
-        user="user",
-        password="I2F0HN3Ffe")
-
-    cursor = conn.cursor()
+    cursor = connection.get_cursor()
     
     query = """
     SELECT Player.Name AS PlayerName, Map.Name AS MapName, Victor.Date AS Date FROM Victor
@@ -156,7 +120,6 @@ def load_latest_victors():
     victors = cursor.fetchmany(5)
     
     cursor.close()
-    conn.close()
 
     victors_list = [
         {"player_name": row[0], "map_name": row[1], "date": row[2].isoformat()} 
