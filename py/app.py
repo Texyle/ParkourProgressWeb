@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify, send_from_directory
 import pycountry
 from datetime import datetime
 from database import get_cursor
+import traceback
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 PROJECT_DIR = os.path.dirname(BASE_DIR)  
@@ -51,7 +52,8 @@ def load_player_info(name):
 
         return info
     except Error as e:
-        app.logger.log(e.msg)
+        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
 
 def get_maps_in_prog(name):
     try:
@@ -78,7 +80,8 @@ def get_maps_in_prog(name):
         
         return prog
     except Error as e:
-        app.logger.log(e.msg)
+        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
     
 def get_victor_maps(*args):
     try:
@@ -115,7 +118,8 @@ def get_victor_maps(*args):
         return victor
     
     except Error as e:
-        app.logger.log(e.msg)
+        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
         
 def load_latest_victors():
     try:
@@ -143,7 +147,8 @@ def load_latest_victors():
         return victors_list
     
     except Error as e:
-        app.logger.log(e.msg)
+        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
 
 @app.route("/check_player", methods=["POST"])
 def check_player():
@@ -204,7 +209,6 @@ def load_py():
 
 @app.route("/load_latest", methods=["POST"])
 def load_latest():
-
     victors = load_latest_victors()
     return jsonify({"victors": victors})
 
