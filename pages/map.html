@@ -9,31 +9,112 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
-    <script src="/js/map.js"></script>
 </head>
 
 <body>
     <div id="bg-blur">
-        <!-- <div id="main-box">
-            <h1>Pandora's Box</h1>
-            <hr />
-            <div class="list-box">
-                <p>Victors</p>
-                <div class="list">
-                    <ul id="victors-list">
-                        <div class="victor-item">
-                            <p>1. Texyle</p>
-                        </div>
-                    </ul>
-                    <ul id="victors-list">
-                        <div class="victor-item">
-                            <p>2. Texyle</p>
-                        </div>
-                    </ul>
+        <header>
+            <div class="logo">
+                <a href="/pages/index.html"><img src="https://cdn.discordapp.com/icons/913838786947977256/31e403312e7ac1efd09c901d391a3538.webp" alt="Logo" class="logo-image"></a>
+                <a href="/pages/index.html">Parkour Progress</a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/pages/index.html">Home</a></li>
+                    <li><a href="/pages/staff.html">Staff</a></li>
+                    <li><a href="/pages/maps.html">Maps</a></li>
+                    <li><a href="/pages/players.html">Players</a></li>
+                </ul>
+            </nav>
+            <div class="discord-container">
+                <div class="discord-button">
+                    <a href="https://discord.gg/n6uxKDMsNZ" target="_blank">
+                        <i class="fab fa-discord"></i> Join Discord
+                    </a>
+                </div>
+                <div class="discord-widget">
+                    <iframe src="https://discord.com/widget?id=913838786947977256&theme=dark" width="350" height="650" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
                 </div>
             </div>
-        </div> -->
+        </header>
+
+        <div id="main-box">
+            <h1>Pandora's Box</h1>
+            <hr />
+            <div class="list-box-wrapper">
+                <div class="list-box">
+                    <button type="button" class="collapse" id="collapse-victors">Victors</button>
+                    <table class="table victors-table">
+                        <colgroup>
+                            <col span="1" style="width: 15%;">
+                            <col span="1" style="width: 70%;">
+                            <col span="1" style="width: 15%;">
+                         </colgroup>
+
+                        <thead>
+                            <tr>
+                                <th scope="col">Position</th>
+                                <th scope="col">Player</th>
+                                <th scope="col">Sky Fails</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Texyle</td>
+                                <td>123</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Texyle</td>
+                                <td>123</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Texyle</td>
+                                <td>123</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="list-box-wrapper">
+                <div class="list-box">
+                    <button type="button" class="collapse">Sections</button>
+                    <div class="list">
+                        <ul id="sections-list">
+                            <div class="section-item list-item">
+                                <p>Start</p>
+                            </div>
+                        </ul>
+                        <ul id="sections-list">
+                            <div class="section-item list-item">
+                                <p>S1 R1 (l/d to start)</p>
+                            </div>
+                        </ul>
+                        <ul id="sections-list">
+                            <div class="section-item list-item">
+                                <p>S1 R2</p>
+                            </div>
+                        </ul>
+                        <ul id="sections-list">
+                            <div class="section-item list-item">
+                                <p>S1 F1-F2 (l/d to Start)</p>
+                            </div>
+                        </ul>
+                        <ul id="sections-list">
+                            <div class="section-item list-item">
+                                <p>S1 F2</p>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script src="/js/map.js"></script>
 </body>
 
 </html>
