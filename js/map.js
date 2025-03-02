@@ -51,6 +51,3 @@ document.querySelectorAll('.collapse').forEach(function(button) {
         }
     });
 });
-
-
-  tableBox.style.maxHeight = buttonHeight + 'px';
