@@ -157,7 +157,7 @@ async function performSearch() {
 document.getElementById("player-name").addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
         performSearch();
-        document.getElementById("suggestions").style.display = "none";
+        document.getElementById("suggestions-box").style.display = "none";
     }
 });
 
