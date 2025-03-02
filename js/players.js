@@ -74,8 +74,7 @@ function resetGamemodeButtons(name) {
     });
 }
 
-document.getElementById("search-button").addEventListener("click", async () => {
-
+async function performSearch() {
     const modal = document.querySelector(".modal");
     const resultMessage = document.getElementById("result-message");
     const box = document.querySelector(".info-container");
@@ -117,7 +116,7 @@ document.getElementById("search-button").addEventListener("click", async () => {
         if (user_info.ok) {
             resultMessage.textContent = "Success";
             resultMessage.style.color = "green";
-            ign.innerHTML = `<b>IGN:</b> ${us_info.Nick}`;
+            ign.innerHTML = `<b>IGN:</b> ${us_info.Name}`;
             country.innerHTML = `<b>Country:</b> ${us_info.CountryCode || "Unknown"}`;
             avatar.src = `https://vzge.me/full/${name}`;
 
@@ -152,5 +151,12 @@ document.getElementById("search-button").addEventListener("click", async () => {
         resultMessage.style.color = "red";
         modal.style.height = "6cm";
         box.style.display = "none";
+    } 
+}
+
+document.getElementById("search-button").addEventListener("click", performSearch);
+document.getElementById("player-name").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        performSearch();
     }
 });
