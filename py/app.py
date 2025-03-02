@@ -27,7 +27,7 @@ def check_player_exists(name):
     except Error:
         app.logger.error(e.msg)
 
-def load_player_info(name):
+def fetch_player_info(name):
     try:
         cursor = get_cursor(dictionary=True)
 
@@ -55,7 +55,7 @@ def load_player_info(name):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
 
-def get_maps_in_prog(name):
+def fetch_maps_in_prog(name):
     try:
         cursor = get_cursor(dictionary=True)
 
@@ -83,7 +83,7 @@ def get_maps_in_prog(name):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
     
-def get_victor_maps(*args):
+def fetch_victor_maps(*args):
     try:
         cursor = get_cursor(dictionary=True)
         name = args[0]
@@ -121,7 +121,7 @@ def get_victor_maps(*args):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
         
-def load_latest_victors():
+def fetch_latest_victors():
     try:
         cursor = get_cursor()
         
@@ -149,6 +149,27 @@ def load_latest_victors():
     except Error as e:
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
+    
+def fetch_map(name):
+    try:
+        cursor = get_cursor()
+        
+        query = """
+        SELECT * FROM Map
+        JOIN Gamemode
+        ON Gamemode.ID = Map.GamemodeID
+        WHERE Map.Name = %s
+        """
+        cursor.execute(query, [name])
+        map = cursor.fetchone()
+        
+        cursor.close()
+
+        return {"map": map}
+    
+    except Error as e:
+        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
 
 @app.route("/check_player", methods=["POST"])
 def check_player():
@@ -170,7 +191,7 @@ def load_victories():
     if not name and not gamemode:
         return jsonify({"victories": None, "error": "No gamemode provided"}), 400
     
-    victories = get_victor_maps(name, gamemode)
+    victories = fetch_victor_maps(name, gamemode)
 
     if victories is None:
         return jsonify({"victories": None}), 404
@@ -185,7 +206,7 @@ def load_progress():
     if not name:
         return jsonify({"prog": None}), 400
     
-    prog = get_maps_in_prog(name)
+    prog = fetch_maps_in_prog(name)
 
     if prog is None:
         return jsonify({"prog": None}), 404
@@ -200,7 +221,7 @@ def load_py():
     if not name:
         return jsonify({"info": None, "error": "No name provided"}), 400
 
-    info = load_player_info(name)
+    info = fetch_player_info(name)
     
     if info is None:
         return jsonify({"info": None, "error": "Player not found"}), 404
@@ -209,8 +230,15 @@ def load_py():
 
 @app.route("/load_latest", methods=["POST"])
 def load_latest():
-    victors = load_latest_victors()
+    victors = fetch_latest_victors()
     return jsonify({"victors": victors})
+
+@app.route("/load_map", methods=["POST"])
+def load_map():
+    data = request.json
+    name = data.get("name")
+
+    return fetch_map(name)
 
 @app.route("/")
 def home():
