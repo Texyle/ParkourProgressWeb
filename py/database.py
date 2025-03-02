@@ -4,6 +4,8 @@ from mysql.connector import Error
 connection = None
 
 def get_cursor(*args, **kwargs):
+    global connection
+    
     if connection == None:
         connection = mysql.connector.connect(
             host="193.124.204.44", 
