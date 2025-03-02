@@ -41,10 +41,10 @@
         <div id="main-box">
             <h1>Pandora's Box</h1>
             <hr />
-            <div class="list-box-wrapper">
-                <div class="list-box">
+            <div class="table-box-wrapper">
+                <div class="table-box collapsed" id="table-box-victors">
                     <button type="button" class="collapse" id="collapse-victors">Victors</button>
-                    <table class="table victors-table">
+                    <table class="table table-victors">
                         <colgroup>
                             <col span="1" style="width: 15%;">
                             <col span="1" style="width: 70%;">
@@ -60,17 +60,17 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row">1</th>
+                                <td scope="row">1</td>
                                 <td>Texyle</td>
                                 <td>123</td>
                             </tr>
                             <tr>
-                                <th scope="row">2</th>
+                                <td scope="row">2</td>
                                 <td>Texyle</td>
                                 <td>123</td>
                             </tr>
                             <tr>
-                                <th scope="row">3</th>
+                                <td scope="row">3</td>
                                 <td>Texyle</td>
                                 <td>123</td>
                             </tr>
@@ -79,36 +79,25 @@
                 </div>
             </div>
 
-            <div class="list-box-wrapper">
-                <div class="list-box">
-                    <button type="button" class="collapse">Sections</button>
-                    <div class="list">
-                        <ul id="sections-list">
-                            <div class="section-item list-item">
-                                <p>Start</p>
-                            </div>
-                        </ul>
-                        <ul id="sections-list">
-                            <div class="section-item list-item">
-                                <p>S1 R1 (l/d to start)</p>
-                            </div>
-                        </ul>
-                        <ul id="sections-list">
-                            <div class="section-item list-item">
-                                <p>S1 R2</p>
-                            </div>
-                        </ul>
-                        <ul id="sections-list">
-                            <div class="section-item list-item">
-                                <p>S1 F1-F2 (l/d to Start)</p>
-                            </div>
-                        </ul>
-                        <ul id="sections-list">
-                            <div class="section-item list-item">
-                                <p>S1 F2</p>
-                            </div>
-                        </ul>
-                    </div>
+            <div class="table-box-wrapper">
+                <div class="table-box collapsed" id="table-box-sections">
+                    <button type="button" class="collapse" id="collapse-sections">Sections</button>
+                    <table class="table table-sections">
+                        <tbody>
+                            <tr>
+                                <td scope="row">s1</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">s2</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">s3</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">those will also expand on click and show players</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

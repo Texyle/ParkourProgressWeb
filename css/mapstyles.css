@@ -10,13 +10,13 @@ body {
 }
 
 
-.list-box-wrapper {
+.table-box-wrapper {
     position: relative;
     z-index: 0;
     pointer-events: none;
 }
 
-.list-box {
+.table-box {
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 5px;
     box-shadow: 0px 0px 10px 4px black inset;
@@ -30,6 +30,8 @@ body {
     margin-bottom: 1rem;
     pointer-events: none;
     transition: max-height 0.5s ease;
+    max-height: 1rem;
+    overflow: hidden;
 }
 
 .collapse {
@@ -38,7 +40,7 @@ body {
     width: 100%;
     padding: 0.5rem;
     background-color: transparent;
-    border-bottom: 3px solid gray;
+    border-bottom: 2px solid gray;
     color: white;
     font-size: 1.2rem;
     font-family: 'Montserrat', sans-serif;
@@ -54,13 +56,19 @@ body {
 }
 
 .table {
-    width: 100%;
+    width: 90%;
     justify-items: stretch;
     align-items: center;
+    border-collapse: collapse;
+    overflow: hidden;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 16px;
 }
 
-.victor-position {
-    grid-column-start: 1;
+table td, table th {
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .logo {

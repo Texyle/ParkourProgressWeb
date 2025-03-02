@@ -15,13 +15,42 @@ async function loadData(name) {
     document.body.style.backgroundImage = `url(${map.ScreenshotURL})`;
 }
 
-document.getElementById('collapse-victors').addEventListener('click', function() {
-    const listBox = document.getElementById('listBox');
-    const table = document.querySelector('.victors-table');
+function getAbsoluteHeight(el) {
+    el = (typeof el === 'string') ? document.querySelector(el) : el; 
+  
+    var styles = window.getComputedStyle(el);
+    var margin = parseFloat(styles['marginTop']) +
+                 parseFloat(styles['marginBottom']);
+  
+    return Math.ceil(el.offsetHeight + margin);
+  }
 
-    if (listBox.style.maxHeight) {
-      listBox.style.maxHeight = null;
-    } else {
-      listBox.style.maxHeight = table.scrollHeight + 'px';
-    }
-  });
+const collapseButton = document.getElementById('collapse-victors');
+const buttonHeight = getAbsoluteHeight(collapseButton);
+
+const victorsBox = document.getElementById('table-box-victors');
+victorsBox.style.maxHeight = buttonHeight + 'px';
+
+const sectionsBox = document.getElementById('table-box-sections');
+sectionsBox.style.maxHeight = buttonHeight + 'px';
+
+document.querySelectorAll('.collapse').forEach(function(button) {
+    button.addEventListener('click', function() {
+        const tableBox = button.parentElement;
+        const table = button.parentNode.querySelector(".table");
+
+        const buttonHeight = getAbsoluteHeight(button);
+        const tableHeight = getAbsoluteHeight(table);
+
+        if (!tableBox.classList.contains("collapsed")) {
+            tableBox.style.maxHeight = buttonHeight + 'px';
+            tableBox.classList.add("collapsed");
+        } else {
+            tableBox.style.maxHeight = buttonHeight + tableHeight + 'px';
+            tableBox.classList.remove("collapsed");
+        }
+    });
+});
+
+
+  tableBox.style.maxHeight = buttonHeight + 'px';
