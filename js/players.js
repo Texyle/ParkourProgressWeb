@@ -154,13 +154,6 @@ async function performSearch() {
     } 
 }
 
-document.getElementById("player-name").addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        performSearch();
-        document.getElementById("suggestions-box").style.display = "none";
-    }
-});
-
 let players = [];
 
 async function fetchPlayers() {
@@ -218,5 +211,12 @@ inputField.addEventListener("input", function () {
 document.addEventListener("click", function (e) {
     if (!inputField.contains(e.target) && !suggestionsBox.contains(e.target)) {
         suggestionsBox.style.display = "none";
+    }
+});
+
+document.getElementById("player-name").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        performSearch();
+        document.getElementById("suggestions-box").style.display = `none`;
     }
 });
