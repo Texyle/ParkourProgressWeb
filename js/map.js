@@ -22,11 +22,13 @@ async function loadData(name) {
     eyeIcon.addEventListener('mouseover', function() {
         content.style.opacity = '0';
         bgBlur.style.backdropFilter = 'none';
+        bgBlur.style.backgroundColor = 'transparent';
     });
 
     eyeIcon.addEventListener('mouseout', function() {
         content.style.opacity = '1';
-        bgBlur.style.backdropFilter = 'blur(3px)';
+        // bgBlur.style.backdropFilter = 'blur(2px)';
+        bgBlur.style.backgroundColor = 'rgba(0, 0, 0, 0.3)'
     });
 }
 
