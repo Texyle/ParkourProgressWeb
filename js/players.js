@@ -37,18 +37,25 @@ async function loadVictories(name, gamemode) {
     } else {
         maps.innerHTML = victories
             .map((entry, index) => {
+
+                if (entry.Fails == 1) {
+                    const word = `fail`
+                } else {
+                    const word = `fails`
+                }
+
                 if (gamemode === "Segmented") {
                     return `${index + 1}. ${entry.MapName}`;
                 } 
                 if (gamemode === "Onlysprint") {
                     return ["last stretch", "final stretch"].includes(entry.FailsMessage)
-                        ? `${index + 1}. ${entry.MapName} - <i>${entry.Fails} ${entry.FailsMessage} fails</i>`
+                        ? `${index + 1}. ${entry.MapName} - <i>${entry.Fails} ${entry.FailsMessage} ${word}</i>`
                         : `${index + 1}. ${entry.MapName}`;
                 }
 
                 if (gamemode === "Tag") {
                     return ["sky", "final stretch"].includes(entry.FailsMessage)
-                        ? `${index + 1}. ${entry.MapName} - <i>${entry.Fails} ${entry.FailsMessage} fails</i>`
+                        ? `${index + 1}. ${entry.MapName} - <i>${entry.Fails} ${entry.FailsMessage} ${word}</i>`
                         : `${index + 1}. ${entry.MapName}`;
                 }
 
@@ -56,7 +63,7 @@ async function loadVictories(name, gamemode) {
                     return `${index + 1}. ${entry.MapName} - ${entry.SectionName}`;
                 }
 
-                return `${index + 1}. ${entry.MapName} - <i>${entry.Fails} ${entry.FailsMessage} fails</i>`;
+                return `${index + 1}. ${entry.MapName} - <i>${entry.Fails} ${entry.FailsMessage} ${word}</i>`;
             })
             .join("<br>");
     }
