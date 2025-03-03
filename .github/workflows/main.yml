@@ -22,5 +22,5 @@ jobs:
       run: |
         echo "$SSH_PRIVATE_KEY" > private_key
         chmod 600 private_key
-        rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" . $SERVER_USER@$SERVER_HOST:$SERVER_PATH
+        rsync -avz --delete -e "ssh -i private_key -o StrictHostKeyChecking=no" . $SERVER_USER@$SERVER_HOST:$SERVER_PATH
         rm private_key
