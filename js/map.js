@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
+    console.log(`hi`);
     loadData("Pandora's Box");
 });
 
@@ -11,8 +12,8 @@ async function loadData(name) {
 
     const map = await response.json();
 
-    console.log(map.ScreenshotURL);
-    document.body.style.backgroundImage = `url(${map.ScreenshotURL})`;
+    fileName = map.Name.replace(/[\W\s]/g, '').toLowerCase() + '.png';
+    document.body.style.backgroundImage = `url(/images/maps/${fileName})`;
 }
 
 function getAbsoluteHeight(el) {

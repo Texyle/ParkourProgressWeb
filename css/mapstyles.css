@@ -1,5 +1,4 @@
 body {
-    background-image: url(/images/space.webp);
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
@@ -90,6 +89,24 @@ tbody {
 
 .table tr:nth-child(even) {
     background-color: rgba(0, 0, 0, 0.1);
+}
+
+.sub-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 5px 0 0 20px;
+}
+
+.sub-list li {
+    margin: 5px 0;
+    padding: 5px;
+    border-radius: 3px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Optional: Add a hover effect for better UX */
+.sub-list li:hover {
+    background-color: #d0d0d0;
 }
 
 .logo {

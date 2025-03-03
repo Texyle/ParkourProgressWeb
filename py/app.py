@@ -160,7 +160,7 @@ def fetch_map(name):
         cursor = get_cursor(dictionary=True)
         
         query = """
-        SELECT * FROM Map
+        SELECT Map.Name AS Name FROM Map
         JOIN Gamemode
         ON Gamemode.ID = Map.GamemodeID
         WHERE Map.Name = %s
