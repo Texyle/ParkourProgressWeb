@@ -28,7 +28,7 @@ body {
     margin-top: 2rem;
     margin-bottom: 1rem;
     pointer-events: none;
-    transition: max-height 0.5s ease;
+    transition: max-height 0.7s ease;
     max-height: 1rem;
     overflow: hidden;
 }
