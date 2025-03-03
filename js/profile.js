@@ -37,18 +37,21 @@ async function loadVictories(name, gamemode) {
     } else {
         maps.innerHTML = victories
             .map((entry, index) => {
+
+                const word = `${entry.Fails == 1 ? "fail" : "fails"}`;
+
                 if (gamemode === "Segmented") {
                     return `${index + 1}. ${entry.MapName}`;
                 } 
                 if (gamemode === "Onlysprint") {
                     return ["last stretch", "final stretch"].includes(entry.FailsMessage)
-                        ? `${index + 1}. ${entry.MapName} - <i>${entry.Fails} ${entry.FailsMessage} fails</i>`
+                        ? `${index + 1}. ${entry.MapName} - <i>${entry.Fails} ${entry.FailsMessage} ${word}</i>`
                         : `${index + 1}. ${entry.MapName}`;
                 }
 
                 if (gamemode === "Tag") {
                     return ["sky", "final stretch"].includes(entry.FailsMessage)
-                        ? `${index + 1}. ${entry.MapName} - <i>${entry.Fails} ${entry.FailsMessage} fails</i>`
+                        ? `${index + 1}. ${entry.MapName} - <i>${entry.Fails} ${entry.FailsMessage} ${word}</i>`
                         : `${index + 1}. ${entry.MapName}`;
                 }
 
@@ -56,7 +59,7 @@ async function loadVictories(name, gamemode) {
                     return `${index + 1}. ${entry.MapName} - ${entry.SectionName}`;
                 }
 
-                return `${index + 1}. ${entry.MapName} - <i>${entry.Fails} ${entry.FailsMessage} fails</i>`;
+                return `${index + 1}. ${entry.MapName} - <i>${entry.Fails} ${entry.FailsMessage} ${word}</i>`;
             })
             .join("<br>");
     }
@@ -154,13 +157,6 @@ async function performSearch() {
     } 
 }
 
-document.getElementById("player-name").addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        performSearch();
-        document.getElementById("suggestions-box").style.display = "none";
-    }
-});
-
 let players = [];
 
 async function fetchPlayers() {
@@ -218,5 +214,12 @@ inputField.addEventListener("input", function () {
 document.addEventListener("click", function (e) {
     if (!inputField.contains(e.target) && !suggestionsBox.contains(e.target)) {
         suggestionsBox.style.display = "none";
+    }
+});
+
+document.getElementById("player-name").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        performSearch();
+        document.getElementById("suggestions-box").style.display = `none`;
     }
 });

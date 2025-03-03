@@ -29,10 +29,10 @@ const collapseButton = document.getElementById('collapse-victors');
 const buttonHeight = getAbsoluteHeight(collapseButton);
 
 const victorsBox = document.getElementById('table-box-victors');
-victorsBox.style.maxHeight = buttonHeight + 'px';
+victorsBox.style.maxHeight = buttonHeight+5 + 'px';
 
 const sectionsBox = document.getElementById('table-box-sections');
-sectionsBox.style.maxHeight = buttonHeight + 'px';
+sectionsBox.style.maxHeight = buttonHeight+5 + 'px';
 
 document.querySelectorAll('.collapse').forEach(function(button) {
     button.addEventListener('click', function() {
@@ -43,10 +43,10 @@ document.querySelectorAll('.collapse').forEach(function(button) {
         const tableHeight = getAbsoluteHeight(table);
 
         if (!tableBox.classList.contains("collapsed")) {
-            tableBox.style.maxHeight = buttonHeight + 'px';
+            tableBox.style.maxHeight = buttonHeight+5 + 'px';
             tableBox.classList.add("collapsed");
         } else {
-            tableBox.style.maxHeight = buttonHeight + tableHeight + 'px';
+            tableBox.style.maxHeight = buttonHeight+5 + tableHeight + 'px';
             tableBox.classList.remove("collapsed");
         }
     });
