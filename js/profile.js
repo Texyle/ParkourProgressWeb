@@ -38,7 +38,7 @@ async function loadVictories(name, gamemode) {
         maps.innerHTML = victories
             .map((entry, index) => {
 
-                let word;
+                var word;
                 if (entry.Fails == 1) {
                     word = `fail`;
                 } else {
