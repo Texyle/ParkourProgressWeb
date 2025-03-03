@@ -40,9 +40,9 @@ async function loadVictories(name, gamemode) {
 
                 let word;
                 if (entry.Fails == 1) {
-                    word = `fail`
+                    word = `fail`;
                 } else {
-                    word = `fails`
+                    word = `fails`;
                 }
 
                 if (gamemode === "Segmented") {
