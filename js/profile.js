@@ -38,10 +38,11 @@ async function loadVictories(name, gamemode) {
         maps.innerHTML = victories
             .map((entry, index) => {
 
+                let word;
                 if (entry.Fails == 1) {
-                    const word = `fail`
+                    word = `fail`
                 } else {
-                    const word = `fails`
+                    word = `fails`
                 }
 
                 if (gamemode === "Segmented") {
