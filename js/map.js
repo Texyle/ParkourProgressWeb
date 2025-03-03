@@ -14,6 +14,20 @@ async function loadData(name) {
 
     fileName = map.Name.replace(/[\W\s]/g, '').toLowerCase() + '.png';
     document.body.style.backgroundImage = `url(/images/maps/${fileName})`;
+
+    // Show bg icon
+    const eyeIcon = document.querySelector('.eye-icon');
+    const content = document.querySelector('.content');
+    const bgBlur = document.querySelector('#bg-blur');
+    eyeIcon.addEventListener('mouseover', function() {
+        content.style.opacity = '0';
+        bgBlur.style.backdropFilter = 'none';
+    });
+
+    eyeIcon.addEventListener('mouseout', function() {
+        content.style.opacity = '1';
+        bgBlur.style.backdropFilter = 'blur(3px)';
+    });
 }
 
 function getAbsoluteHeight(el) {

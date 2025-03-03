@@ -199,6 +199,10 @@ tbody {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
+.content {
+    transition: opacity 0.2s ease-in-out;
+}
+
 #main-box {
     background-color: rgba(44, 42, 42, 0.965);
     border-radius: 5px;
@@ -324,4 +328,29 @@ nav ul {
     .discord-button {
         margin-top: 10px;
     }
+}
+
+.eye-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 50%;
+    z-index: 1000;
+}
+
+.eye-icon:hover ~ .content {
+    opacity: 0; /* Hide other content when eye icon is hovered */
+}
+
+.eye-icon:hover {
+    color: #ffeb3b; /* Change icon color on hover */
+}
+
+body:hover {
+    filter: none; /* Remove blur when eye icon is hovered */
 }
