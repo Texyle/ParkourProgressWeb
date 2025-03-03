@@ -32,18 +32,18 @@ async function loadVictories(name, gamemode) {
 
     const victories = await response.json();
 
+    let word;
+    if (entry.Fails == 1) {
+        word = `fail`;
+    } else {
+        word = `fails`;
+    }
+
     if (victories.length === 0) {
         maps.innerHTML = gamemode === "Progress" ? "No maps in progress." : "No maps completed in this gamemode.";
     } else {
         maps.innerHTML = victories
             .map((entry, index) => {
-
-                var word;
-                if (entry.Fails == 1) {
-                    word = `fail`;
-                } else {
-                    word = `fails`;
-                }
 
                 if (gamemode === "Segmented") {
                     return `${index + 1}. ${entry.MapName}`;
