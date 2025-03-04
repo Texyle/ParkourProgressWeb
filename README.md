@@ -1,2 +1,2 @@
-- [] Core
-- [] Main page
+- [ ] Core
+- [ ] Main page
