@@ -1,2 +1,3 @@
 - [ ] Core
-- [ ] Main page
+  - [ ] Main page
+    - [ ] Design 
