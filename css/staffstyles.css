@@ -20,52 +20,6 @@ main {
     padding: 20px;
 }
 
-footer {
-    background-color: #1a1a1a;
-    padding: 20px;
-    text-align: center;
-    width: 100%;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
-    position: sticky;
-    bottom: 0;
-    color: #e0e0e0; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center; 
-}
-
-footer h2, footer h3 {
-    margin: 2px 0; 
-    font-family: 'Montserrat', sans-serif;
-}
-
-footer h2 {
-    font-size: 1.4rem;
-    font-weight: bold;
-}
-
-footer h3 {
-    font-size: 1.2rem;
-    font-weight: 500;
-}
-
-footer a {
-    color: rgb(255, 255, 255);
-    text-decoration: none;
-    transition: color 0.4s ease-in-out;
-    text-decoration: underline;
-}
-
-footer a:hover {
-    color: yellow;
-}
-
-footer a:hover ::after{
-    color: yellow;
-    transition: color 0.4s ease-out;
-}
-
 header {
     display: flex;
     justify-content: space-between;
@@ -91,6 +45,12 @@ header {
     color: #e0e0e0;
     font-size: 24px;
     font-weight: bold;
+}
+
+.logo p {
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
 }
 
 nav ul {
