@@ -104,4 +104,4 @@ def images(filename):
     return send_from_directory(IMAGES_DIR, filename)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=20001, debug=True)
+    app.run(host="0.0.0.0", port=20000, debug=True)
