@@ -1,0 +1,147 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;  
+    justify-content: center;  
+    gap: 5px;
+}
+
+.main-background {
+    background-image: url(/images/space.webp);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    padding: 60px 20px;
+    color: #e0e0e0;
+    place-items: center;
+}
+
+.modal {
+    background-color: rgba(44, 42, 42, 0.965);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 4px black inset;
+    text-align: left;
+    border: 3px solid gray;
+    box-sizing: border-box;
+    width: 15cm;
+    height: 6cm;
+}
+
+.input-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.input-container input[type="text"] {
+    width: 100%;
+    padding: 10px 10px 10px 40px; 
+    margin: 10px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    font-size: 18px;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.input-container input[type="text"]:focus {
+    border-color: #555;
+    outline: none;
+}
+
+.input-container .fa-magnifying-glass {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-40%);
+    color: black;
+    font-size: 20px;
+}
+
+.modal h1 {
+    font-size: 2.0rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.modal p {
+    font-size: 1.2rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.filters {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    margin-left: 60px;
+}
+
+.filters label {
+    font-size: 1.1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filters input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    margin-right: 20px;
+}
+
+.filters input[type="checkbox"]:checked {
+    background-color: #555555;
+    border-color: black;
+    position: relative;
+}
+
+.filters input[type="checkbox"]:checked::after {
+    content: "✔";
+    font-size: 13px;
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.filters select {
+    width: 40%;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    font-family: 'Montserrat', sans-serif;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.filters select:hover {
+    border-color: black;
+}
+
+.filters select:focus {
+    outline: none;
+    border-color: black;
+}
+
