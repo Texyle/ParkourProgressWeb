@@ -203,10 +203,12 @@ tbody {
 }
 
 .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
-    margin-right: auto;
-    margin-left: auto;
-    padding: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
     cursor: pointer;
     background-color: transparent;
     pointer-events: auto;
@@ -221,14 +223,36 @@ tbody {
     transition: background-color 0s;
 }
 
+.toggle-icon {
+    font-size: 0.8rem;
+    margin-left: 2rem;
+    margin-right: 8px;
+    transition: transform 0.3s;
+}
+
+.section-name {
+    flex: 1;
+    text-align: left;
+}
+
+.section-reached {
+    margin-left: auto;
+    margin-right: 1rem;
+}
+
 .list-section-players {
     list-style-type: none;
     padding-left: 20px;
     margin-bottom: 1rem;
+    justify-content: left;
 }
 
+
 .list-section-players li {
+    display: block;
     padding: 5px 0;
+    text-align: left;
+    margin-left: 3rem;
 }
 
 .list-sections {
