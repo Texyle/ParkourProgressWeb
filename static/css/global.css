@@ -134,7 +134,7 @@ nav ul li a:hover::after {
 }
 
 .main-background {
-    background-image: url(/images/space.webp);
+    background-image: url(/static/images/space.webp);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

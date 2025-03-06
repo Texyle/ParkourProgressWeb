@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parkour Progress - Profile</title>
-    <link rel="stylesheet" href="/css/profilestyles.css">
-    <link rel="stylesheet" href="/css/global.css">
+    <title>Parkour Progress - Maps</title>
+    <link rel="stylesheet" href="static/css/mapsstyles.css">
+    <link rel="stylesheet" href="static/css/global.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
@@ -21,10 +21,10 @@
         </div>
         <nav>
             <ul>
-                <li><a href="/pages/index.html">Home</a></li>
-                <li><a href="/pages/staff.html">Staff</a></li>
-                <li><a href="/pages/maps.html">Maps</a></li>
-                <li><a href="/pages/profile.html">Profile</a></li>
+                <li><a href="/home">Home</a></li>
+                <li><a href="/staff">Staff</a></li>
+                <li><a href="/maps">Maps</a></li>
+                <li><a href="/profile">Profile</a></li>
             </ul>
         </nav>
         <div class="discord-container">
@@ -39,37 +39,30 @@
         </div>
     </header>
     <main class="main-background">
+        <div class="discord-widget">
+            <iframe src="https://discord.com/widget?id=913838786947977256&theme=dark" width="350" height="650" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+        </div>
         <section class="modal">
-            <h1>Player Profile</h1>
-            <p>To display Player's profile, please enter desired In Game Name below.</p>
+            <h1>Maps</h1>
+            <p>You can search for a map or use filters below.</p> 
             <div class="input-container">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" name="player-name" id="player-name" autocomplete="off">
-                <div id="suggestions" class="suggestions-box"></div>
+                <input type="text" name="map-name" id="map-name">
             </div>
-            <p id="result-message"></p>
+            <div class="filters">
+                <label id="extra-text">Extra <input type="checkbox" name="extra" id="extra"></label>
+                <label id="gamemode-text">Gamemode</label>
+                <select name="gamemode" id="gamemode">
+                    <option value="Any">Any</option>
+                    <option value="Rankup">Rankup</option>
+                    <option value="Segmented">Segmented</option>
+                    <option value="Onlysprint">Onlysprint</option>
+                    <option value="Tag">Tag</option>
+                </select>
+            </div>
         </section>
-        <div class="info-container">
-            <section class="player-info">
-                <h1>Player Profile</h1>
-                <p id="ign"><b>IGN:</b></p>
-                <p id="country"><b>Country:</b></p>
-                <p id="discordid"><b>Discord:</b> <a href="" id="discord-link">Click Here</a></p>
-                <img src="" class="avatar" id="avatar">
-            </section>
-            <section class="maps">
-                <h1 id="map-title">Rankup</h1>
-                <p id="map-list"></p>
-            </section>
-            <section class="buttons">
-                <button id="Rankup">Rankup</button>
-                <button id="Segmented">Segmented</button>
-                <button id="Onlysprint">Onlysprint</button>
-                <button id="Tag">Tag</button>
-                <button id="Progress">Maps in Progress</button>
-            </section>
-        </div>
-    </main>
-    <script src="/js/profile.js"></script>
+        
+        <p id="result-message"></p>
+    </main> 
 </body>
 </html>

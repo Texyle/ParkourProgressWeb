@@ -1,19 +1,11 @@
 document.addEventListener("DOMContentLoaded", function() {
-    console.log(`hi`);
-    loadData("Pandora's Box");
+    loadData(1);
 });
 
-async function loadData(name) {
-    response = await fetch("/load_map", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name })
-    });
-
-    const map = await response.json();
-
-    fileName = map.Name.replace(/[\W\s]/g, '').toLowerCase() + '.png';
-    document.body.style.backgroundImage = `url(/images/maps/${fileName})`;
+async function loadData() {
+    fileName = mapName.replace(/[\W\s]/g, '').toLowerCase() + '.png';
+    console.log(fileName);
+    document.body.style.backgroundImage = `url(/static/images/maps/${fileName})`;
 
     // Show bg icon
     const eyeIcon = document.querySelector('.eye-icon');
