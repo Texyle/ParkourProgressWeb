@@ -15,7 +15,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    background-image: url(/images/space.webp);
+    background-image: url(/static/images/space.webp);
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -312,8 +312,4 @@ nav ul li a:hover::after {
 .box-text p {
     font-size: 1rem;
     font-weight: 400;
-}
-
-.box:hover {
-    transform: rotateY(360deg);
 }
