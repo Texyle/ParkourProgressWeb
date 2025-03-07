@@ -39,7 +39,7 @@
         </header>
 
         <div id="main-box" class="content">
-            <h1>{{ data["MapName"] }}</h1>
+            <h1>{{ map.MapName }}</h1>
             <h3>Rankup - Main</h3>
             <hr />
 
@@ -69,24 +69,14 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for victor in victors %}
                             <tr>
-                                <td scope="row">1</td>
-                                <td>Texyle</td>
-                                <td>Feb 03, 2025</td>
-                                <td>123</td>
+                                <td scope="row">{{ loop.index0 + 1 }}</td>
+                                <td>{{ victor.Name }}</td>
+                                <td>{{ victor.Date }}</td>
+                                <td>{{ victor.Fails }}</td>
                             </tr>
-                            <tr>
-                                <td scope="row">2</td>
-                                <td>Texyle</td>
-                                <td>Feb 03, 2025</td>
-                                <td>123</td>
-                            </tr>
-                            <tr>
-                                <td scope="row">3</td>
-                                <td>Texyle</td>
-                                <td>Feb 03, 2025</td>
-                                <td>123</td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -117,7 +107,7 @@
     </div>
 
     <script type="text/javascript">
-        const mapName = "{{ data.MapName }}";
+        //const mapName = "{{ map.MapName }}";
     </script>
     <script src="/static/js/map.js"></script>
 </body>

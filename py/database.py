@@ -172,10 +172,32 @@ def fetch_map(app, id):
         """
         cursor.execute(query, [id])
         map = cursor.fetchone()
-        
-        cursor.close()
 
         return map
+    
+    except Error as e:
+        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
+    
+def fetch_victors(app, map_id):
+    try:
+        cursor = get_cursor(dictionary=True)
+        
+        query = """
+        SELECT Player.Name AS Name, Victor.Date AS Date, Victor.Fails AS Fails
+        FROM Victor
+        JOIN Player ON Player.ID = Victor.PlayerID
+        WHERE Victor.MapID = %s
+        ORDER BY Date DESC
+        """
+        cursor.execute(query, [map_id])
+        victors = cursor.fetchall()
+        
+        print(victors)
+        
+        cursor.close()
+        
+        return victors
     
     except Error as e:
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")

@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 async function loadData() {
+    mapName = "Pandora's Box"
+
     fileName = mapName.replace(/[\W\s]/g, '').toLowerCase() + '.png';
     console.log(fileName);
     document.body.style.backgroundImage = `url(/static/images/maps/${fileName})`;

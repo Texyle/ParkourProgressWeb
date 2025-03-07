@@ -30,9 +30,10 @@ def profile():
 
 @app.route('/map/<int:map_id>')
 def map(map_id):
-    map_data = database.fetch_map(app, map_id)
-    if map_data != None:
-        return render_template('map.html', data = map_data)
+    map = database.fetch_map(app, map_id)
+    victors = database.fetch_victors(app, map_id)
+    if map != None:
+        return render_template('map.html', map = map, victors = victors)
     else:
         # return error page
         pass
