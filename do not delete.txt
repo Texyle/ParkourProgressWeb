@@ -1,0 +1,83 @@
+
+.filters {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    margin-left: 60px;
+}
+
+.filters label {
+    font-size: 1.1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filters input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    margin-right: 20px;
+}
+
+.filters input[type="checkbox"]:checked {
+    background-color: #555555;
+    border-color: black;
+    position: relative;
+}
+
+.filters input[type="checkbox"]:checked::after {
+    content: "✔";
+    font-size: 13px;
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.filters select {
+    width: 40%;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    font-family: 'Montserrat', sans-serif;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.filters select:hover {
+    border-color: black;
+}
+
+.filters select:focus {
+    outline: none;
+    border-color: black;
+}
+
+--------------------------
+
+<div class="filters">
+                <label id="extra-text">Extra <input type="checkbox" name="extra" id="extra"></label>
+                <label id="gamemode-text">Gamemode</label>
+                <select name="gamemode" id="gamemode">
+                    <option value="Any">Any</option>
+                    <option value="Rankup">Rankup</option>
+                    <option value="Segmented">Segmented</option>
+                    <option value="Onlysprint">Onlysprint</option>
+                    <option value="Tag">Tag</option>
+                </select>
+            </div>
