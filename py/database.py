@@ -188,7 +188,7 @@ def fetch_victors(app, map_id):
         FROM Victor
         JOIN Player ON Player.ID = Victor.PlayerID
         WHERE Victor.MapID = %s
-        ORDER BY Date DESC
+        ORDER BY Date ASC
         """
         cursor.execute(query, [map_id])
         victors = cursor.fetchall()
