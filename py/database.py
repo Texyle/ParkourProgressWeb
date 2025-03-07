@@ -193,8 +193,6 @@ def fetch_victors(app, map_id):
         cursor.execute(query, [map_id])
         victors = cursor.fetchall()
         
-        print(victors)
-        
         cursor.close()
         
         return victors

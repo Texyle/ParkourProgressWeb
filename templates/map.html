@@ -107,8 +107,9 @@
     </div>
 
     <script type="text/javascript">
-        //const mapName = "{{ map.MapName }}";
+        const mapName = "{{ map.MapName|safe }}";
     </script>
+    <script src="/static/js/utils.js"></script>
     <script src="/static/js/map.js"></script>
 </body>
 
