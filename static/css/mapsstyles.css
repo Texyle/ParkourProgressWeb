@@ -5,7 +5,6 @@
 }
 
 html, body {
-    height: 100%;
     font-family: Arial, sans-serif;
     background-color: #2c2c2c;
     color: #e0e0e0;
@@ -27,7 +26,7 @@ body::-webkit-scrollbar {
 
 main {
     flex: 1;
-    padding: 20px;
+    /* padding: 20px; */
 }
 
 header {
@@ -172,8 +171,9 @@ nav ul li a:hover::after {
 
 .input-container {
     position: relative;
-    display: inline-block;
-    width: 100%;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .input-container input[type="text"] {
@@ -224,29 +224,23 @@ nav ul li a:hover::after {
     justify-content: center;
     padding: 20px;
     gap: 20px;
-    margin-top: 250px;
 }
 
 .modal {
-    background-color: rgba(44, 42, 42, 0.965);
+    background-color: rgba(0, 0, 0, 0.3);
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px 4px black inset;
     text-align: left;
-    border: 3px solid gray;
+    border-bottom: 3px solid gray;
     box-sizing: border-box;
-    width: 15cm;
+    width: 100%;
     height: 5cm;
-    position: absolute;
-    top: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
+    margin: 0;
+    z-index: 0;
 }
 
 .second-background {
     background-color: rgba(49, 48, 48, 0.87);
-    padding: 20px;
+    /* padding: 20px; */
     border-radius: 5px;
     box-shadow: 0px 0px 10px 4px black inset;
     border: 3px solid gray;
@@ -259,7 +253,7 @@ nav ul li a:hover::after {
     flex-direction: column;
     position: relative;
     text-align: center;
-    margin: 0 auto;
+    margin: 2rem auto 0 auto;
 }
 
 .box {
