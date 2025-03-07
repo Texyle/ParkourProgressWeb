@@ -1,0 +1,251 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;  
+    justify-content: center;  
+    gap: 5px;
+}
+
+.main-background {
+    background-image: url(/images/space.webp);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    padding: 60px 20px;
+    color: #e0e0e0;
+    place-items: center;
+}
+
+.info-container {
+    gap: 20px;
+    display: none;
+    margin-top: 30px;
+}
+
+.avatar {
+    width: 158px; 
+    height: 256px;
+    margin-top: 60px;
+    margin-left: 90px;
+}
+
+#discord-link {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    transition: color 0.4s ease-in-out;
+    text-decoration: underline;
+}
+
+#non-member {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+}
+
+#discord-link:hover {
+    color: yellow;
+}
+
+#discord-link:hover::after {
+    color: yellow;
+    transition: color 0.4s ease-out;
+}
+
+.player-info {
+    background-color: rgba(44, 42, 42, 0.965);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 4px black inset;
+    text-align: left;
+    border: 3px solid gray;
+    height: 13cm;
+    width: 10cm;
+    justify-content: space-around;
+    display: inline-block;
+    padding: 10px;
+}
+
+.player-info h1 {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.0rem;
+    font-weight: bold;
+}   
+
+.player-info p {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.maps {
+    background-color: rgba(44, 42, 42, 0.965);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 4px black inset;
+    text-align: left;
+    border: 3px solid gray;
+    height: 13cm;
+    width: 10cm;
+    justify-content: space-around;
+    display: inline-block;
+    padding: 10px;
+    align-items: flex-start;
+}
+
+.maps h1 {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.0rem;
+    font-weight: bold;
+}   
+
+.maps p {
+    text-align: left;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16.5px;
+    margin-top: 8px;
+    margin-left: 10px;
+}
+
+.buttons {
+    margin-top: 120px;
+    background-color: rgba(44, 42, 42, 0.965);
+    height: 12cm;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 4px black inset;
+    text-align: left;
+    border: 3px solid gray;
+    height: 6.8cm;
+    width: 5.4cm;
+    justify-content: space-around;
+    display: inline-block;
+    align-items: center;
+}
+
+.buttons button {
+    background-color: #4CAF50; 
+    border: none;
+    color: white;
+    padding: 11px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    font-family: 'Montserrat', sans-serif;
+    width: 5cm;
+    margin-left: 5px;
+}
+
+.buttons button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+.modal {
+    background-color: rgba(44, 42, 42, 0.965);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 4px black inset;
+    text-align: left;
+    border: 3px solid gray;
+    box-sizing: border-box;
+    max-width: 20cm;
+    height: 5cm;
+}
+
+.input-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.input-container input[type="text"] {
+    width: 100%;
+    padding: 10px 10px 10px 40px; 
+    margin: 10px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    font-size: 18px;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.input-container input[type="text"]:focus {
+    border-color: #555;
+    outline: none;
+}
+
+.input-container .fa-magnifying-glass {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: black;
+    font-size: 20px;
+}
+
+.modal h1 {
+    font-size: 2.0rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.modal p {
+    font-size: 1.2rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+#result-message {
+    color: red;
+    text-align: center;
+    margin-right: 40px;
+}
+
+.input-container {
+    position: relative; 
+    display: inline-block;
+    width: 100%;
+}
+
+.suggestions-box {
+    position: absolute;
+    width: 100%;
+    max-height: 200px; 
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    font-family: 'Montserrat', sans-serif;
+    display: none;
+    top: 100%;
+    left: 0;
+}
+
+.suggestions-box::-webkit-scrollbar {
+    width: 0;
+}
+
+.suggestions-box .suggestion {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    color: black;
+    transition: background 0.2s;
+}
+
+.suggestions-box .suggestion:hover {
+    background: #e0e0e0;
+}
+
