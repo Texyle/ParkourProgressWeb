@@ -64,7 +64,7 @@
                             <img id="map-image-{{ map['MapID'] }}" src="/static/images/space.webp" alt="Image">
                         </div>
                         <div class="box-text">
-                            <h2>{{ map['Name'] }}</h2>
+                            <h2>{{ map['Name'] if map['Name'] != "Realm of Champions CP Mode" else ROC CP Mode }}</h2>
                             <p>{{ map['Gamemode'] }} | {{ "Extra" if map['Extra'] else "Main" }}</p>
                             <p>Total victories: {{ map['TotalVictors'] }}</p>
                         </div>
