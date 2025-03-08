@@ -22,7 +22,8 @@ def staff():
 
 @app.route("/maps")
 def maps():
-    return render_template("maps.html")
+    maps = database.fetch_all_maps(app)
+    return render_template("maps.html", maps = maps)
 
 @app.route("/profile")
 def profile():

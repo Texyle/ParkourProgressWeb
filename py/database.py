@@ -184,7 +184,7 @@ def fetch_all_maps(app):
         cursor = get_cursor(dictionary=True)
         
         query = """
-        SELECT Gamemode.Name AS Gamemode, Extra, Map.Name AS Name, COUNT(*) AS TotalVictors
+        SELECT Gamemode.Name AS Gamemode, Extra, Map.Name AS Name, COUNT(*) AS TotalVictors, Map.ID as MapID
         FROM Victor
         JOIN Map ON Map.ID = Victor.MapID
         JOIN Gamemode ON Gamemode.ID = Map.GamemodeID
@@ -192,6 +192,13 @@ def fetch_all_maps(app):
         """
         cursor.execute(query)
         maps = cursor.fetchall()
+
+        for map in maps:
+            extra_status = map.get("Extra")
+            if extra_status == 1:
+                map["Extra"] = True
+            else:
+                map["Extra"] = False
 
         return maps
     
