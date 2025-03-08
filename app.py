@@ -12,9 +12,9 @@ IMAGES_DIR = os.path.join(PROJECT_DIR, "images")
 
 app = Flask(__name__)
 
-@app.route("/home")
+@app.route("/home", "/")
 def home():
-    return render_template("index.html")
+    return render_template("index.html")\
 
 @app.route("/staff")
 def staff():
@@ -99,6 +99,10 @@ def load_map():
 @app.route("/load_players", methods=["POST"])
 def load_players():
     return jsonify(database.fetch_all_players(app)), 200
+
+@app.route("/load_all_maps", methods=["POST"])
+def load_maps():
+    return jsonify(database.fetch_all_maps(app)), 200
 
 @app.route("/images/<path:filename>")
 def images(filename):
