@@ -61,7 +61,7 @@
                 <div id="{{ map['MapID'] }}" class="box" onclick="redirectToMap('{{ map.MapID }}')">
                     <div class="box-content">
                         <div class="box-img">
-                            <img src="{{ loadMapImage(map['Name']) }}" alt="Image">
+                            <img id="map-image-{{ map['MapID'] }}" src="/static/images/maps/default.png" alt="Image">
                         </div>
                         <div class="box-text">
                             <h2>{{ map['Name'] }}</h2>
@@ -74,6 +74,11 @@
             </section>
             <p id="result-message"></p>
         </section>
-    </main> 
+    </main>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        window.Utils.loadAllMapImages();
+    });
+</script>
 </body>
 </html>
