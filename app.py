@@ -63,7 +63,7 @@ def load_victories():
     gamemode = data.get("gamemode")
 
     if not name and not gamemode:
-        return jsonify({"victories": None, "error": "No gamemode provided"}), 400
+        return jsonify({"victories": None, "error": "No gamemode provieded"}), 400
     
     victories = database.fetch_victor_maps(app, name, gamemode)
 
