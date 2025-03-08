@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
-    <script src="/static/js/utils.js"></script>
     <script>
         function redirectToMap(mapID) {
             window.location.href = 'http://193.124.204.44/map/' + mapID;
@@ -61,7 +60,7 @@
                 <div id="{{ map['MapID'] }}" class="box" onclick="redirectToMap('{{ map.MapID }}')">
                     <div class="box-content">
                         <div class="box-img">
-                            <img id="map-image-{{ map['MapID'] }}" src="/static/images/space.webp" alt="Image">
+                            <img src="{{ map['ImagePath'] }}" alt="Image">
                         </div>
                         <div class="box-text">
                             <h2>{{ "ROC CP Mode" if map['Name'] == "Realm of Champions CP Mode" else map['Name'] }}</h2>
@@ -75,10 +74,5 @@
             <p id="result-message"></p>
         </section>
     </main>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        window.Utils.loadAllMapImages();
-    });
-</script>
 </body>
 </html>

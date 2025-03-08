@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify, send_from_directory, render_template
 from datetime import datetime
 import py.database as database
 import traceback
+import re
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 PROJECT_DIR = os.path.dirname(BASE_DIR)  
@@ -11,6 +12,18 @@ PAGES_DIR = os.path.join(PROJECT_DIR, "pages")
 IMAGES_DIR = os.path.join(PROJECT_DIR, "images") 
 
 app = Flask(__name__)
+
+def generate_image_path(map_name):
+    base_filename = re.sub(r'[\W\s]', '', map_name).lower()
+    png_path = f"/static/images/maps/{base_filename}.png"
+    jpg_path = f"/static/images/maps/{base_filename}.jpg"
+    
+    if os.path.exists(os.path.join(app.static_folder, f'images/maps/{base_filename}.png')):
+        return png_path
+    elif os.path.exists(os.path.join(app.static_folder, f'images/maps/{base_filename}.jpg')):
+        return jpg_path
+    else:
+        return "/static/images/space.webp"  
 
 @app.route("/")
 def home():
@@ -23,7 +36,11 @@ def staff():
 @app.route("/maps")
 def maps():
     maps = database.fetch_all_maps(app)
-    return render_template("maps.html", maps = maps)
+    
+    for map in maps:
+        map["ImagePath"] = generate_image_path(map["Name"])  
+
+    return render_template("maps.html", maps=maps)
 
 @app.route("/profile")
 def profile():
