@@ -12,8 +12,12 @@ IMAGES_DIR = os.path.join(PROJECT_DIR, "images")
 
 app = Flask(__name__)
 
-@app.route(("/home", "/"))
+@app.route("/home")
 def home():
+    return render_template("index.html")
+
+@app.route("/")
+def home2():
     return render_template("index.html")
 
 @app.route("/staff")
