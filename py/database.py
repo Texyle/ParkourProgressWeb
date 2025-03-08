@@ -179,6 +179,26 @@ def fetch_map(app, id):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
     
+def fetch_all_maps(app):
+    try:
+        cursor = get_cursor(dictionary=True)
+        
+        query = """
+        SELECT Gamemode.Name AS Gamemode, Extra, Map.Name AS Name, COUNT(*) AS TotalVictors
+        FROM Victor
+        JOIN Map ON Map.ID = Victor.MapID
+        JOIN Gamemode ON Gamemode.ID = Map.GamemodeID
+        GROUP BY Map.ID
+        """
+        cursor.execute(query)
+        maps = cursor.fetchall()
+
+        return maps
+    
+    except Error as e:
+        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
+    
 def fetch_victors(app, map_id):
     try:
         cursor = get_cursor(dictionary=True)
