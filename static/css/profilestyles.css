@@ -5,17 +5,6 @@
     gap: 5px;
 }
 
-.main-background {
-    background-image: url(/images/space.webp);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 100vh;
-    padding: 60px 20px;
-    color: #e0e0e0;
-    place-items: center;
-}
-
 .info-container {
     gap: 20px;
     display: none;
@@ -155,7 +144,7 @@
     border: 3px solid gray;
     box-sizing: border-box;
     max-width: 20cm;
-    height: 5cm;
+    height: 6cm;
 }
 
 .input-container {
