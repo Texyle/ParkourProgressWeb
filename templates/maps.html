@@ -1,78 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parkour Progress - Maps</title>
-    <link rel="stylesheet" href="/static/css/mapsstyles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
-    <script>
-        function redirectToMap(mapID) {
-            window.location.href = 'http://193.124.204.44/map/' + mapID;
-        }
-    </script>
-</head>
-<body>
-    <header>
-        <div class="logo">
-            <a href="/"><img src="https://cdn.discordapp.com/icons/913838786947977256/31e403312e7ac1efd09c901d391a3538.webp" alt="Logo" class="logo-image"></a>
-            <div class="logo-text">
-                <a href="/">Parkour Progress</a>
-                <p>Crafted by ImChill1n and Texyle</p>
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="static/css/mapsstyles.css">
+{% endblock %}
+
+{% block content %}
+    <div class="main-container">
+        <div class="search-container">
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Enter map name">
             </div>
         </div>
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/staff">Staff</a></li>
-                <li><a href="/maps">Maps</a></li>
-                <li><a href="/profile">Profile</a></li>
-            </ul>
-        </nav>
-        <div class="discord-container">
-            <div class="discord-button">
-                <a href="https://discord.gg/n6uxKDMsNZ" target="_blank">
-                    <i class="fab fa-discord"></i> Join Discord
-                </a>
-            </div>
-            <div class="discord-widget">
-                <iframe src="https://discord.com/widget?id=913838786947977256&theme=dark" width="350" height="650" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-            </div>
-        </div>
-    </header>
-    <main class="main-background">
-        <section class="second-background">
-            <div class="discord-widget">
-                <iframe src="https://discord.com/widget?id=913838786947977256&theme=dark" width="350" height="650" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-            </div>
-            <section class="modal">
-                <h1>Maps</h1>
-                <p>You can search for a map or look at list below.</p> 
-                <div class="input-container">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" name="map-name" id="map-name">
-                </div>
-            </section>
-            <section class="maps">
-                {% for map in maps %}
-                <div id="{{ map['MapID'] }}" class="box" onclick="redirectToMap('{{ map.MapID }}')">
-                    <div class="box-content">
-                        <div class="box-img">
-                            <img src="{{ map['ImagePath'] }}" alt="Image">
-                        </div>
-                        <div class="box-text">
-                            <h2>{{ "ROC CP Mode" if map['Name'] == "Realm of Champions CP Mode" else map['Name'] }}</h2>
-                            <p>{{ map['Gamemode'] }} | {{ "Extra" if map['Extra'] else "Main" }}</p>
-                            <p>Total victories: {{ map['TotalVictors'] }}</p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </section>
-            <p id="result-message"></p>
-        </section>
-    </main>
-</body>
-</html>
+    </div>
+{% endblock %}
