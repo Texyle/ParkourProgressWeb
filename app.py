@@ -36,11 +36,8 @@ def staff():
 @app.route("/maps")
 def maps():
     maps = database.fetch_all_maps(app)
-    
-    for map in maps:
-        map["ImagePath"] = generate_image_path(map["Name"])  
 
-    return render_template("maps.html", maps=maps)
+    return render_template("maps.html")
 
 @app.route("/profile")
 def profile():
