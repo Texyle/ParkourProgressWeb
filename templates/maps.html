@@ -13,5 +13,40 @@
                 <input type="text" placeholder="Enter map name">
             </div>
         </div>
+        <div class="tabs-container">
+            {% for gamemode in maps %}
+                <button class="tab-button" data-tab="{{ gamemode }}">{{ gamemode }}</button>
+            {% endfor %}
+        </div>
+
+        <div class="tab-content-container">
+            {% for gamemode, lists in maps.items() %}
+            <div class="tab-content" id="{{ gamemode }}">
+                {% if lists['Main'] | length > 0 %}
+                <div class="list-container">
+                    <p>MAIN LIST</p>
+                    {% for map in lists['Main'] %}
+                        <div class="map-container">
+                            {{ map['Name'] }}
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if lists['Extra'] | length > 0 %}
+                <div class="list-container">
+                    <p>EXTRA LIST</p>
+                    {% for map in lists['Extra'] %}
+                        <div class="map-container">
+                            {{ map['Name'] }}
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
     </div>
+
+    <script src="static/js/maps.js"></script>
 {% endblock %}

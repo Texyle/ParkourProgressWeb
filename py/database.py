@@ -180,6 +180,8 @@ def fetch_map(app, id):
         return jsonify({"error": e.msg}), 500
     
 def fetch_all_maps(app):
+    # this is not used but ill leave just in case
+    
     try:
         cursor = get_cursor(dictionary=True)
         
@@ -199,6 +201,34 @@ def fetch_all_maps(app):
                 map["Extra"] = True
             else:
                 map["Extra"] = False
+
+        return maps
+    
+    except Error as e:
+        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
+    
+def fetch_map_list(app):
+    try:
+        cursor = get_cursor(dictionary=True)
+        
+        query = """
+        SELECT Gamemode.Name AS Gamemode, Extra, Map.Name AS Name, Map.ID as MapID
+        FROM Map
+        JOIN Gamemode ON Gamemode.ID = Map.GamemodeID
+        """
+        cursor.execute(query)
+        all_maps = cursor.fetchall()
+
+        maps = {}
+        for map in all_maps:
+            if not maps.get(map["Gamemode"]):
+                maps[map["Gamemode"]] = {"Main": [], "Extra": []}
+                
+            if map["Extra"] == 0:
+                maps[map["Gamemode"]]["Main"].append(map)
+            elif map["Extra"] == 1:
+                maps[map["Gamemode"]]["Extra"].append(map)      
 
         return maps
     

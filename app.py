@@ -35,9 +35,9 @@ def staff():
 
 @app.route("/maps")
 def maps():
-    maps = database.fetch_all_maps(app)
+    maps = database.fetch_map_list(app)
 
-    return render_template("maps.html")
+    return render_template("maps.html", maps=maps)
 
 @app.route("/profile")
 def profile():
