@@ -117,3 +117,34 @@
     text-align: center;
     margin: 1rem 0 1rem 0;
 }
+
+.map-container {
+    display: grid;
+    grid-template-columns: 10% 30% 30% 30%;
+    gap: 0;
+}
+
+.map-container > div {
+    padding: 10px;
+    position: relative;
+}
+
+.map-container > div:not(:last-child):not(:nth-last-child(2))::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 25px;
+    width: 1px;
+    background-color: white;
+}
+
+.map-field {
+    text-align: center;
+}
+
+.map-position {
+    font-size: 3rem;
+    font-weight: bold;
+}

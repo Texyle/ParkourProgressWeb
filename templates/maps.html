@@ -23,25 +23,28 @@
             {% for gamemode, lists in maps.items() %}
             <div class="tab-content" id="{{ gamemode }}">
                 {% if lists['Main'] | length > 0 %}
-                <div class="list-container">
-                    <p>MAIN LIST</p>
-                    {% for map in lists['Main'] %}
-                        <div class="map-container">
-                            {{ map['Name'] }}
-                        </div>
-                    {% endfor %}
-                </div>
+                    <div class="list-container">
+                        <p>MAIN LIST</p>
+                        {% for map in lists['Main'] %}
+                            <div class="map-container">
+                                <div class="map-field map-position">{{ loop.index0 + 1 }}</div>
+                                <div class="map-field map-title">{{ map['Name'] }}</div>
+                                <div class="map-field map-status">1</div>
+                                <div class="map-field map-image">1</div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 {% endif %}
 
                 {% if lists['Extra'] | length > 0 %}
-                <div class="list-container">
-                    <p>EXTRA LIST</p>
-                    {% for map in lists['Extra'] %}
-                        <div class="map-container">
-                            {{ map['Name'] }}
-                        </div>
-                    {% endfor %}
-                </div>
+                    <div class="list-container">
+                        <p>EXTRA LIST</p>
+                        {% for map in lists['Extra'] %}
+                            <div class="map-container">
+                                {{ map['Name'] }}
+                            </div>
+                        {% endfor %}
+                    </div>
                 {% endif %}
             </div>
             {% endfor %}
