@@ -50,6 +50,7 @@ header {
     width: 40px;
     height: auto;
     margin-right: 10px;
+    border-radius: 50%;
 }
 
 .logo a {
@@ -106,6 +107,17 @@ nav ul li a:hover {
 nav ul li a:hover::after {
     width: 100%;
 }
+
+nav ul li a.active,
+nav ul li a:hover {
+    color: yellow;
+}
+
+nav ul li a.active::after,
+nav ul li a:hover::after {
+    width: 100%;
+}
+
 
 .discord-button a {
     display: flex;

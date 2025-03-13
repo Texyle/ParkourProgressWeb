@@ -24,22 +24,6 @@ async function loadMapImage(mapName) {
         img.src = `/static/images/maps/${pngFileName}`;
     });
 }
-
-async function loadAllMapImages() {
-    const images = document.querySelectorAll('.map-image');
-
-    for (const img of images) {
-        const mapName = img.dataset.mapName;
-        try {
-            const imageUrl = await loadMapImage(mapName);
-            img.src = imageUrl;
-        } catch (error) {
-            console.error(error);
-        }
-    }
-}
-
 window.Utils = {
-    loadMapImage,
-    loadAllMapImages
+    loadMapImage
 };
