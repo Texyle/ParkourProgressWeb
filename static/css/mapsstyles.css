@@ -7,6 +7,8 @@
     border-radius: 5px;
     box-shadow: 0px 0px 10px 4px black inset;
     border: 3px solid gray;
+    position: relative;
+    z-index: 10;
 }
 
 .search-container {
@@ -120,12 +122,13 @@
 
 .map-container {
     display: grid;
-    grid-template-columns: 10% 30% 30% 30%;
+    grid-template-columns: 10% 40% 30% 20%;
     gap: 0;
+    z-index: 1;
 }
 
 .map-container > div {
-    padding: 10px;
+    /* padding: 10px; */
     position: relative;
 }
 
@@ -138,6 +141,7 @@
     height: 25px;
     width: 1px;
     background-color: white;
+    z-index: 10;
 }
 
 .map-field {
@@ -150,7 +154,7 @@
 }
 
 .map-name {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: bold;
 }
 
@@ -169,4 +173,41 @@
     font-size: 1.5rem;
     font-weight: lighter;
     color: rgb(170, 255, 170);
+}
+
+.player-card {
+    max-height: 1.2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    background-color: rgba(100, 100, 100, 0.1);
+    box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.4) inset;
+    color: white;
+    font-size: 1rem;
+    border-radius: 10px;
+    padding: 5px 20px 5px 20px;
+}
+
+.beaten-by {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.map-image-container {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0px 8px 6px -6px rgba(40, 40, 40, 0.965) inset, 
+    0px -8px 6px -6px rgba(40, 40, 40, 0.965) inset,
+    -8px 0px 6px -6px rgba(0, 0, 0, 0.965) inset;
+}
+
+.map-image {
+    width: 100%;
+    display: block;
+    position: relative;
+    z-index: -1;
+    object-fit: cover;
 }

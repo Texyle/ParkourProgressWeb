@@ -5,15 +5,17 @@ from datetime import datetime
 import py.database as database
 import traceback
 import re
-from py.flags import Flags
+from py.files import Files
+from jinja2 import Environment, FileSystemLoader
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 PROJECT_DIR = os.path.dirname(BASE_DIR)  
 PAGES_DIR = os.path.join(PROJECT_DIR, "pages")  
 IMAGES_DIR = os.path.join(PROJECT_DIR, "images") 
+TEMPLATES_DIR = os.path.join(PROJECT_DIR, "templates")
 
 app = Flask(__name__)
-flags = Flags(app.static_folder)
+files = Files(app.static_folder)
 
 def generate_image_path(map_name):
     base_filename = re.sub(r'[\W\s]', '', map_name).lower()
@@ -38,9 +40,8 @@ def staff():
 @app.route("/maps")
 def maps():
     maps = database.fetch_map_list(app)
-    flags_dict = flags.flags
 
-    return render_template("maps.html", maps=maps, flags=flags_dict)
+    return render_template("maps.html", maps=maps, flags=files.flags, map_images=files.map_images)
 
 @app.route("/profile")
 def profile():
@@ -126,5 +127,13 @@ def load_maps():
 def images(filename):
     return send_from_directory(IMAGES_DIR, filename)
 
+def to_filename(map_name):
+    # to be used in jinja as a filter
+    return re.sub(r'[^a-z0-9]', '', map_name.lower())
+
 if __name__ == "__main__":
+    # env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
+    # env.filters['to_filename'] = to_filename
+    app.add_template_filter(to_filename, 'to_filename')
+    
     app.run(host="0.0.0.0", port=20000, debug=True)

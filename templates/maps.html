@@ -33,12 +33,20 @@
                                     <div class="map-creator">[creator]</div>
                                 </div>
                                 <div class="map-field map-status beaten">
-                                    <div>Beaten by</div>
-                                    <div class="player-card">
-                                        <img class="flag" src="{{ url_for('static', filename=flags['ru']) }}" alt="{{ code }}">
+                                    <div class="beaten-by">
+                                        <div>Beaten by</div>
+                                        <div class="player-card">
+                                            <img class="flag" src="{{ url_for('static', filename=flags['ru']) }}" alt="{{ code }}">
+                                            <div>Texyle</div>
+                                        </div>
                                     </div>
+                                        <div>and 103 others</div>
                                 </div>
-                                <div class="map-field map-image">1</div>
+                                <div class="map-field map-image-container">
+                                    {% set map_name = map['Name']|to_filename %}
+                                    {% set filename = map_images[map_name] if map_name in map_images else map_images['space'] %}
+                                    <img class="map-image" src="{{ url_for('static', filename=filename) }}" alt="{{ map['Name'] }}">
+                                </div>
                             </div>
                         {% endfor %}
                     </div>
@@ -47,9 +55,29 @@
                 {% if lists['Extra'] | length > 0 %}
                     <div class="list-container">
                         <p>EXTRA LIST</p>
+                        {% set index_start = lists['Main']|length %}
                         {% for map in lists['Extra'] %}
                             <div class="map-container">
-                                {{ map['Name'] }}
+                                <div class="map-field map-position">{{ loop.index0 + 1 + index_start }}</div>
+                                <div class="map-field map-title">
+                                    <div class="map-name">{{ map['Name'] }}</div>
+                                    <div class="map-creator">[creator]</div>
+                                </div>
+                                <div class="map-field map-status beaten">
+                                    <div class="beaten-by">
+                                        <div>Beaten by</div>
+                                        <div class="player-card">
+                                            <img class="flag" src="{{ url_for('static', filename=flags['ru']) }}" alt="{{ code }}">
+                                            <div>Texyle</div>
+                                        </div>
+                                    </div>
+                                        <div>and 103 others</div>
+                                </div>
+                                <div class="map-field map-image-container">
+                                    {% set map_name = map['Name']|to_filename %}
+                                    {% set filename = map_images[map_name] if map_name in map_images else map_images['space'] %}
+                                    <img class="map-image" src="{{ url_for('static', filename=filename) }}" alt="{{ map['Name'] }}">
+                                </div>
                             </div>
                         {% endfor %}
                     </div>
