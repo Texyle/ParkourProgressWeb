@@ -17,18 +17,6 @@ TEMPLATES_DIR = os.path.join(PROJECT_DIR, "templates")
 app = Flask(__name__)
 files = Files(app.static_folder)
 
-def generate_image_path(map_name):
-    base_filename = re.sub(r'[\W\s]', '', map_name).lower()
-    png_path = f"/static/images/maps/{base_filename}.png"
-    jpg_path = f"/static/images/maps/{base_filename}.jpg"
-    
-    if os.path.exists(os.path.join(app.static_folder, f'images/maps/{base_filename}.png')):
-        return png_path
-    elif os.path.exists(os.path.join(app.static_folder, f'images/maps/{base_filename}.jpg')):
-        return jpg_path
-    else:
-        return "/static/images/space.webp"  
-
 @app.route("/")
 def home():
     return render_template("index.html")
