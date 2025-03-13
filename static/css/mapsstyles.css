@@ -148,3 +148,25 @@
     font-size: 3rem;
     font-weight: bold;
 }
+
+.map-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.map-creator {
+    font-size: 0.8rem;
+    font-weight: lighter;
+}
+
+.map-status.unverified {
+    font-size: 2rem;
+    font-weight: lighter;
+    color: rgb(255, 110, 110);
+}
+
+.map-status.beaten {
+    font-size: 1.5rem;
+    font-weight: lighter;
+    color: rgb(170, 255, 170);
+}

@@ -5,6 +5,7 @@ from datetime import datetime
 import py.database as database
 import traceback
 import re
+from py.flags import Flags
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 PROJECT_DIR = os.path.dirname(BASE_DIR)  
@@ -12,6 +13,7 @@ PAGES_DIR = os.path.join(PROJECT_DIR, "pages")
 IMAGES_DIR = os.path.join(PROJECT_DIR, "images") 
 
 app = Flask(__name__)
+flags = Flags(app.static_folder)
 
 def generate_image_path(map_name):
     base_filename = re.sub(r'[\W\s]', '', map_name).lower()
@@ -36,8 +38,9 @@ def staff():
 @app.route("/maps")
 def maps():
     maps = database.fetch_map_list(app)
+    flags_dict = flags.flags
 
-    return render_template("maps.html", maps=maps)
+    return render_template("maps.html", maps=maps, flags=flags_dict)
 
 @app.route("/profile")
 def profile():

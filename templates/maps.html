@@ -28,8 +28,16 @@
                         {% for map in lists['Main'] %}
                             <div class="map-container">
                                 <div class="map-field map-position">{{ loop.index0 + 1 }}</div>
-                                <div class="map-field map-title">{{ map['Name'] }}</div>
-                                <div class="map-field map-status">1</div>
+                                <div class="map-field map-title">
+                                    <div class="map-name">{{ map['Name'] }}</div>
+                                    <div class="map-creator">[creator]</div>
+                                </div>
+                                <div class="map-field map-status beaten">
+                                    <div>Beaten by</div>
+                                    <div class="player-card">
+                                        <img class="flag" src="{{ url_for('static', filename=flags['ru']) }}" alt="{{ code }}">
+                                    </div>
+                                </div>
                                 <div class="map-field map-image">1</div>
                             </div>
                         {% endfor %}
