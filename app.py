@@ -25,6 +25,22 @@ def home():
 def staff():
     return render_template("staff.html")
 
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
+@app.route("/leaderboard")
+def leaderboard():
+    return render_template("leaderboard.html")
+
+@app.route("/leaderboard/players")
+def leaderboard1():
+    return render_template("playerslb.html")
+
+@app.route("/leaderboard/country")
+def leaderboard2():
+    return render_template("countrylb.html")
+
 @app.route("/maps")
 def maps():
     maps = database.fetch_map_list(app)

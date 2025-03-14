@@ -92,7 +92,7 @@ nav ul li a {
     padding: 8px 12px;
     position: relative;
     transition: color 0.4s ease-in-out;
-} 
+}
 
 nav ul li a::after {
     content: '';
@@ -186,4 +186,52 @@ nav ul li a:hover::after {
 .flag {
     max-height: 1rem;
     border-radius: 15%;
+}
+
+.form h1 {
+    font-size: 2rem;
+}
+
+.form {
+    background-color: rgba(44, 42, 42, 0.965);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 4px black inset;
+    text-align: center;
+    border: 3px solid gray;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-self: center;
+    margin-top: calc(5%);
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px; 
+    margin-top: 10px;
+}
+
+.form #button {
+    background-color: #4CAF50; 
+    border: none;
+    color: white;
+    padding: 11px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    font-family: 'Montserrat', sans-serif;
+    width: 5cm;
+    display: flex;
+    justify-content: center;
+}
+
+.form #button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
 }
