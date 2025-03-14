@@ -32,16 +32,26 @@
                                     <div class="map-name">{{ map['Name'] }}</div>
                                     <div class="map-creator">[creator]</div>
                                 </div>
+
+                                {% if map['FirstVictorID'] is none %}
+
+                                <div class="map-field map-status unverified">UNVERIFIED</div>
+
+                                {% else %}
+
                                 <div class="map-field map-status beaten">
                                     <div class="beaten-by">
                                         <div>Beaten by</div>
                                         <div class="player-card">
-                                            <img class="flag" src="{{ url_for('static', filename=flags['ru']) }}" alt="{{ code }}">
-                                            <div>Texyle</div>
+                                            <img class="flag" src="{{ url_for('static', filename=flags[map['FirstVictorCountry']]) }}" alt="{{ code }}">
+                                            <div>{{ map['FirstVictorName'] }}</div>
                                         </div>
                                     </div>
-                                        <div>and 103 others</div>
+                                    <div>and {{ map['VictorCount'] }} others</div>
                                 </div>
+
+                                {% endif %}
+
                                 <div class="map-field map-image-container">
                                     {% set map_name = map['Name']|to_filename %}
                                     {% set filename = map_images[map_name] if map_name in map_images else map_images['space'] %}
@@ -63,16 +73,24 @@
                                     <div class="map-name">{{ map['Name'] }}</div>
                                     <div class="map-creator">[creator]</div>
                                 </div>
+                                {% if map['FirstVictorID'] is none %}
+
+                                <div class="map-field map-status unverified">UNVERIFIED</div>
+
+                                {% else %}
+
                                 <div class="map-field map-status beaten">
                                     <div class="beaten-by">
                                         <div>Beaten by</div>
                                         <div class="player-card">
-                                            <img class="flag" src="{{ url_for('static', filename=flags['ru']) }}" alt="{{ code }}">
-                                            <div>Texyle</div>
+                                            <img class="flag" src="{{ url_for('static', filename=flags[map['FirstVictorCountry']]) }}" alt="{{ code }}">
+                                            <div>{{ map['FirstVictorName'] }}</div>
                                         </div>
                                     </div>
-                                        <div>and 103 others</div>
+                                    <div>and {{ map['VictorCount'] }} others</div>
                                 </div>
+
+                                {% endif %}
                                 <div class="map-field map-image-container">
                                     {% set map_name = map['Name']|to_filename %}
                                     {% set filename = map_images[map_name] if map_name in map_images else map_images['space'] %}
