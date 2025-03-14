@@ -213,14 +213,39 @@ def fetch_map_list(app):
         cursor = get_cursor(dictionary=True)
         
         query = """
-        SELECT Gamemode.Name AS Gamemode, Extra, Map.Name AS Name, Map.ID as MapID
+        SELECT Gamemode.Name AS Gamemode, Extra, Map.Name AS Name, Map.ID as MapID,
+        (SELECT COUNT(*)
+            FROM Victor
+            WHERE Victor.MapID = Map.ID) AS VictorCount,
+        (SELECT Victor.PlayerID
+            FROM Victor
+            WHERE Victor.MapID = Map.ID
+            ORDER BY Victor.Date ASC
+            LIMIT 1) AS FirstVictorID,
+        (SELECT Player.Name
+            FROM Victor
+            JOIN Player ON Player.ID = Victor.PlayerID
+            WHERE Victor.MapID = Map.ID
+            ORDER BY Victor.Date ASC
+            LIMIT 1) AS FirstVictorName,
+        (SELECT Player.CountryCode
+            FROM Victor
+            JOIN Player ON Player.ID = Victor.PlayerID
+            WHERE Victor.MapID = Map.ID
+            ORDER BY Victor.Date ASC
+            LIMIT 1) AS FirstVictorCountry
         FROM Map
         JOIN Gamemode ON Gamemode.ID = Map.GamemodeID
+        WHERE Position > 0
+        ORDER BY Position;
         """
         cursor.execute(query)
         all_maps = cursor.fetchall()
 
-        maps = {}
+        maps = {"Rankup": {"Main": [], "Extra": []},
+                "Segmented": {"Main": [], "Extra": []},
+                "Onlysprint": {"Main": [], "Extra": []},
+                "Tag": {"Main": [], "Extra": []}}
         for map in all_maps:
             if not maps.get(map["Gamemode"]):
                 maps[map["Gamemode"]] = {"Main": [], "Extra": []}
@@ -228,7 +253,7 @@ def fetch_map_list(app):
             if map["Extra"] == 0:
                 maps[map["Gamemode"]]["Main"].append(map)
             elif map["Extra"] == 1:
-                maps[map["Gamemode"]]["Extra"].append(map)      
+                maps[map["Gamemode"]]["Extra"].append(map)   
 
         return maps
     
