@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="/static/css/contactstyles.css">
+    <title>Parkour Progress - Contact</title>
+{% endblock %}
+
+{% block content %}
+    <section class="modal">
+        <h1>Contact</h1>
+        <p>If you encounter any errors, please fill out the form below.</p>
+        <form action="/send_message" method="POST">
+            <label for="nickname">Minecraft Name</label>
+            <input type="text" id="nickname" name="nickname" required>
+            
+            <label for="discord_name">Discord Name</label>
+            <input type="text" id="discord_name" name="discord_name" required>
+            
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" required></textarea>
+            
+            <button type="submit">Submit</button>
+        </form>    
+    </section>
+{% endblock %}

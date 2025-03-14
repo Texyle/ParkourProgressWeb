@@ -184,7 +184,8 @@ nav ul li a:hover::after {
 }
 
 .flag {
-    height: 1rem;
-    width: 1.5rem;
+    max-height: 1rem;
     border-radius: 15%;
 }
+
+/* Different part */
