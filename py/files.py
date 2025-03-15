@@ -6,6 +6,7 @@ class Files:
         self.static_path = static_path
         self.flags = {}
         self.map_images = {}
+        self.map_images_small = {}
         
         self.load_flags()
         self.load_map_images()
@@ -25,6 +26,14 @@ class Files:
         self.map_images.clear()
         
         map_images_path = 'images/maps/'
+        path = os.path.join(self.static_path, map_images_path)
+        
+        for file_path in Path(path).iterdir():
+            if file_path.is_file():        
+                filename = file_path.stem
+                self.map_images[filename] = map_images_path + file_path.name
+                
+        map_images_path = 'images/maps/small_copies/'
         path = os.path.join(self.static_path, map_images_path)
         
         for file_path in Path(path).iterdir():

@@ -9,6 +9,8 @@ connection = None
 def get_cursor(*args, **kwargs):
     global connection
     
+    print(connection)
+    
     if connection == None or not connection.is_connected:
         connection = mysql.connector.connect(
             host="193.124.204.44", 
