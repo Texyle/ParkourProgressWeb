@@ -58,7 +58,7 @@
                                 <div class="map-field map-image-container">
                                     {% set map_name = map['Name']|to_filename %}
                                     {% set map_name = map_name ~ '_small' %}
-                                    {% set filename = map_images[map_name] if map_name in map_images else map_images['space'] %}
+                                    {% set filename = map_images[map_name] if map_name in map_images else map_images['space_small'] %}
                                     <img class="map-image" loading="lazy" src="{{ url_for('static', filename=filename) }}" alt="{{ map['Name'] }}">
                                 </div>
                             </div>
@@ -99,7 +99,8 @@
                                 {% endif %}
                                 <div class="map-field map-image-container">
                                     {% set map_name = map['Name']|to_filename %}
-                                    {% set filename = map_images[map_name] if map_name in map_images else map_images['space'] %}
+                                    {% set map_name = map_name ~ '_small' %}
+                                    {% set filename = map_images[map_name] if map_name in map_images else map_images['space_small'] %}
                                     <img class="map-image" loading="lazy" src="{{ url_for('static', filename=filename) }}" alt="{{ map['Name'] }}">
                                 </div>
                             </div>
