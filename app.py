@@ -25,10 +25,6 @@ def home():
 def staff():
     return render_template("staff.html")
 
-@app.route("/contact")
-def contact():
-    return render_template("contact.html")
-
 @app.route("/leaderboard")
 def leaderboard():
     return render_template("leaderboard.html")
@@ -47,9 +43,13 @@ def maps():
 
     return render_template("maps.html", maps=maps, flags=files.flags, map_images=files.map_images)
 
-@app.route("/profile")
+@app.route("/profile/player")
 def profile():
     return render_template("profile.html")
+
+@app.route("/profile/country")
+def profile2():
+    return render_template("countryprofile.html")
 
 @app.route('/map/<int:map_id>')
 def map(map_id):
