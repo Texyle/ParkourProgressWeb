@@ -41,17 +41,20 @@ function initSearchInput() {
                 mapContainers.forEach(container => {
                     const mapName = container.querySelector('.map-name').textContent.toLowerCase();
                     if (mapName.includes(query)) {
-                        container.style.display = '';
+                        container.style.height = '';
                         anyVisibleInList = true;
                     } else {
-                        container.style.display = 'none';
+                        container.style.height = '0'
                     }
                 });
 
                 if (!anyVisibleInList) {
-                    listContainer.style.display = 'none';
+                    let p = listContainer.querySelector('p');
+                    p.style.fontSize = '0';
                 } else {
-                    listContainer.style.display = '';
+                    let p = listContainer.querySelector('p');
+                    p.style.fontSize = '3rem';
+
                     anyVisibleInTab = true;
                 }
             });
@@ -67,7 +70,8 @@ function initSearchInput() {
                 let anyVisibleInTab = false;
 
                 listContainers.forEach(listContainer => {
-                    if (listContainer.style.display !== 'none') {
+                    let p = listContainer.querySelector('p');
+                    if (p.style.fontSize !== '0px') {
                         anyVisibleInTab = true;
                     }
                 });

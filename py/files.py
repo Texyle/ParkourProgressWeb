@@ -6,7 +6,6 @@ class Files:
         self.static_path = static_path
         self.flags = {}
         self.map_images = {}
-        self.map_images_small = {}
         
         self.load_flags()
         self.load_map_images()
