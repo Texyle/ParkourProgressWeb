@@ -44,7 +44,7 @@
                                     <div class="beaten-by">
                                         <div>Beaten by</div>
                                         <div class="player-card">
-                                            <img class="flag" src="{{ url_for('static', filename=flags[map['FirstVictorCountry']]) }}" alt="{{ code }}">
+                                            <img class="flag" loading="lazy" src="{{ url_for('static', filename=flags[map['FirstVictorCountry']]) }}" alt="{{ code }}">
                                             <div>{{ map['FirstVictorName'] }}</div>
                                         </div>
                                     </div>
@@ -58,7 +58,7 @@
                                 <div class="map-field map-image-container">
                                     {% set map_name = map['Name']|to_filename %}
                                     {% set filename = map_images[map_name] if map_name in map_images else map_images['space'] %}
-                                    <img class="map-image" src="{{ url_for('static', filename=filename) }}" alt="{{ map['Name'] }}">
+                                    <img class="map-image" loading="lazy" src="{{ url_for('static', filename=filename) }}" alt="{{ map['Name'] }}">
                                 </div>
                             </div>
                         {% endfor %}
@@ -86,7 +86,7 @@
                                     <div class="beaten-by">
                                         <div>Beaten by</div>
                                         <div class="player-card">
-                                            <img class="flag" src="{{ url_for('static', filename=flags[map['FirstVictorCountry']]) }}" alt="{{ code }}">
+                                            <img class="flag" loading="lazy" src="{{ url_for('static', filename=flags[map['FirstVictorCountry']]) }}" alt="{{ code }}">
                                             <div>{{ map['FirstVictorName'] }}</div>
                                         </div>
                                     </div>
@@ -99,7 +99,7 @@
                                 <div class="map-field map-image-container">
                                     {% set map_name = map['Name']|to_filename %}
                                     {% set filename = map_images[map_name] if map_name in map_images else map_images['space'] %}
-                                    <img class="map-image" src="{{ url_for('static', filename=filename) }}" alt="{{ map['Name'] }}">
+                                    <img class="map-image" loading="lazy" src="{{ url_for('static', filename=filename) }}" alt="{{ map['Name'] }}">
                                 </div>
                             </div>
                         {% endfor %}
