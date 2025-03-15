@@ -11,7 +11,7 @@
         <div class="search-container">
             <div class="search-bar">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Enter map name">
+                <input type="text" placeholder="Enter map name" id="map-search">
             </div>
         </div>
         <div class="tabs-container">
@@ -27,7 +27,7 @@
                     <div class="list-container">
                         <p>MAIN LIST</p>
                         {% for map in lists['Main'] %}
-                            <div class="map-container">
+                            <div class="map-container" onclick="redirectToMapPage('{{ map['MapID'] }}')">
                                 <div class="map-field map-position">{{ loop.index0 + 1 }}</div>
                                 <div class="map-field map-title">
                                     <div class="map-name">{{ map['Name'] }}</div>
@@ -70,7 +70,7 @@
                         <p>EXTRA LIST</p>
                         {% set index_start = lists['Main']|length %}
                         {% for map in lists['Extra'] %}
-                            <div class="map-container">
+                            <div class="map-container" onclick="redirectToMapPage('{{ map['MapID'] }}')">
                                 <div class="map-field map-position">{{ loop.index0 + 1 + index_start }}</div>
                                 <div class="map-field map-title">
                                     <div class="map-name">{{ map['Name'] }}</div>
