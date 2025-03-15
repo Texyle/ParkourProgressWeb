@@ -2,8 +2,8 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="static/css/profilestyles.css">
-    <title>Parkour Progress - Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='/css/profilestyles.css') }}">
+    <title>Parkour Progress - Player Profile</title>
 {% endblock %}
 
 {% block content %}
@@ -37,5 +37,5 @@
             <button id="Progress">Maps in Progress</button>
         </section>
     </div>
-    <script src="static/js/profile.js"></script>
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 {% endblock %}
