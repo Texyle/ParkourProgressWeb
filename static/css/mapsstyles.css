@@ -34,6 +34,12 @@
     box-sizing: border-box;
     font-family: inherit;
 }
+
+.search-bar input[type="text"]:focus {
+    border-radius: 5px;
+    transition: ease-in-out 0.04s;
+}
+
 .search-bar i {
     position: absolute;
     top: 50%;
