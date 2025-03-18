@@ -11,7 +11,7 @@ def get_cursor(*args, **kwargs):
     
     print(connection)
     
-    if connection == None or not connection.is_connected:
+    if connection == None or not connection.is_connected():
         connection = mysql.connector.connect(
             host="193.124.204.44", 
             database="progressbot",
