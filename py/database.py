@@ -215,7 +215,7 @@ def fetch_map_list(app):
         cursor = get_cursor(dictionary=True)
         
         query = """
-        SELECT Gamemode.Name AS Gamemode, Extra, Map.Name AS Name, Map.ID as MapID,
+        SELECT Gamemode.Name AS Gamemode, Extra, Map.Name AS Name, Map.ID as MapID, Builder,
         (SELECT COUNT(*)
             FROM Victor
             WHERE Victor.MapID = Map.ID) AS VictorCount,

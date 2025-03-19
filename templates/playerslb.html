@@ -2,10 +2,15 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/leaderboardbase.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/playerlb.css') }}">
     <title>Parkour Progress - Players Leaderboard</title>
 {% endblock %}
 
 {% block content %}
-    <section class=""></section>
+    <div class="main-container">
+        <p><strong style="font-size: 2rem;">RANKING SYSTEM TEST</strong></p>
+        <ol>
+            <li>Texyle - 1234 points</li>
+        </ol>
+    </div>
 {% endblock %}

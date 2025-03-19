@@ -31,7 +31,7 @@
                                 <div class="map-field map-position">{{ loop.index0 + 1 }}</div>
                                 <div class="map-field map-title">
                                     <div class="map-name">{{ map['Name'] }}</div>
-                                    <div class="map-creator">[creator]</div>
+                                    <div class="map-creator">{{ map['Builder'] }}</div>
                                 </div>
 
                                 {% if map['FirstVictorID'] is none %}
@@ -75,7 +75,7 @@
                                 <div class="map-field map-position">{{ loop.index0 + 1 + index_start }}</div>
                                 <div class="map-field map-title">
                                     <div class="map-name">{{ map['Name'] }}</div>
-                                    <div class="map-creator">[creator]</div>
+                                    <div class="map-creator">{{ map['Builder'] }}</div>
                                 </div>
                                 {% if map['FirstVictorID'] is none %}
 
