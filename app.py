@@ -58,8 +58,7 @@ def map(map_id):
     if map != None:
         return render_template('map.html', map = map, victors = victors)
     else:
-        # return error page
-        pass
+        return render_template("notfound.html")
 
 @app.route("/load_victories", methods=["POST"])
 def load_victories():
@@ -130,6 +129,10 @@ def load_maps():
 @app.route("/images/<path:filename>")
 def images(filename):
     return send_from_directory(IMAGES_DIR, filename)
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("notfound.html"), 404
 
 def to_filename(map_name):
     # to be used in jinja as a filter

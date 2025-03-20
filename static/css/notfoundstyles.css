@@ -1,0 +1,59 @@
+.info {
+    background-color: rgba(44, 42, 42, 0.965);
+    padding: 25px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 4px black inset;
+    text-align: center;
+    border: 3px solid gray;
+}
+
+.info h1 {
+    font-size: 2.0rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+#imgbtn img {
+    width: 512px;
+    height: 400px;   
+    margin-top: 12px;
+    align-self: center;
+    margin-bottom: 12px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 4px black, 0px 0px 10px 2px gray inset;
+    border: 3px solid rgb(52, 53, 52) !important;
+}
+
+#imgbtn #btn {
+    background-color: #4CAF50; 
+    border: none;
+    color: white;
+    padding: 11px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    font-family: 'Montserrat', sans-serif;
+    width: 5cm;
+    margin-left: 5px;
+    justify-self: center;
+}
+
+#imgbtn #btn:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+#imgbtn {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
