@@ -1,11 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let titleText = document.title;
-    let speed = 200; 
+    let baseTitle = document.title;
+    let parts = baseTitle.split(" - "); 
+    let mainPart = parts[0]; 
+    let suffix = " - " + parts.slice(1).join(" - "); 
+    let speed = 200;  
     let index = 0;
 
     function scrollTitle() {
-        document.title = titleText.substring(index) + " " + titleText.substring(0, index);
-        index = (index + 1) % titleText.length;
+        document.title = mainPart.substring(index) + " " + mainPart.substring(0, index) + suffix;
+        index = (index + 1) % mainPart.length;
         setTimeout(scrollTitle, speed);
     }
 
