@@ -14,7 +14,9 @@ body {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
+    transition: background-image 1.5s ease-in-out;
 }
+
 
 #content {
     height: 100%;

@@ -7,6 +7,7 @@ import traceback
 import re
 from py.files import Files
 from jinja2 import Environment, FileSystemLoader
+import random
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 PROJECT_DIR = os.path.dirname(BASE_DIR)  
@@ -58,8 +59,7 @@ def map(map_id):
     if map != None:
         return render_template('map.html', map = map, victors = victors)
     else:
-        # return error page
-        pass
+        return render_template("notfound.html")
 
 @app.route("/load_victories", methods=["POST"])
 def load_victories():
@@ -76,6 +76,17 @@ def load_victories():
         return jsonify({"victories": None}), 404
     
     return jsonify(victories), 200
+
+@app.route("/random-image")
+def random_image():
+    image_folder = "static/images/maps"
+    images = [f for f in os.listdir(image_folder) if f.endswith(("jpg", "png", "webp"))]
+    
+    if not images:
+        return jsonify({"error": "No images found"}), 404
+
+    random_image = random.choice(images)
+    return jsonify({"image_url": f"/static/images/maps/{random_image}"})
 
 @app.route("/load_progress", methods=["POST"])
 def load_progress():
@@ -130,6 +141,10 @@ def load_maps():
 @app.route("/images/<path:filename>")
 def images(filename):
     return send_from_directory(IMAGES_DIR, filename)
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("notfound.html"), 404
 
 def to_filename(map_name):
     # to be used in jinja as a filter
