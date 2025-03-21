@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let speed = 200;
     let index = 0;
 
-    let extendedTitle = " - " + baseTitle + " - ";
+    let extendedTitle = " - " + baseTitle + " ";
 
     function scrollTitle() {
         document.title = extendedTitle.substring(index) + extendedTitle.substring(0, index);
