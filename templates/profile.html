@@ -2,40 +2,21 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='/css/profilestyles.css') }}">
-    <title>Parkour Progress - Player Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profilestyles.css') }}">
+    <title>Parkour Progress - [player]</title>
 {% endblock %}
 
 {% block content %}
-    <section class="modal">
-        <h1>Player Profile</h1>
-        <p>To display Player's profile, please enter desired In Game Name below.</p>
-        <div class="input-container">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" name="player-name" id="player-name" autocomplete="off">
-            <div id="suggestions" class="suggestions-box"></div>
-        </div>
-        <p id="result-message"></p>
-    </section>
-    <div class="info-container">
-        <section class="player-info">
-            <h1>Player Profile</h1>
-            <p id="ign"><b>IGN:</b></p>
-            <p id="country"><b>Country:</b></p>
-            <p id="discordid"><b>Discord:</b> <a href="" id="discord-link">Click Here</a></p>
-            <img src="" class="avatar" id="avatar">
-        </section>
-        <section class="maps">
-            <h1 id="map-title">Rankup</h1>
-            <p id="map-list"></p>
-        </section>
-        <section class="buttons">
-            <button id="Rankup">Rankup</button>
-            <button id="Segmented">Segmented</button>
-            <button id="Onlysprint">Onlysprint</button>
-            <button id="Tag">Tag</button>
-            <button id="Progress">Maps in Progress</button>
-        </section>
+    <div class="main-container">
+        <div class="container" id="player-container">player</div>
+        <div class="container" id="rankings-container">rankings</div>
+        <div class="container" id="maps-container">maps</div>
+        <div class="container" id="progress-container">progress</div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 {% endblock %}
+
