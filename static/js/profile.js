@@ -1,225 +1,71 @@
-const gamemodeButtons = {
-    "Rankup": "Rankup",
-    "Segmented": "Segmented",
-    "Onlysprint": "Onlysprint",
-    "Tag": "Tag",
-    "Progress": "Progress"
-};
+let scene, camera, renderer, model, controls;
 
-async function loadVictories(name, gamemode) {
-    const maps = document.getElementById("map-list");
-    const maps_title = document.getElementById("map-title");
-    maps.innerHTML = "Loading maps...";
-    if (gamemode == "Progress") {
-        maps_title.innerHTML = `Maps in Progress`;
-    } else {
-        maps_title.innerHTML = `${gamemode}`;
-    }
+function init() {
+    scene = new THREE.Scene();
 
-    if (gamemode === "Progress") {
-        response = await fetch("/load_progress", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name: name })
-        });
-    } else {
-        response = await fetch("/load_victories", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name: name, gamemode: gamemode })
-        });
-    }
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 1.5, 3);
 
-    const victories = await response.json();
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 
-    if (victories.length === 0) {
-        maps.innerHTML = gamemode === "Progress" ? "No maps in progress." : "No maps completed in this gamemode.";
-    } else {
-        maps.innerHTML = victories
-            .map((entry, index) => {
+    const light = new THREE.AmbientLight(0x404040);
+    scene.add(light);
 
-                const word = `${entry.Fails == 1 ? "fail" : "fails"}`;
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(0, 1, 0).normalize();
+    scene.add(directionalLight);
 
-                if (gamemode === "Segmented") {
-                    return `${index + 1}. ${entry.MapName}`;
-                } 
-                if (gamemode === "Onlysprint") {
-                    return ["last stretch", "final stretch"].includes(entry.FailsMessage)
-                        ? `${index + 1}. ${entry.MapName} - <i>${entry.Fails} ${entry.FailsMessage} ${word}</i>`
-                        : `${index + 1}. ${entry.MapName}`;
-                }
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+    controls.enableZoom = true;
 
-                if (gamemode === "Tag") {
-                    return ["sky", "final stretch"].includes(entry.FailsMessage)
-                        ? `${index + 1}. ${entry.MapName} - <i>${entry.Fails} ${entry.FailsMessage} ${word}</i>`
-                        : `${index + 1}. ${entry.MapName}`;
-                }
-
-                if (gamemode === "Progress") {
-                    return `${index + 1}. ${entry.MapName} - ${entry.SectionName}`;
-                }
-
-                return `${index + 1}. ${entry.MapName} - <i>${entry.Fails} ${entry.FailsMessage} ${word}</i>`;
-            })
-            .join("<br>");
-    }
+    window.addEventListener('resize', onWindowResize, false);
 }
 
-function resetGamemodeButtons(name) {
-    const buttonsContainer = document.querySelector(".buttons");
-    const newButtonsContainer = buttonsContainer.cloneNode(true);
-    buttonsContainer.replaceWith(newButtonsContainer);
-
-    Object.entries(gamemodeButtons).forEach(([buttonId, gamemode]) => {
-        document.getElementById(buttonId).addEventListener("click", async () => {
-            await loadVictories(name, gamemode);
-        });
-    });
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-async function performSearch() {
-    const modal = document.querySelector(".modal");
-    const resultMessage = document.getElementById("result-message");
-    const box = document.querySelector(".info-container");
-    const ign = document.getElementById("ign");
-    const country = document.getElementById("country");
-    const avatar = document.getElementById("avatar");
-    const name1 = document.getElementById("player-name").value;
-    const name = name1.trim();
+function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+}
 
-    if (name.includes(" ")) {
-        modal.style.height = "6cm";
-        resultMessage.textContent = "Name cannot contain spaces.";
-        resultMessage.style.color = "red";
-        box.style.display = "none";
-        return;
-    }
-
-    if (name === "") {
-        resultMessage.textContent = "Name cannot be empty.";
-        resultMessage.style.color = "red";
-        modal.style.height = "6cm";
-        box.style.display = "none";
-        return;
-    }
-
-    modal.style.height = "6cm";
-    resultMessage.innerHTML = "Loading...";
-    resultMessage.style.color = "white";
+async function loadPlayerSkin(playerName) {
+    if (!playerName) return;
 
     try {
-        const user_info = await fetch("/load_player_info", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name: name })
+        const response = await fetch(`https://api.ashcon.app/mojang/v2/user/${playerName}`);
+        const responseData = await response.json();
+        const textureUrl = responseData.textures.skin.url;
+
+        // const textureUrl = JSON.parse(atob(skinData.properties[0].value)).textures.SKIN.url;
+
+        const loader = new THREE.GLTFLoader();
+        loader.load('/static/scenes/steve/scene.gltf', function(gltf) {
+            model = gltf.scene;
+            model.traverse((child) => {
+                if (child.isMesh) {
+                    child.material.map = new THREE.TextureLoader().load(textureUrl);
+                }
+            });
+            scene.add(model);
+            animate();
+        }, undefined, function(error) {
+            console.error(error);
         });
-
-        const us_info = await user_info.json();
-
-        if (user_info.ok) {
-            resultMessage.textContent = "Success";
-            resultMessage.style.color = "green";
-            ign.innerHTML = `<b>IGN:</b> ${us_info.Nick}`;
-            country.innerHTML = `<b>Country:</b> ${us_info.CountryCode || "Unknown"}`;
-            avatar.src = `https://vzge.me/full/${name}`;
-
-            let discord = document.getElementById("discord-link") || document.getElementById("non-member"); 
-
-            if (us_info.DiscordID && us_info.DiscordID !== "-1") {
-                discord.id = "discord-link"; 
-                discord.setAttribute("href", `https://discord.com/users/${us_info.DiscordID}`);
-                discord.setAttribute("target", "_");
-                discord.innerHTML = "Click Here";
-            } else {
-                discord.id = "non-member";
-                discord.innerHTML = "Non-Member";
-                discord.removeAttribute("href");
-                discord.removeAttribute("target");
-            }
-
-            box.style.display = "flex";
-
-            await loadVictories(name, "Rankup");
-            resetGamemodeButtons(name);
-
-        } else {
-            resultMessage.textContent = `Player ${name} does not exist.`;
-            resultMessage.style.color = "red";
-            box.style.display = "none";
-        }
-
     } catch (error) {
-        console.error("Error during fetch:", error);
-        resultMessage.textContent = "An error occurred. Please try again.";
-        resultMessage.style.color = "red";
-        modal.style.height = "6cm";
-        box.style.display = "none";
-    } 
-}
-
-let players = [];
-
-async function fetchPlayers() {
-    try {
-        const response = await fetch("/load_players", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" }
-        });
-
-        let data = await response.json();
-        players = data.map(entry => entry[0]); 
-    } catch (error) {
-        console.error("Error fetching players:", error);
+        console.error('Error loading player skin:', error);
     }
 }
 
-document.addEventListener("DOMContentLoaded", fetchPlayers);
+init();
 
-const inputField = document.getElementById("player-name");
-const suggestionsBox = document.createElement("div");
-suggestionsBox.classList.add("suggestions-box");
-inputField.parentNode.appendChild(suggestionsBox);
-
-inputField.addEventListener("input", function () {
-    const query = this.value.trim();
-    if (query.length === 0) {
-        suggestionsBox.style.display = "none";
-        return;
-    }
-
-    const filteredPlayers = players
-        .filter(name => name.toLowerCase().startsWith(query.toLowerCase()))
-        .slice(0, 5);
-
-    if (filteredPlayers.length === 0) {
-        suggestionsBox.style.display = "none";
-        return;
-    }
-
-    suggestionsBox.innerHTML = filteredPlayers
-        .map(name => `<div class="suggestion">${name}</div>`)
-        .join("");
-
-    suggestionsBox.style.display = "block";
-
-    document.querySelectorAll(".suggestion").forEach(item => {
-        item.addEventListener("click", function () {
-            inputField.value = this.textContent;
-            suggestionsBox.style.display = "none";
-            performSearch(); 
-        });
-    });
-});
-
-document.addEventListener("click", function (e) {
-    if (!inputField.contains(e.target) && !suggestionsBox.contains(e.target)) {
-        suggestionsBox.style.display = "none";
-    }
-});
-
-document.getElementById("player-name").addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        performSearch();
-        document.getElementById("suggestions-box").style.display = `none`;
-    }
-});
+// Example: Load skin for a player named 'Notch'
+loadPlayerSkin('Notch');
