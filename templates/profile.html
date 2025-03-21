@@ -3,7 +3,7 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='/css/profilestyles.css') }}">
-    <title>Player Profile - Parkour Progress</title>
+    <title>[add player name here]'s Profile - Parkour Progress</title>
 {% endblock %}
 
 {% block content %}
@@ -14,9 +14,6 @@
         <div class="container" id="progress-container">progress</div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 {% endblock %}
 
