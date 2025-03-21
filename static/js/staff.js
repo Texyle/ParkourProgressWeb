@@ -20,31 +20,26 @@ const userDict = {
     "Lemon": "408971271087456265"
 };
 
-const updateAvatars = async () => {
-    for (const [name, userId] of Object.entries(userDict)) {
-        try {
-            const response = await fetch(`https://discordlookup.mesalytic.moe/v1/user/${userId}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            console.log(`Fetched data for ${name}:`, data); 
-
-            const img = document.querySelector(`img[alt="${name}"]`);
-            if (img) {
-                if (data.avatar && data.avatar.link) {
-                    img.src = data.avatar.link;
-                    console.log(`Updated avatar for ${name} to ${data.avatar.link}`);
-                } else {
-                    console.log(`No avatar link found for ${name}`); 
-                }
-            } else {
-                console.log(`Image element not found for ${name}`); 
-            }
-        } catch (error) {
-            console.error(`Error fetching data for ${name}:`, error); 
+const fetchAvatar = async (name, userId) => {
+    try {
+        const response = await fetch(`https://discordlookup.mesalytic.moe/v1/user/${userId}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        const img = document.querySelector(`img[alt="${name}"]`);
+        if (img && data.avatar && data.avatar.link) {
+            img.src = data.avatar.link;
+            console.log(`Aktualizovaný avatar pre ${name} na ${data.avatar.link}`);
+        } else {
+            console.log(`Nenašiel sa avatar pre ${name}`);
         }
+    } catch (error) {
+        console.error(`Chyba pri získavaní dát pre ${name}:`, error);
     }
+};
+
+const updateAvatars = async () => {
+    const promises = Object.entries(userDict).map(([name, userId]) => fetchAvatar(name, userId));
+    await Promise.all(promises);
 };
 
 document.addEventListener('DOMContentLoaded', updateAvatars);
