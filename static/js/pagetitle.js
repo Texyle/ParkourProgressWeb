@@ -1,9 +1,13 @@
-const title = document.title;
-let spaces = "";
+document.addEventListener("DOMContentLoaded", function () {
+    let titleText = document.title;
+    let speed = 200; 
+    let index = 0;
 
-function moveTitle() {
-    spaces = spaces.length < 30 ? spaces + " " : "";
-    document.title = spaces + title;
-}
+    function scrollTitle() {
+        document.title = titleText.substring(index) + " " + titleText.substring(0, index);
+        index = (index + 1) % titleText.length;
+        setTimeout(scrollTitle, speed);
+    }
 
-setInterval(moveTitle, 200);
+    scrollTitle();
+});
