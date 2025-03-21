@@ -111,7 +111,6 @@
     </script>
     <script src="/static/js/utils.js"></script>
     <script src="/static/js/map.js"></script>
-    <script src="/static/js/pagetitle.js"></script>
     <script>
         async function changeTitle() {
             const mapName = "{{ map.MapName|safe }}";
@@ -120,6 +119,7 @@
 
         document.addEventListener("DOMContentLoaded", changeTitle)
     </script>
+    <script src="/static/js/pagetitle.js" defer></script>
 </body>
 
 </html> 
