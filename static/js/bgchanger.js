@@ -3,10 +3,17 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch("/random-image")
             .then(response => response.json())
             .then(data => {
-                if (data.image_url) {
+                // if (data.image_url) {
+                //     document.body.style.transition = "background-image 1.5s ease-in-out";
+                //     document.body.style.backgroundImage = `url('${data.image_url}')`;
+                // }
+                const img = new Image();
+                img.src = data.image_url;
+
+                img.onload = function () {
                     document.body.style.transition = "background-image 1.5s ease-in-out";
                     document.body.style.backgroundImage = `url('${data.image_url}')`;
-                }
+                };
             })
             .catch(error => console.error("Error fetching image:", error));
     }
