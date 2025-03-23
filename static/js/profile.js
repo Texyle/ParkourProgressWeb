@@ -91,9 +91,13 @@ async function load_discord() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (playerData !== null) {
+    if (typeof playerData !== 'undefined') {
         load_skin();
         load_discord();
+
+        document.getElementById('discord-container').addEventListener('click', function() {
+            window.location.href = `https://discord.com/users/${playerData.DiscordID}`;
+        });
     }
 
     input.addEventListener('input', function () {
@@ -104,10 +108,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!suggestionsContainer.contains(event.target) && event.target !== input && event.target !== magnifyingGlassIcon) {
             suggestionsContainer.style.height = '0';
         }
-    });
-
-    document.getElementById('discord-container').addEventListener('click', function() {
-        window.location.href = `https://discord.com/users/${playerData.DiscordID}`;
     });
 
     input.addEventListener('click', function () {

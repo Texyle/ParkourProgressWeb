@@ -17,7 +17,7 @@
             </div>
         </div>
         <div id="profile-container">
-            {% if player_data is defined %}
+            {% if player_data is not none %}
                 <div class="container" id="player-container">
                     <div id="skin-container">
                         <img src="" id="skin-img">
@@ -36,10 +36,7 @@
                     const playerData = {{ player_data | tojson }};
                 </script>
             {% else %}
-                <div class="container" id="player-container">player</div>
-                <div class="container" id="rankings-container">rankings</div>
-                <div class="container" id="maps-container">maps</div>
-                <div class="container" id="progress-container">progress</div>
+            
             {% endif %}
         </div>
     </div>
