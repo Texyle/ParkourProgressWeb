@@ -9,8 +9,6 @@ connection = None
 def get_cursor(*args, **kwargs):
     global connection
     
-    print(connection)
-    
     if connection == None or not connection.is_connected():
         connection = mysql.connector.connect(
             host="193.124.204.44", 
@@ -19,6 +17,22 @@ def get_cursor(*args, **kwargs):
             password="I2F0HN3Ffe")
     
     return connection.cursor(*args, **kwargs)
+
+def fetch_player_names(app):
+    try:
+        cursor = get_cursor(dictionary=True)
+
+        query = "SELECT Name FROM Player"
+
+        cursor.execute(query)
+        names = cursor.fetchall()
+        cursor.close()
+        
+        return names
+    
+    except Error as e:
+        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
 
 def fetch_all_players(app):
     try:

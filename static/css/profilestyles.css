@@ -1,8 +1,6 @@
 .main-container {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    grid-template-rows: 26rem auto;
-    gap: 10px;
+    display: flex;
+    flex-direction: column;
     background-color: rgba(44, 42, 42, 0.965);
     min-height: 90%;
     width: 60rem;
@@ -14,29 +12,114 @@
     z-index: 10;
 }
 
-.container {
-    background-color: rgba(44, 42, 42, 0.965);
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px 4px black inset;
-    border: 3px solid gray;
+#profile-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 26rem auto;
+    gap: 15px;
+    z-index: 10;
+    padding: 15px;
 }
 
-.player-container {
+.search-container {
+    background-color: rgba(0, 0, 0, 0.3);
+    height: 5rem;
+    border-bottom: 2px solid rgb(80, 80, 80);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.search-bar {
+    width: 20rem;
+    height: 2rem;
+    position: relative;
+}
+
+.search-bar input[type="text"] {
+    width: 100%;
+    height: 100%;
+    padding: 0px 0px 0px 24px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-family: inherit;
+    z-index: 1003;
+    position: relative;
+}
+
+.search-bar input[type="text"]:focus {
+    border-radius: 5px;
+    transition: ease-in-out 0.04s;
+}
+
+.search-bar i {
+    position: absolute;
+    top: 50%;
+    padding: 0 0px 0 4px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: rgba(44, 42, 42, 0.965);
+    z-index: 1005;
+}
+
+#suggestions-container {
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 10px;
+    background-color: gray;
+    height: 0; /* Start with zero height */
+    overflow: hidden; /* Hide overflow content */
+    position: absolute;
+    top: 80%; /* Start below the input */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 19rem;
+    z-index: 1002;
+    transition: height 0.2s ease-out; /* Smooth transition for height */
+    box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.1) inset;
+}
+
+#suggestions-container > :first-child {
+    padding-top: 14px;
+}
+
+.suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+    height: 1rem;
+}
+
+.suggestion-item:hover {
+    background-color: rgb(110, 110, 110);
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
+    box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.1) inset;
+    border: 2px solid gray;
+}
+
+#player-container {
     grid-column: 1 / 1;
     grid-row: 1 / 1;
 }
 
-.rankings-container {
+#rankings-container {
     grid-column: 2 / 2;
     grid-row: 1 / 1;
 }
 
-.maps-container {
+#maps-container {
     grid-column: 1 / 3;
     grid-row: 2 / 2;
+    min-height: 10rem;
 }
 
-.progress-container {
+#progress-container {
     grid-column: 1 / 3;
     grid-row: 3 / 3;
+    min-height: 10rem;
 }

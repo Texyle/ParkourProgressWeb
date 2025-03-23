@@ -46,7 +46,9 @@ def maps():
 
 @app.route("/profile/player")
 def profile():
-    return render_template("profile.html")
+    player_names = database.fetch_player_names(app)
+    player_names = [x['Name'] for x in player_names]
+    return render_template("profile.html", player_names = player_names)
 
 @app.route("/profile/country")
 def profile2():

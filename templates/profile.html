@@ -8,12 +8,24 @@
 
 {% block content %}
     <div class="main-container">
-        <div class="container" id="player-container">player</div>
-        <div class="container" id="rankings-container">rankings</div>
-        <div class="container" id="maps-container">maps</div>
-        <div class="container" id="progress-container">progress</div>
+        <div class="search-container">
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Enter player name" id="map-search">
+                <div id="suggestions-container"></div>
+            </div>
+        </div>
+        <div id="profile-container">
+            <div class="container" id="player-container">player</div>
+            <div class="container" id="rankings-container">rankings</div>
+            <div class="container" id="maps-container">maps</div>
+            <div class="container" id="progress-container">progress</div>
+        </div>
     </div>
 
+    <script>
+        const playerNames = {{ player_names | tojson }};
+    </script>
     <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 {% endblock %}
 
