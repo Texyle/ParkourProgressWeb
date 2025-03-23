@@ -47,13 +47,11 @@ def maps():
 @app.route("/profile/player")
 def profile():
     player_names = database.fetch_player_names(app)
-    player_names = [x['Name'] for x in player_names]
-    return render_template("profile.html", player_names = player_names)
+    return render_template("profile.html", player_names = player_names, player_data = None)
 
 @app.route('/profile/player/<int:player_id>')
 def profile_with_player(player_id):
     player_names = database.fetch_player_names(app)
-    player_names = [x['Name'] for x in player_names]
     
     player_data = database.fetch_player_info(app, player_id)
     

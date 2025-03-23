@@ -22,7 +22,7 @@ def fetch_player_names(app):
     try:
         cursor = get_cursor(dictionary=True)
 
-        query = "SELECT Name FROM Player"
+        query = "SELECT ID, Name FROM Player"
 
         cursor.execute(query)
         names = cursor.fetchall()
