@@ -53,17 +53,17 @@ def fetch_all_players(app):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
 
-def fetch_player_info(app, name):
+def fetch_player_info(app, id):
     try:
         cursor = get_cursor(dictionary=True)
 
         query = """
-        SELECT Player.DiscordID, Player.CountryCode, Player.Name AS Nick
+        SELECT DiscordID, CountryCode, Name
         FROM Player 
-        WHERE Player.Name = %s
+        WHERE ID = %s
         """
 
-        cursor.execute(query, (name,))
+        cursor.execute(query, (id,))
         info = cursor.fetchone()
         cursor.close()
 
@@ -75,6 +75,8 @@ def fetch_player_info(app, name):
             info['CountryCode'] == "Unknown"
         cc = pycountry.countries.get(alpha_2=id)
         info['CountryCode'] = cc.name 
+        
+        print(info)
 
         return info
     except Error as e:

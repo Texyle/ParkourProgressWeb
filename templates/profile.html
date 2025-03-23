@@ -3,6 +3,7 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='/css/profilestyles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>[add player name here]'s Profile - Parkour Progress</title>
 {% endblock %}
 
@@ -16,10 +17,30 @@
             </div>
         </div>
         <div id="profile-container">
-            <div class="container" id="player-container">player</div>
-            <div class="container" id="rankings-container">rankings</div>
-            <div class="container" id="maps-container">maps</div>
-            <div class="container" id="progress-container">progress</div>
+            {% if player_data is defined %}
+                <div class="container" id="player-container">
+                    <div id="skin-container">
+                        <img src="" id="skin-img">
+                    </div>
+                    <div id="discord-container">
+                        <i class="fas fa-external-link-alt external-link-icon"></i>
+                        <img id="discord-pfp" src="" alt="">
+                        <p id="discord-username">
+                    </div>
+                </div>
+                <div class="container" id="rankings-container">{{ player_data['Name']  }}</div>
+                <div class="container" id="maps-container">maps</div>
+                <div class="container" id="progress-container">progress</div>
+
+                <script>
+                    const playerData = {{ player_data | tojson }};
+                </script>
+            {% else %}
+                <div class="container" id="player-container">player</div>
+                <div class="container" id="rankings-container">rankings</div>
+                <div class="container" id="maps-container">maps</div>
+                <div class="container" id="progress-container">progress</div>
+            {% endif %}
         </div>
     </div>
 
