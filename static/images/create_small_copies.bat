@@ -1,0 +1,2 @@
+python create_small_copies.py
+pause
