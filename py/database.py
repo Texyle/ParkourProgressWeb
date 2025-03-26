@@ -72,9 +72,9 @@ def fetch_player_info(app, id):
         
         id = info.get("CountryCode")
         if id == "idk":
-            info['CountryCode'] == "Unknown"
+            info['CountryName'] == "Unknown"
         cc = pycountry.countries.get(alpha_2=id)
-        info['CountryCode'] = cc.name 
+        info['CountryName'] = cc.name 
         
         print(info)
 

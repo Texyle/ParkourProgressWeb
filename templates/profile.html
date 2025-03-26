@@ -28,9 +28,28 @@
                         <p id="discord-username">
                     </div>
                 </div>
-                <div class="container" id="rankings-container">{{ player_data['Name']  }}</div>
-                <div class="container" id="maps-container">maps</div>
-                <div class="container" id="progress-container">progress</div>
+                <div id="info-container">
+                    <div id="player-info">
+                        <p id="player-name">{{ player_data['Name']  }}</p>
+                        <div id="player-country">
+                            <img class="flag" src="{{ url_for('static', filename=flags[player_data['CountryCode']]) }}" alt="{{ code }}">
+                            <div>{{ player_data['CountryName'] }}</div>
+                        </div>
+                    </div>
+                    <div id="rankings-container">
+                        RANKINGS<br>NOT DONE
+                    </div>
+                </div>
+                <div class="container" id="maps-container">
+                    <div id="maps-header">
+                        <p>Completed Maps</p>
+                    </div>
+                </div>
+                <div class="container" id="progress-container">
+                    <div id="progress-header">
+                        <p>Maps in Progress</p>
+                    </div>
+                </div>
 
                 <script>
                     const playerData = {{ player_data | tojson }};

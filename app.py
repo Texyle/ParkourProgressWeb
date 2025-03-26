@@ -56,7 +56,7 @@ def profile_with_player(player_id):
     player_data = database.fetch_player_info(app, player_id)
     
     if player_data != None:
-        return render_template("profile.html", player_names = player_names, player_data = player_data)
+        return render_template("profile.html", player_names = player_names, player_data = player_data, flags=files.flags)
     else:
         return render_template("notfound.html")
     
