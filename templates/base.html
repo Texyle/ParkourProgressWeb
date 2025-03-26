@@ -13,7 +13,7 @@
     <script src="{{ url_for('static', filename='js/bgchanger.js') }}" defer></script>
     {% endblock %}
 </head>
-<body>
+<body class="darken">
     <header>
         <div class="logo">
             <a href="/"><img src="https://cdn.discordapp.com/icons/913838786947977256/31e403312e7ac1efd09c901d391a3538.webp" alt="Logo" class="logo-image"></a>
@@ -58,5 +58,8 @@
         {% block content %}
         {% endblock %}
     </div>
+    <i class="far fa-eye eye-icon"></i>
+
+    <script src="{{ url_for('static', filename='js/showbg.js') }}"></script>
 </body>
 </html>
