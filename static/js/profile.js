@@ -129,3 +129,76 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+function openDropdown(event) {
+    var dropdownButton = event.target;
+    var dropdownContent = dropdownButton.nextElementSibling;
+
+    var openDropdowns = document.querySelectorAll(".profile-dropdown-content.open");
+    openDropdowns.forEach(function(openDropdown) {
+        if (openDropdown !== dropdownContent) {
+            openDropdown.classList.remove("open");
+        }
+    });
+
+    dropdownContent.classList.add("open");
+}
+
+function closeDropdown(event) {
+    var dropdownContent = event.target;
+
+    if (!dropdownContent.matches('.profile-dropdown-content') && !dropdownContent.closest('.profile-dropdown-content')) {
+        var openDropdowns = document.querySelectorAll(".profile-dropdown-content.open");
+        openDropdowns.forEach(function(openDropdown) {
+            openDropdown.classList.remove("open");
+        });
+    }
+}
+
+function updateDropdownButtonStyle() {
+    var dropdown = document.querySelector('.gamemode-dropdown');
+    var checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
+    var dropdownButton = dropdown.querySelector('.profile-dropdown-button');
+
+    var allChecked = true;
+    checkboxes.forEach(function(checkbox) {
+        if (!checkbox.checked) {
+            allChecked = false;
+        }
+    });
+
+    if (!allChecked) {
+        dropdownButton.classList.add('gamemode-dropdown-changed');
+        dropdownButton.textContent = 'Gamemodes *';
+    } else {
+        dropdownButton.classList.remove('gamemode-dropdown-changed');
+        dropdownButton.textContent = 'Gamemodes';
+    }
+}
+
+var dropdownButtons = document.querySelectorAll('.profile-dropdown-button');
+dropdownButtons.forEach(function(button) {
+    button.addEventListener('mouseenter', openDropdown);
+});
+
+var dropdownContents = document.querySelectorAll('.profile-dropdown');
+dropdownContents.forEach(function(dropdown) {
+    dropdown.addEventListener('mouseleave', closeDropdown);
+});
+
+var checkboxes = document.querySelectorAll('.gamemode-dropdown input[type="checkbox"]');
+checkboxes.forEach(function(checkbox) {
+    checkbox.addEventListener('change', updateDropdownButtonStyle);
+});
+
+function selectOption(event, option) {
+    event.stopPropagation();
+    console.log("Selected option: " + option);
+
+    var dropdownContent = event.target.parentElement;
+    var dropdownButton = dropdownContent.previousElementSibling;
+
+    dropdownButton.textContent = "Sort by: " + option;
+
+    dropdownContent.classList.remove("open");
+}

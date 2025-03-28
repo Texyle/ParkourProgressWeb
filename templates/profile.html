@@ -4,7 +4,7 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='/css/profilestyles.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>[add player name here]'s Profile - Parkour Progress</title>
+    <title>{{ player_data['Name']  }}'s Profile - Parkour Progress</title>
 {% endblock %}
 
 {% block content %}
@@ -43,6 +43,40 @@
                 <div class="container" id="maps-container">
                     <div id="maps-header">
                         <p>Completed Maps</p>
+                        <div class="header-filters-container">
+                            <div class="gamemode-dropdown profile-dropdown">
+                                <button onclick="toggleDropdown(event)" class="profile-dropdown-button">Gamemodes</button>
+                                <div id="maps-gamemode-dropdown-content" class="gamemode-dropdown-content profile-dropdown-content">
+                                    <label>    
+                                        <input type="checkbox" value="Option 1" checked>
+                                        <span class="custom-checkbox"></span>
+                                        <span class="label-text">Rankup</span>
+                                    </label>
+                                    <label>    
+                                        <input type="checkbox" value="Option 1" checked>
+                                        <span class="custom-checkbox"></span>
+                                        <span class="label-text">Segmented</span>
+                                    </label>
+                                    <label>    
+                                        <input type="checkbox" value="Option 1" checked>
+                                        <span class="custom-checkbox"></span>
+                                        <span class="label-text">Onlysprint</span>
+                                    </label>
+                                    <label>    
+                                        <input type="checkbox" value="Option 1" checked>
+                                        <span class="custom-checkbox"></span>
+                                        <span class="label-text">Tag</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="sort-dropdown profile-dropdown">
+                                <button onclick="toggleDropdown(event)" class="profile-dropdown-button">Sort by: Recent</button>
+                                <div id="maps-sort-dropdown-content" class="sort-dropdown-content profile-dropdown-content">
+                                    <button onclick="selectOption(event, 'Recent')">Recent</button>
+                                    <button onclick="selectOption(event, 'Difficulty')">Difficulty</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="container" id="progress-container">
