@@ -18,6 +18,19 @@ def get_cursor(*args, **kwargs):
     
     return connection.cursor(*args, **kwargs)
 
+def commit():
+    global connection
+    
+    if connection == None or not connection.is_connected():
+        connection = mysql.connector.connect(
+            host="193.124.204.44", 
+            database="progressbot",
+            user="user",
+            password="I2F0HN3Ffe")
+        return
+    
+    connection.commit()
+
 def fetch_player_names(app):
     try:
         cursor = get_cursor(dictionary=True)
@@ -27,6 +40,7 @@ def fetch_player_names(app):
         cursor.execute(query)
         names = cursor.fetchall()
         cursor.close()
+        commit()
         
         return names
     
@@ -43,6 +57,7 @@ def fetch_all_players(app):
         cursor.execute(query)
         nicks = cursor.fetchall()
         cursor.close()
+        commit()
 
         if nicks is None:
             return None
@@ -66,6 +81,7 @@ def fetch_player_info(app, id):
         cursor.execute(query, (id,))
         info = cursor.fetchone()
         cursor.close()
+        commit()
 
         if info is None:
             return None
@@ -102,6 +118,7 @@ def fetch_maps_in_prog(app, name):
         cursor.execute(query, (name,))
         prog = cursor.fetchall()
         cursor.close()
+        commit()
 
         if prog is None:
             return None
@@ -134,6 +151,7 @@ def fetch_victor_maps(app, *args):
         cursor.execute(query, (name, gamemode))
         victor = cursor.fetchall()
         cursor.close()
+        commit()
 
         if victor is None:
             return None
@@ -166,6 +184,7 @@ def fetch_latest_victors(app):
         victors = cursor.fetchmany(5)
         
         cursor.close()
+        commit()
 
         victors_list = [
             {"player_name": row[0], "map_name": row[1], "date": row[2].isoformat()} 
@@ -190,6 +209,7 @@ def fetch_map(app, id):
         """
         cursor.execute(query, [id])
         map = cursor.fetchone()
+        commit()
 
         return map
     
@@ -259,6 +279,8 @@ def fetch_map_list(app):
         """
         cursor.execute(query)
         all_maps = cursor.fetchall()
+        cursor.close()
+        commit()
 
         maps = {"Rankup": {"Main": [], "Extra": []},
                 "Segmented": {"Main": [], "Extra": []},
@@ -294,6 +316,7 @@ def fetch_victors(app, map_id):
         victors = cursor.fetchall()
         
         cursor.close()
+        commit()
         
         return victors
     

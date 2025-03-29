@@ -159,6 +159,13 @@ def images(filename):
 def page_not_found(error):
     return render_template("notfound.html"), 404
 
+@app.after_request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '-1'
+    return response
+
 def to_filename(map_name):
     # to be used in jinja as a filter
     return re.sub(r'[^a-z0-9]', '', map_name.lower())
