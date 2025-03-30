@@ -144,7 +144,16 @@
                     </div>
                     {% if progress | length > 0 %}
                         <div id="progress-list-container">
-                            {% for map in progress %}
+                            {% set juku_cps = {
+                                "<@&1120013547892646050>": "CP2",
+                                "<@&1120013758920654909>": "CP3",
+                                "<@&1120013825907892265>": "CP4",
+                                "<@&1120013855746170940>": "CP5",
+                                "<@&1120013881847324823>": "CP6",
+                                "<@&1120013899991875724>": "CP7",
+                                "<@&1120013930782265425>": "CP8"
+                            } %}
+                            {% for map in progress %}                 
                                 <div class="progress-container" data-position="{{ map['Position'] }}" onclick="redirectToMapPage('{{ map['MapID'] }}')">
                                     <div class="progress-field progress-title">
                                         <div class="progress-name">{{ map['Name'] }}</div>
@@ -153,7 +162,11 @@
                                         <div class="progress-gamemode">{{ map['Gamemode'] }}</div>
                                     </div>
                                     <div class="progress-field progress-section">
-                                        <div class="progress-section">{{ map['Section'] }}</div>
+                                        {% if map['Name'] == 'Juku Section' %}
+                                            <div class="progress-section">{{ juku_cps.get(map['Section']) }}</div>
+                                        {% else %}
+                                            <div class="progress-section">{{ map['Section'] }}</div>
+                                        {% endif %}
                                     </div>
                                     <div class="progress-field progress-image-container">
                                         {% set map_name = map['Name']|to_filename %}
