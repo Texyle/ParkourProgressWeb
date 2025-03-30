@@ -62,9 +62,22 @@ document.addEventListener('DOMContentLoaded', function () {
         suggestionsContainer.style.height = height + 'px';
     }
 
-    function load_skin() {
+    async function load_skin() {
         const skinImg = document.getElementById("skin-img");
-        skinImg.src = `https://vzge.me/full/${playerData.Name}`;
+        const url = `https://vzge.me/full/512/${playerData.Name}`;
+        const fallbackUrl = 'https://vzge.me/full/512/X-Steve';
+    
+        try {
+            const response = await fetch(url);
+            if (response.status === 404) {
+                skinImg.src = fallbackUrl;
+            } else {
+                skinImg.src = url;
+            }
+        } catch (error) {
+            console.error('Error loading image:', error);
+            skinImg.src = fallbackUrl;
+        }
     }
 
     async function load_discord() {
