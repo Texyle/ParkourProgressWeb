@@ -98,12 +98,12 @@ def fetch_player_info(app, id):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
 
-def fetch_maps_in_prog(app, name):
+def fetch_maps_in_progress(app, player_id):
     try:
         cursor = get_cursor(dictionary=True)
 
         query = """
-        SELECT Map.Name AS MapName, Section.Name AS SectionName
+        SELECT Map.Name AS Name, Section.Name AS Section, Gamemode.Name AS Gamemode
         FROM SectionPlayer
         JOIN Player
         ON Player.ID = SectionPlayer.PlayerID
@@ -111,10 +111,12 @@ def fetch_maps_in_prog(app, name):
         ON Section.ID = SectionPlayer.SectionID
         JOIN Map
         ON Map.ID = Section.MapID
-        WHERE Player.Name = %s
+        JOIN Gamemode
+        ON Gamemode.ID = Map.GamemodeID
+        WHERE Player.ID = %s
         """
 
-        cursor.execute(query, (name,))
+        cursor.execute(query, (player_id,))
         prog = cursor.fetchall()
         cursor.close()
         commit()

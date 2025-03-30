@@ -55,12 +55,14 @@ def profile_with_player(player_id):
     
     player_data = database.fetch_player_info(app, player_id)
     maps = database.fetch_completed_maps(app, player_id)
+    progress = database.fetch_maps_in_progress(app, player_id)
     
     if player_data != None:
         return render_template("profile.html", 
                                player_names = player_names, 
                                player_data = player_data, 
                                maps = maps,
+                               progress = progress,
                                map_images=files.map_images,
                                flags=files.flags)
     else:

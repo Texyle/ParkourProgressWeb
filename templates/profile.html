@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div id="rankings-container">
-                        RANKINGS<br>NOT DONE
+                        RANKINGS<br>COMING SOON
                     </div>
                 </div>
                 <div class="container" id="maps-container">
@@ -114,7 +114,57 @@
                 <div class="container" id="progress-container">
                     <div id="progress-header">
                         <p>Maps in Progress</p>
+                        <div class="header-filters-container">
+                            <div class="gamemode-dropdown profile-dropdown">
+                                <button onclick="toggleDropdown(event)" class="profile-dropdown-button">Gamemodes</button>
+                                <div id="profile-gamemode-dropdown-content" class="gamemode-dropdown-content profile-dropdown-content">
+                                    <label>    
+                                        <input type="checkbox" value="Option 1" checked>
+                                        <span class="custom-checkbox"></span>
+                                        <span class="label-text">Rankup</span>
+                                    </label>
+                                    <label>    
+                                        <input type="checkbox" value="Option 1" checked>
+                                        <span class="custom-checkbox"></span>
+                                        <span class="label-text">Segmented</span>
+                                    </label>
+                                    <label>    
+                                        <input type="checkbox" value="Option 1" checked>
+                                        <span class="custom-checkbox"></span>
+                                        <span class="label-text">Onlysprint</span>
+                                    </label>
+                                    <label>    
+                                        <input type="checkbox" value="Option 1" checked>
+                                        <span class="custom-checkbox"></span>
+                                        <span class="label-text">Tag</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    {% if progress | length > 0 %}
+                        <div id="progress-list-container">
+                            {% for map in progress %}
+                                <div class="progress-container" data-position="{{ map['Position'] }}">
+                                    <div class="progress-field progress-title">
+                                        <div class="progress-name">{{ map['Name'] }}</div>
+                                    </div>
+                                    <div class="progress-field progress-type">
+                                        <div class="progress-gamemode">{{ map['Gamemode'] }}</div>
+                                    </div>
+                                    <div class="progress-field progress-section">
+                                        <div class="progress-section">{{ map['Section'] }}</div>
+                                    </div>
+                                    <div class="progress-field progress-image-container">
+                                        {% set map_name = map['Name']|to_filename %}
+                                        {% set map_name = map_name ~ '_small' %}
+                                        {% set filename = map_images[map_name] %}
+                                        <img class="map-image" loading="lazy" src="{{ url_for('static', filename=filename) }}" alt="{{ map['Name'] }}">
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <script>
