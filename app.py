@@ -54,9 +54,15 @@ def profile_with_player(player_id):
     player_names = database.fetch_player_names(app)
     
     player_data = database.fetch_player_info(app, player_id)
+    maps = database.fetch_completed_maps(app, player_id)
     
     if player_data != None:
-        return render_template("profile.html", player_names = player_names, player_data = player_data, flags=files.flags)
+        return render_template("profile.html", 
+                               player_names = player_names, 
+                               player_data = player_data, 
+                               maps = maps,
+                               map_images=files.map_images,
+                               flags=files.flags)
     else:
         return render_template("notfound.html")
     

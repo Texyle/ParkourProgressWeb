@@ -91,8 +91,7 @@ def fetch_player_info(app, id):
             info['CountryName'] == "Unknown"
         cc = pycountry.countries.get(alpha_2=id)
         info['CountryName'] = cc.name 
-        
-        print(info)
+
 
         return info
     except Error as e:
@@ -128,27 +127,81 @@ def fetch_maps_in_prog(app, name):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
     
-def fetch_victor_maps(app, *args):
+def fetch_completed_maps(app, player_id, gamemode=None):
     try:
         cursor = get_cursor(dictionary=True)
-        name = args[0]
-        gamemode = args[1]
 
-        query = """
-        SELECT Map.Name AS MapName, Player.Name AS PlayerName, Victor.Date AS Date, Victor.Fails AS Fails, Map.FailsMessage AS FailsMessage
-        FROM Victor
-        JOIN Map
-        ON Map.ID = Victor.MapID
-        JOIN Player
-        ON Player.ID = Victor.PlayerID
-        JOIN Gamemode
-        ON Gamemode.ID = Map.GamemodeID
-        WHERE Player.Name = %s
-        AND Gamemode.Name = %s
-        ORDER BY Date ASC
-        """
+        if gamemode != None:
+            query = """
+            SELECT
+                Map.Name AS Name,
+                Date,
+                Fails,
+                Map.FailsMessage AS FailsMessage,
+                Gamemode.Name AS Gamemode,
+                Map.Position as Position,
+                Map.Extra AS Extra,
+                VictorPosition
+            FROM (
+                SELECT
+                    Victor.MapID,
+                    Victor.PlayerID,
+                    Victor.Date,
+                    Victor.Fails,
+                    ROW_NUMBER() OVER (PARTITION BY Victor.MapID ORDER BY Victor.Date ASC) AS VictorPosition
+                FROM
+                    Victor
+            ) AS RankedVictors
+            JOIN
+                Map ON Map.ID = RankedVictors.MapID
+            JOIN
+                Player ON Player.ID = RankedVictors.PlayerID
+            JOIN
+                Gamemode ON Gamemode.ID = Map.GamemodeID
+            WHERE
+                Player.ID = %s
+                Gamemode.Name = %s
+            ORDER BY
+                Date DESC;
+            """
 
-        cursor.execute(query, (name, gamemode))
+            cursor.execute(query, (player_id, gamemode))
+        else:
+            query = """
+            SELECT
+                Map.Name AS Name,
+                Date,
+                Fails,
+                Map.FailsMessage AS FailsMessage,
+                Gamemode.Name AS Gamemode,
+                Map.Position as Position,
+                Map.Extra AS Extra,
+                VictorPosition
+            FROM (
+                SELECT
+                    Victor.MapID,
+                    Victor.PlayerID,
+                    Victor.Date,
+                    Victor.Fails,
+                    ROW_NUMBER() OVER (PARTITION BY Victor.MapID ORDER BY Victor.Date ASC) AS VictorPosition
+                FROM
+                    Victor
+            ) AS RankedVictors
+            JOIN
+                Map ON Map.ID = RankedVictors.MapID
+            JOIN
+                Player ON Player.ID = RankedVictors.PlayerID
+            JOIN
+                Gamemode ON Gamemode.ID = Map.GamemodeID
+            WHERE
+                Player.ID = %s
+            ORDER BY
+                Date DESC;
+            """
+
+            print(player_id)
+            cursor.execute(query, [player_id])
+            
         victor = cursor.fetchall()
         cursor.close()
         commit()

@@ -78,6 +78,38 @@
                             </div>
                         </div>
                     </div>
+                    {% if maps | length > 0 %}
+                        <div id="map-list-container">
+                            {% for map in maps %}
+                                <div class="map-container" data-position="{{ map['Position'] }}">
+                                    <div class="map-field map-title">
+                                        <div class="map-name">{{ map['Name'] }}</div>
+                                        {% if map['FailsMessage'] is not none %}
+                                            <div class="map-fails">{{ map['Fails'] }} {{ map['FailsMessage'] }} fails</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="map-field map-type">
+                                        <div class="map-gamemode">{{ map['Gamemode'] }}</div>
+                                        {% if map['Extra'] == 0 %}
+                                            <div class="map-status">Main</div>
+                                        {% else %}
+                                            <div class="map-status">Extra</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="map-field map-date">
+                                        <div class="map-date">{{ map['Date'] }}</div>
+                                        <div class="map-fails">#{{ map['VictorPosition'] }}</div>
+                                    </div>
+                                    <div class="map-field map-image-container">
+                                        {% set map_name = map['Name']|to_filename %}
+                                        {% set map_name = map_name ~ '_small' %}
+                                        {% set filename = map_images[map_name] %}
+                                    <img class="map-image" loading="lazy" src="{{ url_for('static', filename=filename) }}" alt="{{ map['Name'] }}">
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="container" id="progress-container">
                     <div id="progress-header">
@@ -96,7 +128,11 @@
 
     <script>
         const playerNames = {{ player_names | tojson }};
+        {% if maps | length > 0 %}
+        const maps = {{ maps | tojson }}
+        {% endif %}
     </script>
     <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/profile_maps.js') }}"></script>
 {% endblock %}
 
