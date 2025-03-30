@@ -10,6 +10,7 @@
     border: 3px solid gray;
     position: relative;
     z-index: 10;
+    margin-bottom: 5rem;
 }
 
 #profile-container {
@@ -379,17 +380,18 @@
 
 .map-container {
     display: grid;
-    grid-template-columns: 49% 16% 16% 19%;
+    grid-template-columns: 50% 16% 16% 18%;
     height: 5rem;
     justify-content: center;
     align-items: center;
     background-color: rgba(100, 100, 100, 0.8);
     box-shadow: 0px 8px 6px -6px rgba(40, 40, 40, 0.965) inset, 0px -8px 6px -6px rgba(40, 40, 40, 0.965) inset;
-    transition: height 0.5s ease, transform 0.5s ease;
+    transition: height 0.3s ease, transform 0.5s ease, background-color 0.3s ease;
     overflow: hidden;
     z-index: 1;
     position: relative;
     box-sizing: border-box;
+    cursor: pointer;
 }
 
 .map-container.hidden {
@@ -415,6 +417,15 @@
     background-color: white;
 }
 
+.map-container:hover {
+    height: 5.4rem !important;
+    background-color: rgba(85, 85, 85, 0.8);
+}
+
+.map-container:hover .map-image-container {
+    margin-left: 0;
+}
+
 .map-field {
     text-align: center;
 }
@@ -425,12 +436,12 @@
 }
 
 .map-name {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: bold;
 }
 
 .map-fails {
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-weight: lighter;
 }
 
@@ -439,7 +450,7 @@
 }
 
 .map-image-container {
-    height: 5rem;
+    height: inherit;
     position: relative;
     object-fit: contain;
     box-shadow: 0px 8px 6px -6px rgba(0, 0, 0, 0.965) inset, 
@@ -447,6 +458,8 @@
     -8px 0px 6px -6px rgba(0, 0, 0, 0.965) inset;
     justify-content: center;
     white-space: nowrap;
+    margin-left: 0.6rem;
+    transition: margin 0.3s;
 }
 
 .map-image {
@@ -462,17 +475,18 @@
 
 .progress-container {
     display: grid;
-    grid-template-columns: 40% 20% 20% 20%;
+    grid-template-columns: 42% 17% 23% 18%;
     height: 5rem;
     justify-content: center;
     align-items: center;
     background-color: rgba(100, 100, 100, 0.8);
     box-shadow: 0px 8px 6px -6px rgba(40, 40, 40, 0.965) inset, 0px -8px 6px -6px rgba(40, 40, 40, 0.965) inset;
-    transition: height 0.5s ease, transform 0.5s ease;
+    transition: height 0.5s ease, transform 0.5s ease, background-color 0.3s ease;
     overflow: hidden;
     z-index: 1;
     position: relative;
     box-sizing: border-box;
+    cursor: pointer;
 }
 
 .progress-container.hidden {
@@ -480,6 +494,15 @@
     padding: 0;
     border: none;
     opacity: 0;
+}
+
+.progress-container:hover {
+    height: 5.4rem !important;
+    background-color: rgba(85, 85, 85, 0.8);
+}
+
+.progress-container:hover .progress-image-container {
+    margin-left: 0;
 }
 
 .progress-container > div {
@@ -511,8 +534,13 @@
     font-weight: bold;
 }
 
+.progress-section {
+    margin-left: 0.5rem;
+    margin-right: 0.2rem;
+}
+
 .progress-image-container {
-    height: 5rem;
+    height: inherit;
     position: relative;
     object-fit: contain;
     box-shadow: 0px 8px 6px -6px rgba(0, 0, 0, 0.965) inset, 
@@ -520,6 +548,8 @@
     -8px 0px 6px -6px rgba(0, 0, 0, 0.965) inset;
     justify-content: center;
     white-space: nowrap;
+    margin-left: 0.6rem;
+    transition: margin 0.3s;
 }
 
 .progress-image {

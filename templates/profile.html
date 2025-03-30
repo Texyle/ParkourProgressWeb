@@ -81,7 +81,7 @@
                     {% if maps | length > 0 %}
                         <div id="map-list-container">
                             {% for map in maps %}
-                                <div class="map-container" data-position="{{ map['Position'] }}">
+                                <div class="map-container" data-position="{{ map['Position'] }}" onclick="redirectToMapPage('{{ map['MapID'] }}')">
                                     <div class="map-field map-title">
                                         <div class="map-name">{{ map['Name'] }}</div>
                                         {% if map['FailsMessage'] is not none %}
@@ -145,7 +145,7 @@
                     {% if progress | length > 0 %}
                         <div id="progress-list-container">
                             {% for map in progress %}
-                                <div class="progress-container" data-position="{{ map['Position'] }}">
+                                <div class="progress-container" data-position="{{ map['Position'] }}" onclick="redirectToMapPage('{{ map['MapID'] }}')">
                                     <div class="progress-field progress-title">
                                         <div class="progress-name">{{ map['Name'] }}</div>
                                     </div>

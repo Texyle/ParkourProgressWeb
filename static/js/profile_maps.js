@@ -56,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function filterProgress() {
-        console.log("asd");
         const selectedGamemodes = Array.from(filterCheckboxesProgress)
             .filter(checkbox => checkbox.checked)
             .map(checkbox => checkbox.nextElementSibling.nextElementSibling.textContent);
@@ -126,3 +125,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+function redirectToMapPage(mapId) {
+    const currentUrl = window.location.href;
+
+    const baseUrl = window.location.protocol + "//" + window.location.host;
+    const newUrl = `${baseUrl}/map/${mapId}`;
+
+    window.location.href = newUrl;
+}

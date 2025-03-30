@@ -191,16 +191,14 @@ document.addEventListener('DOMContentLoaded', function () {
             updateDropdownButtonStyle(dropdown);
         });
     });
-
-    function selectOption(event, option) {
-        event.stopPropagation();
-        console.log("Selected option: " + option);
-
-        var dropdownContent = event.target.parentElement;
-        var dropdownButton = dropdownContent.previousElementSibling;
-
-        dropdownButton.textContent = "Sort by: " + option;
-
-        dropdownContent.classList.remove("open");
-    }
 });
+
+function selectOption(event, option) {
+    event.stopPropagation();
+    console.log("Selected option: " + option);
+
+    var dropdownContent = event.target.parentElement;
+    var dropdownButton = dropdownContent.previousElementSibling;
+
+    dropdownButton.textContent = "Sort by: " + option;
+}

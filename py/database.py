@@ -103,7 +103,7 @@ def fetch_maps_in_progress(app, player_id):
         cursor = get_cursor(dictionary=True)
 
         query = """
-        SELECT Map.Name AS Name, Section.Name AS Section, Gamemode.Name AS Gamemode
+        SELECT Map.Name AS Name, Section.Name AS Section, Gamemode.Name AS Gamemode, Map.ID as MapID
         FROM SectionPlayer
         JOIN Player
         ON Player.ID = SectionPlayer.PlayerID
@@ -137,6 +137,7 @@ def fetch_completed_maps(app, player_id, gamemode=None):
             query = """
             SELECT
                 Map.Name AS Name,
+                Map.ID as MapID,
                 Date,
                 Fails,
                 Map.FailsMessage AS FailsMessage,
@@ -172,6 +173,7 @@ def fetch_completed_maps(app, player_id, gamemode=None):
             query = """
             SELECT
                 Map.Name AS Name,
+                Map.ID as MapID,
                 Date,
                 Fails,
                 Map.FailsMessage AS FailsMessage,
