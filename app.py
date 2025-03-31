@@ -22,9 +22,8 @@ app = Flask(__name__)
 app.secret_key = secrets.token_hex(64)
 app.config["DISCORD_CLIENT_ID"] = "1218283716200366131"
 app.config["DISCORD_CLIENT_SECRET"] = "s1E5Lxws6wyyrsajRZznwhAar0AnYBDn"
-app.config["DISCORD_REDIRECT_URI"] = "http://127.0.0.1:20000/callback"
+app.config["DISCORD_REDIRECT_URI"] = "http://193.124.204.44/callback"
 app.config["DISCORD_BOT_TOKEN"] = "MTIxODI4MzcxNjIwMDM2NjEzMQ.GdjgrS.OqmS8ixXmtmmbi8OKbfzGKhdmmLYOxGWvz6nUs"
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 files = Files(app.static_folder)
 discord = DiscordOAuth2Session(app)
 
