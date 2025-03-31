@@ -1,6 +1,6 @@
 import os
 from mysql.connector import Error
-from flask import Flask, request, jsonify, send_from_directory, render_template
+from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect
 from datetime import datetime
 import py.database as database
 import traceback
@@ -8,6 +8,9 @@ import re
 from py.files import Files
 from jinja2 import Environment, FileSystemLoader
 import random
+import uuid, secrets
+from flask_discord import DiscordOAuth2Session, requires_authorization, Unauthorized
+import requests
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 PROJECT_DIR = os.path.dirname(BASE_DIR)  
@@ -16,11 +19,77 @@ IMAGES_DIR = os.path.join(PROJECT_DIR, "images")
 TEMPLATES_DIR = os.path.join(PROJECT_DIR, "templates")
 
 app = Flask(__name__)
+app.secret_key = secrets.token_hex(64)
+app.config["DISCORD_CLIENT_ID"] = "1218283716200366131"
+app.config["DISCORD_CLIENT_SECRET"] = "s1E5Lxws6wyyrsajRZznwhAar0AnYBDn"
+app.config["DISCORD_REDIRECT_URI"] = "http://127.0.0.1:20000/callback"
+app.config["DISCORD_BOT_TOKEN"] = "MTIxODI4MzcxNjIwMDM2NjEzMQ.GdjgrS.OqmS8ixXmtmmbi8OKbfzGKhdmmLYOxGWvz6nUs"
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 files = Files(app.static_folder)
+discord = DiscordOAuth2Session(app)
+
+def get_guild_member(guild_id, user_id, bot_token):
+    url = f"https://discord.com/api/v10/guilds/{guild_id}/members/{user_id}"
+    headers = {
+        "Authorization": f"Bot {bot_token}"
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.json().get("roles")
+    else:
+        return None
+
+@app.route("/login")
+def login():
+    return discord.create_session()
+
+@app.route('/callback')
+def callback():
+    discord.callback()
+    user = discord.fetch_user()
+    print(user)
+    guilds = discord.fetch_guilds()
+
+    target_guild_id = 913838786947977256  
+    staff_role_ids = ["921147495374024714", "913840524627177573", "1222953168208658518", "916739439177371688", "1244782886595465256"]
+
+    for guild in guilds:
+        if guild.id == target_guild_id:
+            roles = get_guild_member(guild.id, user.id, app.config.get("DISCORD_BOT_TOKEN"))
+            for role in roles:
+                if any(role in staff_role_ids for role in roles):
+                    token = str(uuid.uuid4())
+                    session["token"] = token
+                    session["ip"] = request.remote_addr
+                    return redirect(url_for('dashboard', token=token))
+                else:
+                    return redirect(url_for('home', success='False'))
+
+    return redirect(url_for('home', success='False'))
+
+@app.route('/dashboard/<token>')
+def dashboard(token):
+    user_ip = session.get("ip")
+    current_ip = request.remote_addr
+
+    if session.get("token") == token and user_ip == current_ip:
+        return render_template('dashboard.html', token=token)
+    else:
+        return "Prístup zamietnutý: neplatný token alebo IP adresa.", 403
+    
+@app.route('/invalidate-token', methods=['POST'])
+def invalidate_token():
+    data = request.get_json()
+    token = data.get("token")
+    if session.get("token") == token:
+        session.pop("token", None)
+        session.pop("ip", None)
+    return jsonify({"message": "Token deaktivovaný"})
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    success = request.args.get("success")
+    return render_template("index.html", success=success)
 
 @app.route("/staff")
 def staff():

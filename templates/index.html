@@ -7,6 +7,11 @@
 {% endblock %}
 
 {% block content %}
+    {% if success == 'False' %}
+    <script>
+        alert("Unauthorized");
+    </script>
+    {% endif %}
     <section class="description">
         <h1>Welcome to Parkour Progress!</h1>  
         <p>A community based on the hardest Minecraft Parkour maps ever created. The best place to show your parkour skills!</p>

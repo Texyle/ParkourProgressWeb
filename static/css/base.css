@@ -216,6 +216,27 @@ nav ul li a:hover::after {
     max-height: 6rem;
 }
 
+.login-button a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.login-button i {
+    font-size: 1.2em;
+}
+
+.login-button a:hover {
+    background-color: #2a612c;
+    transform: scale(1.05);
+}
 
 .discord-button a {
     display: flex;
@@ -240,6 +261,7 @@ nav ul li a:hover::after {
 
 .discord-container {
     position: relative;
+    display: flex;
 }
 
 .discord-widget {
@@ -271,6 +293,10 @@ nav ul li a:hover::after {
     }
 
     .discord-button {
+        margin-top: 10px;
+    }
+
+    .login-button {
         margin-top: 10px;
     }
 }
