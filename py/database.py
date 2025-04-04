@@ -223,7 +223,34 @@ def fetch_completed_maps(app, player_id, gamemode=None):
     except Error as e:
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
+
+def fetch_country_player_counts(app):
+    try:
+        cursor = get_cursor(dictionary=True)
         
+        query = """
+            SELECT CountryCode, COUNT(*) AS Players
+            FROM Player
+            GROUP BY CountryCode
+            ORDER BY Players DESC;
+        """
+        cursor.execute(query)
+        player_counts = cursor.fetchall()
+        valid_counts = {}
+                
+        for player_count in player_counts:
+            country_code = player_count["CountryCode"].upper()
+            country = pycountry.countries.get(alpha_2=country_code)
+            if country:
+                valid_counts[country.alpha_3] = {"Players": player_count["Players"]}
+        
+        return valid_counts
+        
+    except Error as e:
+        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
+    
+    
 def fetch_latest_victors(app):
     try:
         cursor = get_cursor()
@@ -376,6 +403,32 @@ def fetch_victors(app, map_id):
         commit()
         
         return victors
+    
+    except Error as e:
+        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
+    
+def fetch_country_data(app, country_code):
+    try:
+        # cursor = get_cursor(dictionary=True)
+        
+        # query = """
+
+        # """
+        # cursor.execute(query, [map_id])
+        # victors = cursor.fetchall()
+        
+        # cursor.close()
+        # commit()
+        data = {}
+        country = pycountry.countries.get(alpha_2=country_code)
+        if country == None:
+            return None
+        
+        data["Code"] = country_code
+        data["Name"] = country.name
+        
+        return data
     
     except Error as e:
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
