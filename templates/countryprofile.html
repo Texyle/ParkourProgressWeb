@@ -24,20 +24,25 @@
                     <img class="flag" src="{{ url_for('static', filename=flags[data['Code']]) }}" alt="{{ flag }}">
                     <span>{{ data['Name'] }}</span>
                 </div>
-                <div class="info-icon-wrapper">
-                    <div class="info-icon">
-                        i
-                    </div>
-                    <div class="popup">
-                        This is some information text.
-                    </div>
-                </div>
-                </div>
                 <div id="players-container">
                     <div id="players-header-container">
-                        <span>Top 5 players</span>
+                        <span id="players-header-text">Players</span>
+                        <div class="info-icon">
+                            i
+                            <div class="popup">
+                                <span>
+                                    Currently sorted by number of maps completed, will likely be changed when the ranking system is implemented.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                     <div id="players-list-container">
-
+                        {% for player in data["Players"] %}
+                            <div class="player-container">
+                                <img src="https://vzge.me/face/{{ player["Name"] }}" class="player-face">
+                                {{ player["Name"] }}
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
 

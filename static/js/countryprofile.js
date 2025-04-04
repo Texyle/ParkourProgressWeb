@@ -109,3 +109,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+document.addEventListener('mousemove', (event) => {
+    const popups = document.querySelectorAll('.popup');
+    popups.forEach(popup => {
+        popup.style.left = `${event.clientX+10}px`;
+        popup.style.top = `${event.clientY}px`;
+    });
+});
