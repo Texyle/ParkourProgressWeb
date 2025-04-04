@@ -1,20 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Dashboard</h1>
-</body>
-<script>
-    window.addEventListener('beforeunload', function() {
-        fetch('/invalidate-token', {
-            method: 'POST',
-            body: JSON.stringify({ token: '{{ token }}' }),
-            headers: { 'Content-Type': 'application/json' }
-        });
-    });
-</script>
-</html>
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardstyles.css') }}">
+    <title>Dashboard</title>
+{% endblock %}
+
+{% block content %}
+    <h1>Welcome, {{ discordname }}, {{ pos }}, what would you like to do?</h1>
+{% endblock %}

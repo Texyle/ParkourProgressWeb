@@ -1,0 +1,196 @@
+* {
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
+}
+
+body.dark-mode {
+    background-color: #18191c;
+    color: #e3e3e3;
+}
+
+body.dark-mode .form {
+    background: #242526;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode p {
+    color: #b0b3b8;
+}
+
+body.dark-mode .triangle {
+    background: #7289da;
+}
+
+body.light-mode {
+    background-color: #f0f0f0;
+    color: #18191c;
+}
+
+body.light-mode .form {
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode p {
+    color: #555;
+}
+
+body.light-mode .triangle {
+    background: #5865F2;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    position: relative;
+}
+
+.form {
+    width: 350px;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.logoicon img {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    border-radius: 50%;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.login-button a {
+    display: inline-block;
+    background-color: #5865F2;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.login-button a:hover {
+    background-color: #4752C4;
+}
+
+#db {
+    margin-right: 10px;
+}
+
+.error-box {
+    background-color: #ebc9c9;
+    color: #a00;
+    padding: 10px;
+    border: 1px solid #a00;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    position: sticky;
+}
+
+.triangle {
+    position: absolute;
+    top: 50%;
+    width: 200px;
+    height: 200px;
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    transform: translateY(-50%);
+    border-radius: 10px;
+}
+
+.triangle.left {
+    left: -0px;
+    transform: translateY(-50%) rotate(90deg);
+}
+
+.triangle.right {
+    right: -0px;
+    transform: translateY(-50%) rotate(-90deg);
+}
+
+.switch-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 30px;
+    background: #ddd;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    padding: 2px;
+}
+
+.switch-circle {
+    width: 26px;
+    height: 26px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, background 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.switch-circle i {
+    font-size: 16px;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .switch-container {
+    background: #7289da;
+}
+
+body.dark-mode .switch-circle {
+    transform: translateX(30px);
+    background: #18191c;
+}
+
+body.dark-mode .switch-circle i {
+    color: #f1c40f;
+}
+
+body.light-mode .switch-container {
+    background: #5865F2;
+}
+
+body.light-mode .switch-circle {
+    transform: translateX(5px);  
+    background: white;
+}
+
+body.light-mode .switch-circle i {
+    color: #f39c12;
+}
+

@@ -216,12 +216,12 @@ nav ul li a:hover::after {
     max-height: 6rem;
 }
 
-.login-button a {
+.dashboard-button a {
     display: flex;
     align-items: center;
     gap: 8px;
     text-decoration: none;
-    background-color: #4CAF50;
+    background-color: #0cb143;
     color: white;
     padding: 10px 15px;
     border-radius: 5px;
@@ -229,12 +229,12 @@ nav ul li a:hover::after {
     margin-right: 10px;
 }
 
-.login-button i {
+.dashboard-button i {
     font-size: 1.2em;
 }
 
-.login-button a:hover {
-    background-color: #2a612c;
+.dashboard-button a:hover {
+    background-color: #07642b;
     transform: scale(1.05);
 }
 
