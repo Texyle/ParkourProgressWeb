@@ -4,8 +4,59 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/countryprofilestyles.css') }}">
     <title>Country Profile - Parkour Progress</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+    <script src="{{ url_for('static', filename='js/datamaps.world.min.js') }}"></script>
 {% endblock %}
 
 {% block content %}
-    <section class=""></section>
+    <div id="main-container">
+        <div id="search-container">
+            <div id="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Enter country" autocomplete="off" id="search-input">
+                <div id="suggestions-container"></div>
+            </div>
+        </div>
+        {% if data is not none %}
+            <div id="profile-container">
+                <div id="country-title-container">
+                    <img class="flag" src="{{ url_for('static', filename=flags[data['Code']]) }}" alt="{{ flag }}">
+                    <span>{{ data['Name'] }}</span>
+                </div>
+                <div class="info-icon-wrapper">
+                    <div class="info-icon">
+                        i
+                    </div>
+                    <div class="popup">
+                        This is some information text.
+                    </div>
+                </div>
+                </div>
+                <div id="players-container">
+                    <div id="players-header-container">
+                        <span>Top 5 players</span>
+                    <div id="players-list-container">
+
+                    </div>
+                </div>
+
+                <div id="stats-container">
+
+                </div>
+
+                <div id="maps-container">
+
+                </div>
+            </div>
+        {% else %}
+            reminder for myself to do something with this blank box (go search for a country)
+        {% endif %}
+    </div>
+
+    <script>
+        var countries = {{ countries | tojson }};
+        const flags = {{ flags | tojson }}
+    </script>
+    <script src="{{ url_for('static', filename='js/countryprofile.js') }}"></script>
 {% endblock %}

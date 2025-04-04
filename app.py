@@ -10,6 +10,7 @@ from flask_discord import DiscordOAuth2Session
 from cryptography.fernet import Fernet
 import requests
 import base64
+import pycountry
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 PROJECT_DIR = os.path.dirname(BASE_DIR)  
@@ -172,8 +173,23 @@ def profile_with_player(player_id):
         return render_template("notfound.html")
     
 @app.route("/profile/country")
-def profile2():
-    return render_template("countryprofile.html")
+def country_profile():
+    player_counts = database.fetch_country_player_counts(app)
+    countries = [{'Code': country.alpha_2.lower(), 'Name': country.name} for country in pycountry.countries]
+    return render_template("countryprofile.html", 
+                           countries = countries,
+                           data = None,
+                           flags=files.flags)
+
+@app.route("/profile/country/<string:country_code>")
+def country_profile_with_country(country_code):
+    player_counts = database.fetch_country_player_counts(app)
+    data = database.fetch_country_data(app, country_code)
+    countries = [{'Code': country.alpha_2.lower(), 'Name': country.name} for country in pycountry.countries]
+    return render_template("countryprofile.html", 
+                           countries = countries,
+                           data = data,
+                           flags=files.flags)
 
 @app.route('/map/<int:map_id>')
 def map(map_id):
