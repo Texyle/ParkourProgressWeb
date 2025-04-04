@@ -7,6 +7,7 @@ from py.files import Files
 import random
 import secrets
 from flask_discord import DiscordOAuth2Session
+from cryptography.fernet import Fernet
 import requests
 import base64
 import pycountry
@@ -24,8 +25,10 @@ app.config["DISCORD_CLIENT_SECRET"] = "rFVXxCBDdBJDDu7fFBWRrQwiQbWcXJv9"
 app.config["DISCORD_REDIRECT_URI"] = "http://127.0.0.1:20000/callback"
 app.config["DISCORD_BOT_TOKEN"] = "MTIxODI4MzcxNjIwMDM2NjEzMQ.GdjgrS.OqmS8ixXmtmmbi8OKbfzGKhdmmLYOxGWvz6nUs"
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "true"
-files = Files(app.static_folder)
+files = Files(app.static_folder)    
 discord = DiscordOAuth2Session(app)
+key = Fernet.generate_key()
+fernet = Fernet(key)
 
 def get_guild_member(guild_id, user_id, bot_token):
     url = f"https://discord.com/api/v10/guilds/{guild_id}/members/{user_id}"
@@ -43,12 +46,12 @@ def createcookie():
     ip = request.remote_addr
     discordname = session.get("discordname")
     pos = session.get("pos")
-    zdata = json.dumps({"ip": ip, "discordname": discordname, "pos": pos})
-    data = base64.b64encode(zdata.encode('utf-8')).decode()
+    data = json.dumps({"ip": ip, "discordname": discordname, "pos": pos})
+    encrypted = fernet.encrypt(data).decode()
 
     try:
         resp = make_response(redirect(url_for('dashboard')))
-        resp.set_cookie("login", data, httponly=True)
+        resp.set_cookie("login", encrypted, httponly=True)
         return resp
     except Exception as e:
         print(f"Error while creating cookie: {e}")
@@ -61,8 +64,8 @@ def checkcookie():
         return None
     
     try:
-        decoded = base64.b64decode(bs64).decode()
-        cookie = json.loads(decoded)
+        decrypted = fernet.decrypt(bs64.encode())
+        cookie = json.loads(decrypted)
         if cookie.get("ip") == request.remote_addr:
             return cookie
     except Exception as e:
