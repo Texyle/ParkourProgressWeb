@@ -410,16 +410,21 @@ def fetch_victors(app, map_id):
     
 def fetch_country_data(app, country_code):
     try:
-        # cursor = get_cursor(dictionary=True)
+        cursor = get_cursor(dictionary=True)
         
-        # query = """
-
-        # """
-        # cursor.execute(query, [map_id])
-        # victors = cursor.fetchall()
+        query = """
+            SELECT Name, COUNT(*) AS Completions
+            FROM Victor
+            JOIN Player ON Player.ID = Victor.PlayerID
+            WHERE CountryCode = %s
+            GROUP BY Player.ID
+            ORDER BY Completions DESC
+        """
+        cursor.execute(query, [country_code])
+        players = cursor.fetchall()
+        cursor.close()
+        commit()
         
-        # cursor.close()
-        # commit()
         data = {}
         country = pycountry.countries.get(alpha_2=country_code)
         if country == None:
@@ -427,6 +432,7 @@ def fetch_country_data(app, country_code):
         
         data["Code"] = country_code
         data["Name"] = country.name
+        data["Players"] = players
         
         return data
     
