@@ -1,16 +1,14 @@
 import os
-from mysql.connector import Error
-from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect
-from datetime import datetime
+import json
+from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect, make_response
 import py.database as database
-import traceback
 import re
 from py.files import Files
-from jinja2 import Environment, FileSystemLoader
 import random
-import uuid, secrets
-from flask_discord import DiscordOAuth2Session, requires_authorization, Unauthorized
+import secrets
+from flask_discord import DiscordOAuth2Session
 import requests
+import base64
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 PROJECT_DIR = os.path.dirname(BASE_DIR)  
@@ -20,10 +18,11 @@ TEMPLATES_DIR = os.path.join(PROJECT_DIR, "templates")
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(64)
-app.config["DISCORD_CLIENT_ID"] = "1218283716200366131"
-app.config["DISCORD_CLIENT_SECRET"] = "s1E5Lxws6wyyrsajRZznwhAar0AnYBDn"
-app.config["DISCORD_REDIRECT_URI"] = "http://193.124.204.44/callback"
+app.config["DISCORD_CLIENT_ID"] = "1263772933483139143"
+app.config["DISCORD_CLIENT_SECRET"] = "rFVXxCBDdBJDDu7fFBWRrQwiQbWcXJv9"
+app.config["DISCORD_REDIRECT_URI"] = "http://127.0.0.1:20000/callback"
 app.config["DISCORD_BOT_TOKEN"] = "MTIxODI4MzcxNjIwMDM2NjEzMQ.GdjgrS.OqmS8ixXmtmmbi8OKbfzGKhdmmLYOxGWvz6nUs"
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "true"
 files = Files(app.static_folder)
 discord = DiscordOAuth2Session(app)
 
@@ -38,6 +37,38 @@ def get_guild_member(guild_id, user_id, bot_token):
     else:
         return None
 
+@app.route("/createcookie")
+def createcookie():
+    ip = request.remote_addr
+    discordname = session.get("discordname")
+    pos = session.get("pos")
+    zdata = json.dumps({"ip": ip, "discordname": discordname, "pos": pos})
+    data = base64.b64encode(zdata.encode('utf-8')).decode()
+
+    try:
+        resp = make_response(redirect(url_for('dashboard')))
+        resp.set_cookie("login", data, httponly=True)
+        return resp
+    except Exception as e:
+        print(f"Error while creating cookie: {e}")
+        return "Error", 500
+
+@app.route("/checkcookie")
+def checkcookie():
+    bs64 = request.cookies.get("login")
+    if bs64 is None:
+        return None
+    
+    try:
+        decoded = base64.b64decode(bs64).decode()
+        cookie = json.loads(decoded)
+        if cookie.get("ip") == request.remote_addr:
+            return cookie
+    except Exception as e:
+        print(f"Cookie decoding error: {e}")
+    
+    return None
+
 @app.route("/login")
 def login():
     return discord.create_session()
@@ -46,44 +77,45 @@ def login():
 def callback():
     discord.callback()
     user = discord.fetch_user()
-    print(user)
     guilds = discord.fetch_guilds()
 
-    target_guild_id = 913838786947977256  
-    staff_role_ids = ["921147495374024714", "913840524627177573", "1222953168208658518", "916739439177371688", "1244782886595465256"]
+    role_strings = {
+        "921147495374024714": "Owner",
+        "913840524627177573": "Admin",
+        "1222953168208658518": "Developer",
+        "916739439177371688": "Moderator",
+        "1244782886595465256": "Helper",
+    }
+
+    target_guild_id = 913838786947977256
+    staff_role_ids = list(role_strings.keys())
 
     for guild in guilds:
         if guild.id == target_guild_id:
             roles = get_guild_member(guild.id, user.id, app.config.get("DISCORD_BOT_TOKEN"))
             for role in roles:
-                if any(role in staff_role_ids for role in roles):
-                    token = str(uuid.uuid4())
-                    session["token"] = token
-                    session["ip"] = request.remote_addr
-                    return redirect(url_for('dashboard', token=token))
-                else:
-                    return redirect(url_for('home', success='False'))
+                if role in staff_role_ids:
+                    session['discordname'] = str(user).replace("#0", "")
+                    session['pos'] = role_strings.get(role)
+                    return redirect(url_for('createcookie'))
+                
+    session['errormsg'] = "You are not a Staff member! You do not have access to this Dashboard."
+    return redirect(url_for('dashboard'))  
 
-    return redirect(url_for('home', success='False'))
 
-@app.route('/dashboard/<token>')
-def dashboard(token):
-    user_ip = session.get("ip")
-    current_ip = request.remote_addr
-
-    if session.get("token") == token and user_ip == current_ip:
-        return render_template('dashboard.html', token=token)
-    else:
-        return "Prístup zamietnutý: neplatný token alebo IP adresa.", 403
+@app.route("/dashboard")
+def dashboard():
+    cookie = checkcookie()
     
-@app.route('/invalidate-token', methods=['POST'])
-def invalidate_token():
-    data = request.get_json()
-    token = data.get("token")
-    if session.get("token") == token:
-        session.pop("token", None)
-        session.pop("ip", None)
-    return jsonify({"message": "Token deaktivovaný"})
+    if cookie is not None:
+        discordname = cookie.get("discordname")
+        pos = cookie.get("pos")
+        return render_template("dashboard.html", discordname=discordname, pos=pos)
+    
+    errormsg = session.get('errormsg', None)
+    session.pop("errormsg", None)
+    return render_template("stafflogin.html", errormsg=errormsg)
+
 
 @app.route("/")
 def home():
@@ -136,7 +168,6 @@ def profile_with_player(player_id):
     else:
         return render_template("notfound.html")
     
-
 @app.route("/profile/country")
 def profile2():
     return render_template("countryprofile.html")

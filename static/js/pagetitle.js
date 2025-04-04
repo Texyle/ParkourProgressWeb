@@ -10,6 +10,11 @@ document.addEventListener("DOMContentLoaded", function () {
         index = (index + 1) % extendedTitle.length;
         setTimeout(scrollTitle, speed);
     }
-
-    scrollTitle();
+    
+    if (document.title != "Dashboard") {
+        scrollTitle();
+    }
+    if (document.title != "Authorization") {
+        scrollTitle();
+    }
 });
