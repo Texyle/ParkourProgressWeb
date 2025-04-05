@@ -398,9 +398,11 @@ def fetch_victors(app, map_id):
         """
         cursor.execute(query, [map_id])
         victors = cursor.fetchall()
-        
+            
         cursor.close()
         commit()
+        for victor in victors:
+            date = victor.get("date").strftime("%b %d, %Y")
         
         return victors
     
