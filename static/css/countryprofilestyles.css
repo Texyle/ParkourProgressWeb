@@ -215,8 +215,7 @@
 }
 
 .player-container {
-    display: grid;
-    grid-template-columns: 1rem 13rem;
+    display: flex;
     justify-content: center;
     align-items: center;
     gap: 5px;
@@ -229,11 +228,6 @@
 
 .player-container:hover {
     background-color: rgba(0, 0, 0, 0.1);
-}
-
-.player-container p {
-    margin: 0;
-    text-align: center;
 }
 
 .player-face {
