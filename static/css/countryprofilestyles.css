@@ -291,9 +291,116 @@
 #maps-container {
     grid-column: 1 / 3;
     grid-row: 3 / 3;
-
-    height: 10rem;
+    min-height: 15rem;
+    height: auto;
+    overflow: hidden;
+    background-color: rgba(100, 100, 100, 0.1);
+    border-radius: 1rem;
+    box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.1) inset;
+    border: 2px solid gray;
 }
+
+#maps-header-container {
+    text-align: center;
+    height: 7rem;
+    background-color: rgba(150, 150, 150, 0.2);
+    border-bottom: 2px solid gray;
+    display: flex;
+    flex-direction: column;
+}
+
+#maps-header-container p {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 0;
+    z-index: 1000;
+}
+
+.map-container {
+    display: grid;
+    grid-template-columns: 37% 16% 29% 18%;
+    height: 5rem;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(100, 100, 100, 0.8);
+    box-shadow: 0px 8px 6px -6px rgba(40, 40, 40, 0.965) inset, 0px -8px 6px -6px rgba(40, 40, 40, 0.965) inset;
+    transition: height 0.3s ease, transform 0.5s ease, background-color 0.3s ease;
+    overflow: hidden;
+    z-index: 1;
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.map-container.hidden {
+    height: 0;
+    padding: 0;
+    border: none;
+    opacity: 0;
+}
+
+.map-container > div {
+    /* padding: 10px; */
+    position: relative;
+}
+
+.map-container > div:not(:last-child):not(:nth-last-child(2))::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 25px;
+    width: 0.5px;
+    background-color: white;
+}
+
+.map-container:hover {
+    height: 5.4rem !important;
+    background-color: rgba(85, 85, 85, 0.8);
+}
+
+.map-container:hover .map-image-container {
+    margin-left: 0;
+}
+
+.map-field {
+    text-align: center;
+}
+
+.map-name {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.map-gamemode {
+    font-weight: bold;
+}
+
+.map-image-container {
+    height: inherit;
+    position: relative;
+    object-fit: contain;
+    box-shadow: 0px 8px 6px -6px rgba(0, 0, 0, 0.965) inset, 
+    0px -8px 6px -6px rgba(0, 0, 0, 0.965) inset,
+    -8px 0px 6px -6px rgba(0, 0, 0, 0.965) inset;
+    justify-content: center;
+    white-space: nowrap;
+    margin-left: 0.6rem;
+    transition: margin 0.3s;
+}
+
+.map-image {
+    width: 100%;
+    display: block;
+    position: relative;
+    z-index: -1;
+    height: 100%;
+    display: inline-block;
+    object-fit: cover;
+}
+
 
 #profile-container-empty {
     display: flex;

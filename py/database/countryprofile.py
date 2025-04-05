@@ -130,10 +130,12 @@ def get_fails_percent(total, country):
 def get_fails_position(data, country_code):
     country_fails_sum = defaultdict(int)
     for item in data:
+        if item["Gamemode"] != "Rankup":
+            continue
         country_fails_sum[item["CountryCode"]] += item["Fails"]
     sorted_country_codes = sorted(country_fails_sum.items(), key=lambda x: x[1], reverse=True)
     sorted_country_codes_list = [country for country, total_fails in sorted_country_codes]
-    
+
     return sorted_country_codes_list.index(country_code) + 1
     
     

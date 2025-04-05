@@ -72,7 +72,7 @@
                             </div>
                         </div>
                         <div class="stat-container">
-                            <img src="{{ url_for('static', filename='images/icon-warning.png') }}"/>
+                            <img src="{{ url_for('static', filename='images/icon-fails.svg') }}"/>
                             <div class="stat-title">
                                 <span>Sky fails</span>
                                 <span class="stat-number">{{ data['Fails'] }}</span>
@@ -85,7 +85,26 @@
                     </div>
 
                     <div id="maps-container">
-
+                        <div id="maps-header-container">
+                            <p>Maps</p>
+                        </div>
+                        <div id="maps-list-container">
+                            <div class="map-container">
+                                <div class="map-field map-title">
+                                    <div class="map-name">Realm of Champions CP Mode</div>
+                                </div>
+                                <div class="map-field map-type">
+                                    <div class="map-gamemode">Rankup</div>
+                                    <div class="map-status">Main</div>
+                                </div>
+                                <div class="map-field map-status">
+                                    <p>Beaten by</p>
+                                </div>
+                                <div class="map-field map-image-container">
+                                    <img class="map-image" src="{{ url_for('static', filename='images/space.webp') }}">
+                                </div>
+                            </div>
+                        </div>
                     </div>
             </div>
             {% else %}
