@@ -62,14 +62,28 @@ def fetch_country_stats(app, country_code):
     
 def get_player_lists(data):
     countries = {}
-    
+    player_counts = {}
+
     for player in data:
-        if not player["CountryCode"] in countries.keys():
-            countries[player["CountryCode"]] = []
-            
-        if not any(p["Name"] == player["Name"] for p in countries[player["CountryCode"]]):
-            countries[player["CountryCode"]].append({"ID": player["ID"], "Name": player["Name"]})
-    
+        country_code = player["CountryCode"]
+        player_name = player["Name"]
+        player_id = player["ID"]
+
+        if country_code not in countries:
+            countries[country_code] = []
+
+        if player_name not in player_counts:
+            player_counts[player_name] = {"ID": player_id, "Count": 0}
+
+        player_counts[player_name]["Count"] += 1
+
+    for player_name, player_info in player_counts.items():
+        country_code = next(p["CountryCode"] for p in data if p["Name"] == player_name)
+        countries[country_code].append({"Name": player_name, "ID": player_info["ID"], "Count": player_info["Count"]})
+
+    for country_code in countries:
+        countries[country_code].sort(key=lambda x: x["Count"], reverse=True)
+
     return countries
 
 def get_player_count_percent(data, players):
