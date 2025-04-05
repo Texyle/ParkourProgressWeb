@@ -42,7 +42,7 @@
                             {% for player in data["Players"] %}
                                 <div class="player-container" onclick="redirectToPlayerPage('{{ player['ID'] }}')">
                                     <img src="https://vzge.me/face/{{ player["Name"] }}" class="player-face">
-                                    <p>{{ player["Name"] }}</p>
+                                    <p>{{ player["Name"] }}</p> 
                                 </div>
                             {% endfor %}
                         </div>
