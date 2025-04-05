@@ -403,7 +403,8 @@ def fetch_victors(app, map_id):
         cursor.close()
         commit()
         for victor in victors:
-            date = victor.get("date").strftime("%b %d, %Y")
+            strfdate = victor['Date'].strftime("%b %d, %Y")
+            victor['Date'] = strfdate
         
         return victors
     
