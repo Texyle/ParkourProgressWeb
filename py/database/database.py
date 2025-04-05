@@ -3,6 +3,7 @@ from mysql.connector import Error
 import traceback
 from flask import Flask, request, jsonify, send_from_directory
 import pycountry
+from py.database.countryprofile import fetch_country_stats
 
 connection = None
 
@@ -408,34 +409,3 @@ def fetch_victors(app, map_id):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
     
-def fetch_country_data(app, country_code):
-    try:
-        cursor = get_cursor(dictionary=True)
-        
-        query = """
-            SELECT Name, COUNT(*) AS Completions
-            FROM Victor
-            JOIN Player ON Player.ID = Victor.PlayerID
-            WHERE CountryCode = %s
-            GROUP BY Player.ID
-            ORDER BY Completions DESC
-        """
-        cursor.execute(query, [country_code])
-        players = cursor.fetchall()
-        cursor.close()
-        commit()
-        
-        data = {}
-        country = pycountry.countries.get(alpha_2=country_code)
-        if country == None:
-            return None
-        
-        data["Code"] = country_code
-        data["Name"] = country.name
-        data["Players"] = players
-        
-        return data
-    
-    except Error as e:
-        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
-        return jsonify({"error": e.msg}), 500

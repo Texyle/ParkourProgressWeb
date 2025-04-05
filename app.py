@@ -1,7 +1,7 @@
 import os
 import json
 from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect, make_response
-import py.database as database
+import py.database.database as database
 import re
 from py.files import Files
 import random
@@ -174,7 +174,6 @@ def profile_with_player(player_id):
     
 @app.route("/profile/country")
 def country_profile():
-    player_counts = database.fetch_country_player_counts(app)
     countries = [{'Code': country.alpha_2.lower(), 'Name': country.name} for country in pycountry.countries]
     return render_template("countryprofile.html", 
                            countries = countries,
@@ -183,8 +182,7 @@ def country_profile():
 
 @app.route("/profile/country/<string:country_code>")
 def country_profile_with_country(country_code):
-    player_counts = database.fetch_country_player_counts(app)
-    data = database.fetch_country_data(app, country_code)
+    data = database.fetch_country_stats(app, country_code)
     countries = [{'Code': country.alpha_2.lower(), 'Name': country.name} for country in pycountry.countries]
     return render_template("countryprofile.html", 
                            countries = countries,

@@ -179,6 +179,11 @@
     color: white;
     font-size: 1rem;
     border-radius: 10px;
+    cursor: pointer;
+}
+
+#player-country:hover div {
+    text-decoration: underline;
 }
 
 #player-country div {

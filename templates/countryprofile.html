@@ -19,41 +19,90 @@
             </div>
         </div>
         {% if data is not none %}
-            <div id="profile-container">
-                <div id="country-title-container">
-                    <img class="flag" src="{{ url_for('static', filename=flags[data['Code']]) }}" alt="{{ flag }}">
-                    <span>{{ data['Name'] }}</span>
-                </div>
-                <div id="players-container">
-                    <div id="players-header-container">
-                        <span id="players-header-text">Players</span>
-                        <div class="info-icon">
-                            i
-                            <div class="popup">
-                                <span>
-                                    Currently sorted by number of maps completed, will likely be changed when the ranking system is implemented.
-                                </span>
+            {% if data['Players'] is not none %}
+                <div id="profile-container">
+                    <div id="country-title-container">
+                        <img class="flag" src="{{ url_for('static', filename=flags[data['Code']]) }}" alt="{{ flag }}">
+                        <span>{{ data['Name'] }}</span>
+                    </div>
+
+                    <div id="players-container">
+                        <div id="players-header-container">
+                            <span id="players-header-text">Players</span>
+                            <div class="info-icon">
+                                i
+                                <div class="popup">
+                                    <span>
+                                        Currently sorted by number of maps completed, will likely be changed when the ranking system is implemented.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="players-list-container">
+                            {% for player in data["Players"] %}
+                                <div class="player-container" onclick="redirectToPlayerPage('{{ player['ID'] }}')">
+                                    <img src="https://vzge.me/face/{{ player["Name"] }}" class="player-face">
+                                    {{ player["Name"] }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div id="stats-container">
+                        <div class="stat-container">
+                            <img src="{{ url_for('static', filename='images/icon-players.png') }}"/>
+                            <div class="stat-title">
+                                <span>Players</span>
+                                <span class="stat-number">{{ data['PlayerCount'] }}</span>
+                            </div>
+                            <div class="stat-rankings">
+                                <span class="stat-rankings-1"><strong>{{ data['PlayerCountPercent'] }}%</strong> of all players</span>
+                                <span class="stat-rankings-2"><strong>#{{ data['PlayerCountPosition'] }}</strong> global</span>
+                            </div>
+                        </div>
+                        <div class="stat-container">
+                            <img src="{{ url_for('static', filename='images/icon-trophy.png') }}"/>
+                            <div class="stat-title">
+                                <span>Map completions</span>
+                                <span class="stat-number">{{ data['Completions'] }}</span>
+                            </div>
+                            <div class="stat-rankings">
+                                <span class="stat-rankings-1"><strong>{{ data['CompletionsPercent'] }}%</strong> of all completions</span>
+                                <span class="stat-rankings-2"><strong>#{{ data['CompletionsPosition'] }}</strong> global</span>
+                            </div>
+                        </div>
+                        <div class="stat-container">
+                            <img src="{{ url_for('static', filename='images/icon-warning.png') }}"/>
+                            <div class="stat-title">
+                                <span>Sky fails</span>
+                                <span class="stat-number">{{ data['Fails'] }}</span>
+                            </div>
+                            <div class="stat-rankings">
+                                <span class="stat-rankings-1"><strong>{{ data['FailsPercent'] }}%</strong> of all sky fails</span>
+                                <span class="stat-rankings-2"><strong>#{{ data['FailsPosition'] }}</strong> global</span>
                             </div>
                         </div>
                     </div>
-                    <div id="players-list-container">
-                        {% for player in data["Players"] %}
-                            <div class="player-container">
-                                <img src="https://vzge.me/face/{{ player["Name"] }}" class="player-face">
-                                {{ player["Name"] }}
-                            </div>
-                        {% endfor %}
+
+                    <div id="maps-container">
+
+                    </div>
+            </div>
+            {% else %}
+                <div id="profile-container-empty">
+                    <div id="country-title-container">
+                        <img class="flag" src="{{ url_for('static', filename=flags[data['Code']]) }}" alt="{{ flag }}">
+                        <span>{{ data['Name'] }}</span>
+                    </div>
+                    <div id="empty-container">
+                        <div class="wave-container">
+                            <h1 class="wave-text">
+                                <span>E</span><span>M</span><span>P</span><span>T</span><span>Y</span>
+                            </h1>
+                        </div>
                     </div>
                 </div>
-
-                <div id="stats-container">
-
-                </div>
-
-                <div id="maps-container">
-
-                </div>
-            </div>
+            {% endif %}
         {% else %}
             reminder for myself to do something with this blank box (go search for a country)
         {% endif %}

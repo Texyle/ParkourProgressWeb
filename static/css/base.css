@@ -305,6 +305,7 @@ nav ul li a:hover::after {
     height: 1rem;
     width: 1.5rem;
     border-radius: 15%;
+    box-shadow: 0px 0px 4px 1px rgb(20, 20, 20);
 }
 
 .eye-icon {
