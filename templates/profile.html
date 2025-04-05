@@ -31,7 +31,7 @@
                 <div id="info-container">
                     <div id="player-info">
                         <p id="player-name">{{ player_data['Name']  }}</p>
-                        <div id="player-country">
+                        <div id="player-country" onclick="redirectToCountryPage('{{ player_data['CountryCode'] }}')">
                             <img class="flag" src="{{ url_for('static', filename=flags[player_data['CountryCode']]) }}" alt="{{ code }}">
                             <div>{{ player_data['CountryName'] }}</div>
                         </div>

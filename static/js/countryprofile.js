@@ -108,6 +108,8 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = event.target.getAttribute('data-url');
         }
     });
+
+    checkFaces();
 });
 
 document.addEventListener('mousemove', (event) => {
@@ -117,3 +119,21 @@ document.addEventListener('mousemove', (event) => {
         popup.style.top = `${event.clientY}px`;
     });
 });
+
+function checkFaces() {
+    var images = document.querySelectorAll('.player-face');
+
+    images.forEach(function (img) {
+        img.onerror = function () {
+            img.src = 'https://vzge.me/face/X-Steve';
+            img.onerror = null;
+        };
+    });
+}
+
+function redirectToPlayerPage(playerId) {
+    const baseUrl = window.location.protocol + "//" + window.location.host;
+    const newUrl = `${baseUrl}/profile/player/${playerId}`;
+
+    window.location.href = newUrl;
+}

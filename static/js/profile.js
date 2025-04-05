@@ -215,3 +215,10 @@ function selectOption(event, option) {
 
     dropdownButton.textContent = "Sort by: " + option;
 }
+
+function redirectToCountryPage(countryCode) {
+    const baseUrl = window.location.protocol + "//" + window.location.host;
+    const newUrl = `${baseUrl}/profile/country/${countryCode}`;
+
+    window.location.href = newUrl;
+}
