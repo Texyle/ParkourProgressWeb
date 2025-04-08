@@ -151,7 +151,8 @@ def maps():
 @app.route("/profile/player")
 def profile():
     player_names = database.fetch_player_names(app)
-    return render_template("profile.html", player_names = player_names, player_data = None)
+    gamemodes = database.fetch_gamemodes(app)
+    return render_template("profile.html", player_names = player_names, player_data = None, gamemodes = gamemodes)
 
 @app.route('/profile/player/<int:player_id>')
 def profile_with_player(player_id):
@@ -160,6 +161,7 @@ def profile_with_player(player_id):
     player_data = database.fetch_player_info(app, player_id)
     maps = database.fetch_completed_maps(app, player_id)
     progress = database.fetch_maps_in_progress(app, player_id)
+    gamemodes = database.fetch_gamemodes(app)
     
     if player_data != None:
         return render_template("profile.html", 
@@ -167,6 +169,7 @@ def profile_with_player(player_id):
                                player_data = player_data, 
                                maps = maps,
                                progress = progress,
+                               gamemodes = gamemodes,
                                map_images=files.map_images,
                                flags=files.flags)
     else:
@@ -175,9 +178,11 @@ def profile_with_player(player_id):
 @app.route("/profile/country")
 def country_profile():
     countries = [{'Code': country.alpha_2.lower(), 'Name': country.name} for country in pycountry.countries]
+    gamemodes = database.fetch_gamemodes(app)
     return render_template("countryprofile.html", 
                            countries = countries,
                            data = None,
+                           gamemodes = gamemodes,
                            map_images=files.map_images,
                            flags=files.flags)
 
@@ -185,10 +190,12 @@ def country_profile():
 def country_profile_with_country(country_code):
     data = database.fetch_country_profile_data(app, country_code)
     countries = [{'Code': country.alpha_2.lower(), 'Name': country.name} for country in pycountry.countries]
+    gamemodes = database.fetch_gamemodes(app)
     return render_template("countryprofile.html", 
                            countries = countries,
                            data = data,
                            map_images=files.map_images,
+                           gamemodes = gamemodes,
                            flags=files.flags)
 
 @app.route('/map/<int:map_id>')

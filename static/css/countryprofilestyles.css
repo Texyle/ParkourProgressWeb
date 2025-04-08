@@ -160,6 +160,7 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    z-index: 100000;
 }
 
 .popup {
@@ -176,6 +177,7 @@
     text-align: center;
     transition: opacity 0.05s;
     opacity: 0;
+    visibility: hidden;
 }
 
 .popup span {
@@ -185,6 +187,7 @@
 
 .info-icon:hover .popup {
     opacity: 1;
+    visibility: visible;
 }
 
 #players-list-container {
@@ -305,6 +308,7 @@
     border-bottom: 2px solid gray;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 #maps-header-container p {
@@ -315,9 +319,134 @@
     z-index: 1000;
 }
 
+.header-filters-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+
+.profile-dropdown {
+    position: relative;
+    display: inline-block;
+    z-index: 1000;
+}
+
+.profile-dropdown-button {
+    background-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2) inset;
+    outline: none;
+    color: white;
+    border: 1px solid gray;
+    border-radius: 10px;
+    width: 12rem;
+    height: 2.5rem;
+    padding: 0;
+}
+
+.profile-dropdown-button:active {
+    border-style: outset;
+    border: 1px solid gray;
+}
+
+.profile-dropdown-button:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.profile-dropdown-content {
+    max-height: 0;
+    width: 90%;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background-color: rgb(40, 40, 40);
+    box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2) inset;
+    z-index: 1;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.profile-dropdown-content.open {
+    max-height: 200px;
+}
+
+.filter-dropdown-content input {
+    display: none;
+}
+
+.filter-dropdown-content .custom-checkbox {
+    width: 10px;
+    height: 10px;
+    /* border: 2px solid #ccc; */
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+    background-color: white;
+    margin-right: 10px;
+    opacity: 0;
+    position: absolute;
+    left: 16px;
+}
+
+.filter-dropdown-content input[type="checkbox"]:checked + .custom-checkbox {
+    opacity: 100;
+}
+
+.filter-dropdown-content .custom-checkbox {
+    transition: opacity 0.1s;
+}
+
+.filter-dropdown-content input {
+    margin-left: 10px;
+}
+
+.filter-dropdown-content label {
+    padding: 8px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filter-dropdown-content .label-text {
+    flex-grow: 1;
+    text-align: center;
+    margin-left: 20px;
+}
+
+.filter-dropdown-content label:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.filter-dropdown-changed {
+    font-style: italic;
+}
+
+.sort-dropdown-content button {
+    display: block;
+    cursor: pointer;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    height: 2.5rem;
+}
+
+.sort-dropdown-content button:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+#sort-direction-button {
+    width: 2rem;
+}
+
 .map-container {
     display: grid;
-    grid-template-columns: 37% 16% 29% 18%;
+    grid-template-columns: 30% 14% 38% 18%;
     height: 5rem;
     justify-content: center;
     align-items: center;
@@ -376,12 +505,32 @@
     font-weight: bold;
 }
 
-.map-status div {
+.map-progress div {
     text-align: center;
     font-size: 1.2rem;
 }
 
-.map-status-beaten-by {
+.map-progress-beaten {
+    color: rgb(170, 255, 170);
+}
+
+.map-progress-progress {
+    color: rgb(255, 255, 170);
+}
+
+.map-progress-none {
+    color: rgb(255, 110, 110);
+    font-size: 1.5rem;
+}
+
+.map-progress-beaten-by {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+
+.map-progress-furthest-progress {
     display: flex;
     justify-content: center;
     align-items: center;

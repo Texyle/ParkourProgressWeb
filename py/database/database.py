@@ -411,3 +411,23 @@ def fetch_victors(app, map_id):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
     
+    
+def fetch_gamemodes(app):
+    try:
+        cursor = get_cursor(dictionary=True)
+        
+        query = """
+            SELECT ID, Name
+            FROM Gamemode
+        """
+        cursor.execute(query)
+        gamemodes = cursor.fetchall()
+            
+        cursor.close()
+        commit()
+        
+        return gamemodes
+    
+    except Error as e:
+        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500

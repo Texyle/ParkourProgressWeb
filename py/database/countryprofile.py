@@ -31,7 +31,7 @@ def select_data(country_code):
     """
     
     query_victors = """
-        SELECT Map.Name AS MapName, Map.ID AS MapID, Gamemode.Name AS Gamemode, Extra, Player.Name AS Victor, Victor.Date AS Date
+        SELECT Map.Name AS MapName, Map.ID AS MapID, Map.Position AS Position, Gamemode.Name AS Gamemode, Extra, Player.Name AS Victor, Player.ID AS VictorID, Victor.Date AS Date
         FROM Map
         JOIN Gamemode ON Gamemode.ID = Map.GamemodeID
         JOIN (
@@ -51,9 +51,11 @@ def select_data(country_code):
             SELECT
                 Map.Name AS MapName,
                 Map.ID AS MapID,
+                Map.Position AS Position,
                 Gamemode.Name AS Gamemode,
                 Extra,
                 Player.Name AS SectionPlayer,
+                Player.ID AS SectionPlayerID,
                 Section.Name AS SectionName,
                 ROW_NUMBER() OVER (PARTITION BY Map.ID ORDER BY Section.SectionIndex DESC) AS RowNum
             FROM Map
@@ -63,13 +65,13 @@ def select_data(country_code):
             JOIN Player ON Player.ID = SectionPlayer.PlayerID
             WHERE Player.CountryCode = %s
         )
-        SELECT MapName, MapID, Gamemode, Extra, SectionPlayer, SectionName
+        SELECT MapName, MapID, Position, Gamemode, Extra, SectionPlayer, SectionName, SectionPlayerID
         FROM FurthestSections
         WHERE RowNum = 1;
     """
     
     query_maps = """
-        SELECT Map.ID AS MapID, Map.Name AS MapName, Gamemode.Name AS Gamemode, Extra
+        SELECT Map.ID AS MapID, Map.Name AS MapName, Map.Position AS Position, Gamemode.Name AS Gamemode, Extra
         FROM Map
         JOIN Gamemode ON Gamemode.ID = Map.GamemodeID
     """
@@ -230,9 +232,12 @@ def get_maps(data_victors, data_sections, data_maps):
             
             found = True
             maps.append({"MapName": victor["MapName"], 
+                         "MapID": victor["MapID"],
+                         "Position": victor["Position"],
                          "Gamemode": victor["Gamemode"],
                          "List": get_list(map["Extra"]),
                          "Player": victor["Victor"],
+                         "PlayerID": victor["VictorID"],
                          "Date": victor["Date"],
                          "Type": "Victor"})
             break
@@ -246,10 +251,13 @@ def get_maps(data_victors, data_sections, data_maps):
             
             found = True
             maps.append({"MapName": section["MapName"], 
+                         "MapID": section["MapID"],
+                         "Position": section["Position"],
                          "Gamemode": section["Gamemode"],
                          "List": get_list(map["Extra"]),
                          "Player": section["SectionPlayer"],
-                         "SectionName": section["SectionName"],
+                         "PlayerID": section["SectionPlayerID"],
+                         "Section": section["SectionName"],
                          "Date": datetime.date(9999, 1, 1),
                          "Type": "Section"})
             break
@@ -257,10 +265,13 @@ def get_maps(data_victors, data_sections, data_maps):
         if found:
             continue
         
-        # maps.append({"MapName": map["MapName"], 
-        #              "Gamemode": map["Gamemode"],
-        #              "List": get_list(map["Extra"]),
-        #              "Type": "None"})
+        maps.append({"MapName": map["MapName"], 
+                     "MapID": map["MapID"],
+                     "Position": map["Position"],
+                     "Gamemode": map["Gamemode"],
+                     "List": get_list(map["Extra"]),
+                     "Date": datetime.date(9999, 1, 1),
+                     "Type": "None"})
     
     maps = sorted(maps, key=lambda x: x["Date"])
     for map in maps:

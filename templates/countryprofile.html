@@ -84,10 +84,64 @@
                     <div id="maps-container">
                         <div id="maps-header-container">
                             <p>Maps</p>
+                            <div class="header-filters-container">
+                                <div class="gamemode-dropdown profile-dropdown">
+                                    <button onclick="toggleDropdown(event)" class="profile-dropdown-button">Gamemodes</button>
+                                    <div id="maps-gamemode-dropdown-content" class="filter-dropdown-content profile-dropdown-content">
+                                        {% for gamemode in gamemodes %}
+                                            <label>    
+                                                <input type="checkbox" value="Option {{ loop.index0 + 1 }}" checked>
+                                                <span class="custom-checkbox"></span>
+                                                <span class="label-text">{{ gamemode['Name'] }}</span>
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="progress-dropdown profile-dropdown">
+                                    <button onclick="toggleDropdown(event)" class="profile-dropdown-button">Progress</button>
+                                    <div id="maps-progress-dropdown-content" class="filter-dropdown-content profile-dropdown-content">
+                                        <label>    
+                                            <input type="checkbox" value="Option 1" checked>
+                                            <span class="custom-checkbox"></span>
+                                            <span class="label-text">Beaten</span>
+                                        </label>
+                                        <label>    
+                                            <input type="checkbox" value="Option 2" checked>
+                                            <span class="custom-checkbox"></span>
+                                            <span class="label-text">In progress</span>
+                                        </label>
+                                        <label>    
+                                            <input type="checkbox" value="Option 3" checked>
+                                            <span class="custom-checkbox"></span>
+                                            <span class="label-text">No progress</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="sort-wrapper">
+                                    <div class="sort-dropdown profile-dropdown">
+                                        <button onclick="toggleDropdown(event)" class="profile-dropdown-button" id="sort-button">Sort by: Recent</button>
+                                        <div id="maps-sort-dropdown-content" class="sort-dropdown-content profile-dropdown-content">
+                                            <button onclick="selectOption(event, 'Date')">Date</button>
+                                            <button onclick="selectOption(event, 'Difficulty')">Difficulty</button>
+                                        </div>
+                                    </div>
+                                    <button id="sort-direction-button" class="profile-dropdown-button">
+                                        <span class="arrow">&#9660;</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="info-icon">
+                                i
+                                <div class="popup">
+                                    <span>
+                                        Sorting by date only works for beaten maps, the rest will go below in undefined order
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                         <div id="maps-list-container">
                             {% for map in data['Maps'] %}
-                                <div class="map-container" onclick="redirectToMapPage('123')">
+                                <div class="map-container" onclick="redirectToMapPage('{{ map['MapID'] }}')" data-position="{{ map['Position'] }}">
                                     <div class="map-field map-title">
                                         <div class="map-name">{{ map['MapName'] }}</div>
                                     </div>
@@ -95,20 +149,37 @@
                                         <div class="map-gamemode">{{ map['Gamemode'] }}</div>
                                         <div class="map-status">{{ map['List'] }}</div>
                                     </div>
-                                    <div class="map-field map-status">
-                                        {% if map['Type'] == 'Victor' %}
-                                            <div class="map-status-beaten-by">
+                                    {% if map['Type'] == 'Victor' %}
+                                        <div class="map-field map-progress map-progress-beaten" data-progress="Beaten">
+                                            <div class="map-progress-beaten-by">
                                                 <div>Beaten by</div>
-                                                <div class="player-card" onclick="redirectToPlayerPage(event, '123')">
-                                                    <img src="https://vzge.me/face/{{ map['Player'] }}" class="player-face" alt="Texyle"/>
+                                                <div class="player-card" onclick="redirectToPlayerPage(event, '{{ map['PlayerID'] }}')">
+                                                    <img src="https://vzge.me/face/{{ map['Player'] }}" class="player-face" alt="{{ map['Player'] }}"/>
                                                     <div>{{ map['Player'] }}</div>
                                                 </div>
                                             </div>
-                                            <div class="map-status-date">
-                                                <div>on {{ map['Date'] }}</div>
+                                            <div class="map-progress-date">
+                                                on {{ map['Date'] }}
+                                            </div>
+                                        </div>
+                                        {% elif map['Type'] == 'Section' %}
+                                            <div class="map-field map-progress map-progress-progress" data-progress="In progress">
+                                                <div class="map-progress-furthest-progress">
+                                                    <div>Furthest progress by</div>
+                                                    <div class="player-card" onclick="redirectToPlayerPage(event, '{{ map['PlayerID'] }}')">
+                                                        <img src="https://vzge.me/face/{{ map['Player'] }}" class="player-face" alt="{{ map['Player'] }}"/>
+                                                        <div>{{ map['Player'] }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="map-progress-section">
+                                                    <div> at {{ map['Section'] }}</div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="map-field map-progress map-progress-none" data-progress="No progress">
+                                                No progress
                                             </div>
                                         {% endif %}
-                                    </div>
                                     <div class="map-field map-image-container">
                                         {% set map_name = map['MapName']|to_filename %}
                                         {% set map_name = map_name ~ '_small' %}

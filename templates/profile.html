@@ -47,26 +47,13 @@
                             <div class="gamemode-dropdown profile-dropdown">
                                 <button onclick="toggleDropdown(event)" class="profile-dropdown-button">Gamemodes</button>
                                 <div id="maps-gamemode-dropdown-content" class="gamemode-dropdown-content profile-dropdown-content">
-                                    <label>    
-                                        <input type="checkbox" value="Option 1" checked>
-                                        <span class="custom-checkbox"></span>
-                                        <span class="label-text">Rankup</span>
-                                    </label>
-                                    <label>    
-                                        <input type="checkbox" value="Option 1" checked>
-                                        <span class="custom-checkbox"></span>
-                                        <span class="label-text">Segmented</span>
-                                    </label>
-                                    <label>    
-                                        <input type="checkbox" value="Option 1" checked>
-                                        <span class="custom-checkbox"></span>
-                                        <span class="label-text">Onlysprint</span>
-                                    </label>
-                                    <label>    
-                                        <input type="checkbox" value="Option 1" checked>
-                                        <span class="custom-checkbox"></span>
-                                        <span class="label-text">Tag</span>
-                                    </label>
+                                    {% for gamemode in gamemodes %}
+                                        <label>    
+                                            <input type="checkbox" value="Option {{ loop.index0 + 1 }}" checked>
+                                            <span class="custom-checkbox"></span>
+                                            <span class="label-text">{{ gamemode['Name'] }}</span>
+                                        </label>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <div class="sort-dropdown profile-dropdown">
