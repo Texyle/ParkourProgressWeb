@@ -4,9 +4,6 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/countryprofilestyles.css') }}">
     <title>Country Profile - Parkour Progress</title>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
-    <script src="{{ url_for('static', filename='js/datamaps.world.min.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -19,11 +16,11 @@
             </div>
         </div>
         {% if data is not none %}
-            {% if data['Players'] is not none %}
+            {% if data['Stats']['Players'] is not none %}
                 <div id="profile-container">
                     <div id="country-title-container">
-                        <img class="flag" src="{{ url_for('static', filename=flags[data['Code']]) }}" alt="{{ flag }}">
-                        <span>{{ data['Name'] }}</span>
+                        <img class="flag" src="{{ url_for('static', filename=flags[data['Stats']['Code']]) }}" alt="{{ flag }}">
+                        <span>{{ data['Stats']['Name'] }}</span>
                     </div>
 
                     <div id="players-container">
@@ -39,7 +36,7 @@
                             </div>
                         </div>
                         <div id="players-list-container">
-                            {% for player in data["Players"] %}
+                            {% for player in data["Stats"]["Players"] %}
                                 <div class="player-container" onclick="redirectToPlayerPage('{{ player['ID'] }}')">
                                     <img src="https://vzge.me/face/{{ player["Name"] }}" class="player-face">
                                     {{ player["Name"] }}
@@ -53,33 +50,33 @@
                             <img src="{{ url_for('static', filename='images/icon-players.png') }}"/>
                             <div class="stat-title">
                                 <span>Players</span>
-                                <span class="stat-number">{{ data['PlayerCount'] }}</span>
+                                <span class="stat-number">{{ data['Stats']['PlayerCount'] }}</span>
                             </div>
                             <div class="stat-rankings">
-                                <span class="stat-rankings-1"><strong>{{ data['PlayerCountPercent'] }}%</strong> of all players</span>
-                                <span class="stat-rankings-2"><strong>#{{ data['PlayerCountPosition'] }}</strong> global</span>
+                                <span class="stat-rankings-1"><strong>{{ data['Stats']['PlayerCountPercent'] }}%</strong> of all players</span>
+                                <span class="stat-rankings-2"><strong>#{{ data['Stats']['PlayerCountPosition'] }}</strong> global</span>
                             </div>
                         </div>
                         <div class="stat-container">
                             <img src="{{ url_for('static', filename='images/icon-trophy.png') }}"/>
                             <div class="stat-title">
                                 <span>Map completions</span>
-                                <span class="stat-number">{{ data['Completions'] }}</span>
+                                <span class="stat-number">{{ data['Stats']['Completions'] }}</span>
                             </div>
                             <div class="stat-rankings">
-                                <span class="stat-rankings-1"><strong>{{ data['CompletionsPercent'] }}%</strong> of all completions</span>
-                                <span class="stat-rankings-2"><strong>#{{ data['CompletionsPosition'] }}</strong> global</span>
+                                <span class="stat-rankings-1"><strong>{{ data['Stats']['CompletionsPercent'] }}%</strong> of all completions</span>
+                                <span class="stat-rankings-2"><strong>#{{ data['Stats']['CompletionsPosition'] }}</strong> global</span>
                             </div>
                         </div>
                         <div class="stat-container">
                             <img src="{{ url_for('static', filename='images/icon-fails.svg') }}"/>
                             <div class="stat-title">
                                 <span>Sky fails</span>
-                                <span class="stat-number">{{ data['Fails'] }}</span>
+                                <span class="stat-number">{{ data['Stats']['Fails'] }}</span>
                             </div>
                             <div class="stat-rankings">
-                                <span class="stat-rankings-1"><strong>{{ data['FailsPercent'] }}%</strong> of all sky fails</span>
-                                <span class="stat-rankings-2"><strong>#{{ data['FailsPosition'] }}</strong> global</span>
+                                <span class="stat-rankings-1"><strong>{{ data['Stats']['FailsPercent'] }}%</strong> of all sky fails</span>
+                                <span class="stat-rankings-2"><strong>#{{ data['Stats']['FailsPosition'] }}</strong> global</span>
                             </div>
                         </div>
                     </div>
@@ -89,29 +86,45 @@
                             <p>Maps</p>
                         </div>
                         <div id="maps-list-container">
-                            <div class="map-container">
-                                <div class="map-field map-title">
-                                    <div class="map-name">Realm of Champions CP Mode</div>
+                            {% for map in data['Maps'] %}
+                                <div class="map-container" onclick="redirectToMapPage('123')">
+                                    <div class="map-field map-title">
+                                        <div class="map-name">{{ map['MapName'] }}</div>
+                                    </div>
+                                    <div class="map-field map-type">
+                                        <div class="map-gamemode">{{ map['Gamemode'] }}</div>
+                                        <div class="map-status">{{ map['List'] }}</div>
+                                    </div>
+                                    <div class="map-field map-status">
+                                        {% if map['Type'] == 'Victor' %}
+                                            <div class="map-status-beaten-by">
+                                                <div>Beaten by</div>
+                                                <div class="player-card" onclick="redirectToPlayerPage(event, '123')">
+                                                    <img src="https://vzge.me/face/{{ map['Player'] }}" class="player-face" alt="Texyle"/>
+                                                    <div>{{ map['Player'] }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="map-status-date">
+                                                <div>on {{ map['Date'] }}</div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="map-field map-image-container">
+                                        {% set map_name = map['MapName']|to_filename %}
+                                        {% set map_name = map_name ~ '_small' %}
+                                        {% set filename = map_images[map_name] %}
+                                        <img class="map-image" loading="lazy" src="{{ url_for('static', filename=filename) }}" alt="{{ map['MapName'] }}">
+                                    </div>
                                 </div>
-                                <div class="map-field map-type">
-                                    <div class="map-gamemode">Rankup</div>
-                                    <div class="map-status">Main</div>
-                                </div>
-                                <div class="map-field map-status">
-                                    <p>Beaten by</p>
-                                </div>
-                                <div class="map-field map-image-container">
-                                    <img class="map-image" src="{{ url_for('static', filename='images/space.webp') }}">
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
             </div>
             {% else %}
                 <div id="profile-container-empty">
                     <div id="country-title-container">
-                        <img class="flag" src="{{ url_for('static', filename=flags[data['Code']]) }}" alt="{{ flag }}">
-                        <span>{{ data['Name'] }}</span>
+                        <img class="flag" src="{{ url_for('static', filename=flags[data['Stats']['Code']]) }}" alt="{{ flag }}">
+                        <span>{{ data['Stats']['Name'] }}</span>
                     </div>
                     <div id="empty-container">
                         <div class="wave-container">

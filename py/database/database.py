@@ -3,7 +3,7 @@ from mysql.connector import Error
 import traceback
 from flask import Flask, request, jsonify, send_from_directory
 import pycountry
-from py.database.countryprofile import fetch_country_stats
+from py.database.countryprofile import fetch_country_profile_data
 
 connection = None
 
@@ -204,7 +204,6 @@ def fetch_completed_maps(app, player_id, gamemode=None):
                 Date DESC;
             """
 
-            print(player_id)
             cursor.execute(query, [player_id])
             
         victor = cursor.fetchall()

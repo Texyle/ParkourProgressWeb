@@ -178,15 +178,17 @@ def country_profile():
     return render_template("countryprofile.html", 
                            countries = countries,
                            data = None,
+                           map_images=files.map_images,
                            flags=files.flags)
 
 @app.route("/profile/country/<string:country_code>")
 def country_profile_with_country(country_code):
-    data = database.fetch_country_stats(app, country_code)
+    data = database.fetch_country_profile_data(app, country_code)
     countries = [{'Code': country.alpha_2.lower(), 'Name': country.name} for country in pycountry.countries]
     return render_template("countryprofile.html", 
                            countries = countries,
                            data = data,
+                           map_images=files.map_images,
                            flags=files.flags)
 
 @app.route('/map/<int:map_id>')

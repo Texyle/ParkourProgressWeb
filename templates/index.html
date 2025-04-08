@@ -12,15 +12,18 @@
         alert("Unauthorized");
     </script>
     {% endif %}
-    <section class="description">
-        <h1>Welcome to Parkour Progress!</h1>  
-        <p>A community based on the hardest Minecraft Parkour maps ever created. The best place to show your parkour skills!</p>
-    </section>
-    <div class="container">
-        <section class="description2">
-            <h1>Latest Victors</h1>
-            <p id="latest_victors"></p>
+    <div id="main-contaner">
+        <section class="description">
+            <h1>Welcome to Parkour Progress!</h1>  
+            <p>A community based on the hardest Minecraft Parkour maps ever created. The best place to show your parkour skills!</p>
         </section>
-    </div>  
+        <div class="container">
+            <section class="description2">
+                <h1>Latest Victors</h1>
+                <p id="latest_victors"></p>
+            </section>
+        </div>  
+    </div>
+    
     <script src="static/js/index.js"></script>
 {% endblock %}

@@ -131,9 +131,17 @@ function checkFaces() {
     });
 }
 
-function redirectToPlayerPage(playerId) {
+function redirectToPlayerPage(event, playerId) {
     const baseUrl = window.location.protocol + "//" + window.location.host;
     const newUrl = `${baseUrl}/profile/player/${playerId}`;
+
+    window.location.href = newUrl;
+    event.stopPropagation();
+}
+
+function redirectToMapPage(mapId) {
+    const baseUrl = window.location.protocol + "//" + window.location.host;
+    const newUrl = `${baseUrl}/map/${mapId}`;
 
     window.location.href = newUrl;
 }

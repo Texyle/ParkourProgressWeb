@@ -4,60 +4,126 @@ from flask import Flask, request, jsonify, send_from_directory
 import pycountry
 import py.database.database as database
 from collections import Counter, defaultdict
+import datetime
 
-def fetch_country_stats(app, country_code):
+def fetch_country_profile_data(app, country_code):
     try:
-        cursor = database.get_cursor(dictionary=True)
+        data_stats, data_victors, data_sections, data_maps = select_data(country_code)
         
-        query = """
-            SELECT Player.ID AS ID, Player.Name AS Name, Fails, Gamemode.Name AS Gamemode, CountryCode
-            FROM Player
-            RIGHT JOIN Victor ON Victor.PlayerID = Player.ID
-            JOIN Map ON Map.ID = Victor.MapID
-            JOIN Gamemode ON Gamemode.ID = Map.GamemodeID
-        """
+        stats = get_stats(data_stats, country_code)
+        maps = get_maps(data_victors, data_sections, data_maps)
         
-        cursor.execute(query)
-        data = cursor.fetchall()
-        cursor.close()
-        database.commit()
+        return {"Stats": stats, "Maps": maps}
         
-        stats = {}
-        country = pycountry.countries.get(alpha_2=country_code)
-        if country == None:
-            return None
-          
-        player_lists = get_player_lists(data)
-        player_list = player_lists.get(country_code)
-        
-        stats["Code"] = country_code
-        stats["Name"] = country.name
-        
-        if player_list != None:
-            stats["Players"] = player_list
-            stats["PlayerCount"] = len(stats["Players"])
-            stats["PlayerCountPercent"] = get_player_count_percent(data, player_list)
-            stats["PlayerCountPosition"] = get_player_count_position(player_lists, country_code)
-            stats["Completions"] = get_completions(data, country_code)
-            stats["CompletionsPercent"] = get_completions_percent(data, stats["Completions"])
-            stats["CompletionsPosition"] = get_completions_position(data, country_code)
-            
-            total_fails, country_fails = get_fails(data, country_code)
-            stats["Fails"] = country_fails
-            stats["FailsPercent"] = get_fails_percent(total_fails, country_fails)
-            stats["FailsPosition"] = get_fails_position(data, country_code)
-        else:
-            stats["Players"] = None
-            stats["PlayerCount"] = 0
-            stats["PlayerCountPercent"] = 0
-            stats["PlayerCountPosition"] = '-'
-
-        
-        return stats
-    
     except Error as e:
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
+    
+def select_data(country_code):
+    cursor = database.get_cursor(dictionary=True)
+    
+    query_stats = """
+        SELECT Player.ID AS ID, Player.Name AS Name, Fails, Gamemode.Name AS Gamemode, CountryCode
+        FROM Player
+        RIGHT JOIN Victor ON Victor.PlayerID = Player.ID
+        JOIN Map ON Map.ID = Victor.MapID
+        JOIN Gamemode ON Gamemode.ID = Map.GamemodeID
+    """
+    
+    query_victors = """
+        SELECT Map.Name AS MapName, Map.ID AS MapID, Gamemode.Name AS Gamemode, Extra, Player.Name AS Victor, Victor.Date AS Date
+        FROM Map
+        JOIN Gamemode ON Gamemode.ID = Map.GamemodeID
+        JOIN (
+            SELECT MapID, MIN(Date) AS FirstVictoryDate
+            FROM Victor
+            JOIN Player ON Player.ID = Victor.PlayerID
+            WHERE Player.CountryCode = %s
+            GROUP BY MapID
+        ) AS FirstVictories ON FirstVictories.MapID = Map.ID
+        JOIN Victor ON Victor.MapID = Map.ID AND Victor.Date = FirstVictories.FirstVictoryDate
+        JOIN Player ON Player.ID = Victor.PlayerID
+        WHERE Player.CountryCode = %s;
+    """
+    
+    query_sections = """
+        WITH FurthestSections AS (
+            SELECT
+                Map.Name AS MapName,
+                Map.ID AS MapID,
+                Gamemode.Name AS Gamemode,
+                Extra,
+                Player.Name AS SectionPlayer,
+                Section.Name AS SectionName,
+                ROW_NUMBER() OVER (PARTITION BY Map.ID ORDER BY Section.SectionIndex DESC) AS RowNum
+            FROM Map
+            JOIN Gamemode ON Gamemode.ID = Map.GamemodeID
+            JOIN Section ON Section.MapID = Map.ID
+            JOIN SectionPlayer ON SectionPlayer.SectionID = Section.ID
+            JOIN Player ON Player.ID = SectionPlayer.PlayerID
+            WHERE Player.CountryCode = %s
+        )
+        SELECT MapName, MapID, Gamemode, Extra, SectionPlayer, SectionName
+        FROM FurthestSections
+        WHERE RowNum = 1;
+    """
+    
+    query_maps = """
+        SELECT Map.ID AS MapID, Map.Name AS MapName, Gamemode.Name AS Gamemode, Extra
+        FROM Map
+        JOIN Gamemode ON Gamemode.ID = Map.GamemodeID
+    """
+    
+    cursor.execute(query_stats)
+    stats_data = cursor.fetchall()
+    
+    cursor.execute(query_victors, (country_code, country_code,))
+    victors_data = cursor.fetchall()
+    
+    cursor.execute(query_sections, (country_code,))
+    sections_data = cursor.fetchall()
+    
+    cursor.execute(query_maps)
+    maps_data = cursor.fetchall()
+    
+    cursor.close()
+    database.commit()
+        
+    return stats_data, victors_data, sections_data, maps_data
+
+def get_stats(data_stats, country_code):
+    stats = {}
+    country = pycountry.countries.get(alpha_2=country_code)
+    if country == None:
+        return None
+        
+    player_lists = get_player_lists(data_stats)
+    player_list = player_lists.get(country_code)
+    
+    stats["Code"] = country_code
+    stats["Name"] = country.name
+    
+    if player_list != None:
+        stats["Players"] = player_list
+        stats["PlayerCount"] = len(stats["Players"])
+        stats["PlayerCountPercent"] = get_player_count_percent(data_stats, player_list)
+        stats["PlayerCountPosition"] = get_player_count_position(player_lists, country_code)
+        stats["Completions"] = get_completions(data_stats, country_code)
+        stats["CompletionsPercent"] = get_completions_percent(data_stats, stats["Completions"])
+        stats["CompletionsPosition"] = get_completions_position(data_stats, country_code)
+        
+        total_fails, country_fails = get_fails(data_stats, country_code)
+        stats["Fails"] = country_fails
+        stats["FailsPercent"] = get_fails_percent(total_fails, country_fails)
+        stats["FailsPosition"] = get_fails_position(data_stats, country_code)
+    else:
+        stats["Players"] = None
+        stats["PlayerCount"] = 0
+        stats["PlayerCountPercent"] = 0
+        stats["PlayerCountPosition"] = '-'
+
+    
+    return stats
     
     
 def get_player_lists(data):
@@ -153,4 +219,57 @@ def get_fails_position(data, country_code):
     return sorted_country_codes_list.index(country_code) + 1
     
     
+def get_maps(data_victors, data_sections, data_maps):
+    maps = []
     
+    for map in data_maps:    
+        found = False
+        for victor in data_victors:
+            if victor["MapID"] != map["MapID"]:
+                continue
+            
+            found = True
+            maps.append({"MapName": victor["MapName"], 
+                         "Gamemode": victor["Gamemode"],
+                         "List": get_list(map["Extra"]),
+                         "Player": victor["Victor"],
+                         "Date": victor["Date"],
+                         "Type": "Victor"})
+            break
+        
+        if found:
+            continue
+        
+        for section in data_sections:
+            if section["MapID"] != map["MapID"]:
+                continue
+            
+            found = True
+            maps.append({"MapName": section["MapName"], 
+                         "Gamemode": section["Gamemode"],
+                         "List": get_list(map["Extra"]),
+                         "Player": section["SectionPlayer"],
+                         "SectionName": section["SectionName"],
+                         "Date": datetime.date(9999, 1, 1),
+                         "Type": "Section"})
+            break
+        
+        if found:
+            continue
+        
+        # maps.append({"MapName": map["MapName"], 
+        #              "Gamemode": map["Gamemode"],
+        #              "List": get_list(map["Extra"]),
+        #              "Type": "None"})
+    
+    maps = sorted(maps, key=lambda x: x["Date"])
+    for map in maps:
+        map["Date"] = map["Date"].strftime("%b %d, %Y")
+    
+    return maps
+        
+def get_list(extra):
+    if extra:
+        return "Extra"
+    
+    return "Main"
