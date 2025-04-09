@@ -17,7 +17,8 @@ const userDict = {
     "ettc": "695468387924574231",
     "ImChill1n": "1073146518481162240",
     "Izaac": "381505087115100160",
-    "Lemon": "408971271087456265"
+    "Lemon": "408971271087456265",
+    "BramVeen": "336148116216741889"
 };
 
 const fetchAvatar = async (name, userId) => {

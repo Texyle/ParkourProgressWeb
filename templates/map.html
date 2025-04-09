@@ -40,14 +40,16 @@
 
         <div id="main-box" class="content">
             <h1>{{ map.MapName }}</h1>
-            <h3>Rankup - Main</h3>
+            <h3>{{ map.Gamemode }} - {% if map.Extra %}Extra{% else %}Main{% endif %}</h3>
             <hr />
-
-            <div class="container">
-                <div class="video-container">
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/zzQViFL26Eg?si=KwQZsCEP-ISiln-n" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            {% if map.VideoURL != "Unknown" %}
+                <div class="container">
+                    <div class="video-container">
+                        {{ map.VideoURL | safe }}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
+
 
             <div class="table-box-wrapper">
                 <div class="table-box collapsed" id="table-box-victors">
@@ -59,25 +61,39 @@
                             <col span="1" style="width: 30%;">
                             <col span="1" style="width: 20%;">
                          </colgroup>
-
-                        <thead>
-                            <tr>
-                                <th scope="col">Position</th>
-                                <th scope="col">Player</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Sky Fails</th>
-                            </tr>
-                        </thead>
                         <tbody>
                             {% for victor in victors %}
                             <tr>
-                                <td scope="row">{{ loop.index0 + 1 }}</td>
-                                <td>{{ victor.Name }}</td>
-                                <td>{{ victor.Date }}</td>
-                                <td>{{ victor.Fails }}</td>
+                              <td>
+                                <div style="font-size: 2rem; font-weight: 800;">{{ loop.index }}</div>
+                              </td>
+                              <td>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    {% if victor.UUID is not none %}
+                                  <img src="https://vzge.me/bust/{{ victor.Name }}.png" alt="Bust" style="height: 48px;">
+                                    {% else %}
+                                    <img src="https://vzge.me/bust/X-Steve.png" alt="Bust" style="height: 48px;">
+                                    {% endif %}
+                                  <div>
+                                    <div style="font-weight: bold;">{{ victor.Name }}</div>
+                                    <div style="font-size: 0.9rem; color: #777; align-self: left;">Slovakia</div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div style="font-style: italic; color: #4e9aff; font-size: 1.1rem;">
+                                  {{ victor.Date }}
+                                </div>
+                              </td>
+                              <td>
+                                <div style="color: #f55; font-weight: 600;">
+                                  {{ victor.Fails }}
+                                </div>
+                              </td>
                             </tr>
                             {% endfor %}
-                        </tbody>
+                          </tbody>
+                          
                     </table>
                 </div>
             </div>
