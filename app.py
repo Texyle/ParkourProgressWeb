@@ -196,7 +196,7 @@ def country_profile_with_country(country_code):
                            data = data,
                            map_images=files.map_images,
                            gamemodes = gamemodes,
-                           flags=files.flags)
+                           flags=files.flags) 
 
 @app.route('/map/<int:map_id>')
 def map(map_id):

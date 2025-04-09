@@ -480,7 +480,7 @@ body:hover {
     align-items: flex-start;
     margin-left: auto;
     font-size: 0.9rem;
-    text-align: right;
+    text-align: right; 
 }
 
 .run-details .date {

@@ -4,54 +4,13 @@ import traceback
 from flask import Flask, request, jsonify, send_from_directory
 import pycountry
 from py.database.countryprofile import fetch_country_profile_data
-import re
 from embeddify import Embedder
-from yt_iframe import yt
 
 connection = None
 plugin_config = {
     'youtube': {'width' : 350, 'height' : 650},
 }
 embedder = Embedder(plugin_config = plugin_config)
-
-def transform_youtube_url(url):
-    pattern = r'(?:https:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=|playlist\?list=|embed\/|v\/)?(.+)'
-
-    def replace(match):
-        if match.group == 1 and 'playlist?list=' in url:  
-            return f"https://www.youtube.com/embed/videoseries?list={match.group(1)}"
-        else:
-            return f"https://www.youtube.com/embed/{match.group(2)}"
-        '''
-        elif match.group == 2:  
-            return f"https://www.youtube.com/embed/{match.group(2)}"
-        elif match.group == 3: 
-            return f"https://www.youtube.com/embed/{match.group(3)}"
-        '''
-        
-    return re.sub(pattern, replace, url)
-
-def get_embed_url(url):
-    match = re.search(
-        r'(?:https:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=|playlist\?list=|embed\/|v\/)?([\w-]+)',
-        url
-    )
-    if not match:
-        return None
-
-    id_ = match.group(1)
-    
-    if 'playlist?list=' in url or 'videoseries?list=' in url:
-        return f"https://www.youtube.com/embed/videoseries?list={id_}"
-    else:
-        return f"https://www.youtube.com/embed/{id_}"
-        
-def get_embed_url_with_ytiframe(youtube_url):
-    iframe = yt.video(youtube_url)
-    start = iframe.find('src="') + 5
-    end = iframe.find('"', start)
-    embed_url = iframe[start:end]
-    return embed_url
 
 def get_cursor(*args, **kwargs):
     global connection

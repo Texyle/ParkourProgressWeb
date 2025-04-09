@@ -43,4 +43,4 @@ const updateAvatars = async () => {
     await Promise.all(promises);
 };
 
-document.addEventListener('DOMContentLoaded', updateAvatars);
+document.addEventListener('DOMContentLoaded', updateAvatars); 
