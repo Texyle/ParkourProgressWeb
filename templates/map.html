@@ -56,30 +56,41 @@
                     <button type="button" class="collapse" id="collapse-victors">Victors</button>
                     <table class="table table-victors">
                         <colgroup>
-                            <col span="1" style="width: 15%;">
-                            <col span="1" style="width: 40%;">
-                            <col span="1" style="width: 30%;">
-                            <col span="1" style="width: 20%;">
-                         </colgroup>
+                          <col span="1" style="width: 10%;">
+                          <col span="1" style="width: 45%;">
+                          <col span="1" style="width: 25%;">
+                          <col span="1" style="width: 20%;">
+                        </colgroup>
                         <tbody>
-                            {% for victor in victors %}
-                            <tr>
+                          {% for victor in victors %}
+                          <tr>
+                            <a href="/profile/player/{{ victor.ID }}" style="display: block; text-decoration: none; color: inherit;">
                               <td>
                                 <div style="font-size: 2rem; font-weight: 800;">{{ loop.index }}</div>
                               </td>
                               <td>
                                 <div style="display: flex; align-items: center; gap: 12px;">
-                                    {% if victor.UUID is not none %}
-                                  <img src="https://vzge.me/bust/{{ victor.Name }}.png" alt="Bust" style="height: 48px;">
-                                    {% else %}
-                                    <img src="https://vzge.me/bust/X-Steve.png" alt="Bust" style="height: 48px;">
-                                    {% endif %}
-                                  <div>
+                                  <div style="min-width: 48px; height: 48px; display: flex; align-items: center;">
+                                    <img src="https://vzge.me/bust/{{ victor.Name }}.png"
+                                         onerror="this.src='https://vzge.me/bust/X-Steve.png'"
+                                         alt="Bust"
+                                         style="height: 48px; display: block;">
+                                  </div>
+                                  <div style="display: flex; flex-direction: column; text-align: left;">
                                     <div style="font-weight: bold;">{{ victor.Name }}</div>
-                                    <div style="font-size: 0.9rem; color: #777; align-self: left;">Slovakia</div>
+                                    
+                                    <div style="margin-top: 5px;">
+                                      <a href="{{ victor.CountryURL }}" class="country-link" style="display: inline-flex; align-items: center; gap: 6px;">
+                                        <img src="/static/images/flags/{{ victor.CountryCode | lower }}.svg"
+                                             alt="{{ victor.CountryCode }}"
+                                             style="height: 0.9rem;">
+                                        <span style="font-size: 0.9rem; color: gray">{{ victor.Country }}</span>
+                                      </a>
+                                    </div>
                                   </div>
                                 </div>
                               </td>
+                              
                               <td>
                                 <div style="font-style: italic; color: #4e9aff; font-size: 1.1rem;">
                                   {{ victor.Date }}
@@ -90,11 +101,13 @@
                                   {{ victor.Fails }}
                                 </div>
                               </td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                          
+                            </a>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
                     </table>
+                      
+                    
                 </div>
             </div>
 

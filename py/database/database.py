@@ -408,7 +408,7 @@ def fetch_victors(app, map_id):
         cursor = get_cursor(dictionary=True)
         
         query = """
-        SELECT Player.Name AS Name, Victor.Date AS Date, Victor.Fails AS Fails
+        SELECT Player.Name AS Name, Victor.Date AS Date, Victor.Fails AS Fails, Player.ID AS ID, Player.CountryCode as CountryCode
         FROM Victor
         JOIN Player ON Player.ID = Victor.PlayerID
         WHERE Victor.MapID = %s
@@ -422,7 +422,11 @@ def fetch_victors(app, map_id):
         for victor in victors:
             strfdate = victor['Date'].strftime("%b %d, %Y")
             victor['Date'] = strfdate
-        
+            victor["Country"] = pycountry.countries.get(alpha_2=victor.get("CountryCode")).name
+            victor["CountryURL"] = f"/profile/country/{victor['CountryCode']}"
+            victor["FlagPath"] = f"/static/images/flags/{victor['CountryCode'].lower()}.svg"
+
+         
         return victors
     
     except Error as e:

@@ -492,3 +492,27 @@ body:hover {
 .run-details .fails {
     color: #f88;
 }
+
+.country-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: color 0.2s ease, filter 0.2s ease;
+  }
+  
+  .country-link:hover {
+    color: #444;
+    filter: brightness(0.85);
+  }
+  
+  a:hover {
+    background-color: #f1f1f1; 
+    cursor: pointer;  
+  }
+  
+  a {
+    transition: background-color 0.3s ease;
+  }
