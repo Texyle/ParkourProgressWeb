@@ -81,7 +81,7 @@ def fetch_player_info(app, id):
         query = """
         SELECT DiscordID, CountryCode, Name
         FROM Player 
-        WHERE ID = %s
+        WHERE Name = %s
         """
 
         cursor.execute(query, (id,))
@@ -104,7 +104,7 @@ def fetch_player_info(app, id):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
 
-def fetch_maps_in_progress(app, player_id):
+def fetch_maps_in_progress(app, player_name):
     try:
         cursor = get_cursor(dictionary=True)
 
@@ -119,10 +119,10 @@ def fetch_maps_in_progress(app, player_id):
         ON Map.ID = Section.MapID
         JOIN Gamemode
         ON Gamemode.ID = Map.GamemodeID
-        WHERE Player.ID = %s
+        WHERE Player.Name = %s
         """
 
-        cursor.execute(query, (player_id,))
+        cursor.execute(query, (player_name,))
         prog = cursor.fetchall()
         cursor.close()
         commit()
@@ -135,7 +135,7 @@ def fetch_maps_in_progress(app, player_id):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
     
-def fetch_completed_maps(app, player_id, gamemode=None):
+def fetch_completed_maps(app, player_name, gamemode=None):
     try:
         cursor = get_cursor(dictionary=True)
 
@@ -168,13 +168,13 @@ def fetch_completed_maps(app, player_id, gamemode=None):
             JOIN
                 Gamemode ON Gamemode.ID = Map.GamemodeID
             WHERE
-                Player.ID = %s
+                Player.Name = %s
                 Gamemode.Name = %s
             ORDER BY
                 Date DESC;
             """
 
-            cursor.execute(query, (player_id, gamemode))
+            cursor.execute(query, (player_name, gamemode))
         else:
             query = """
             SELECT
@@ -209,7 +209,7 @@ def fetch_completed_maps(app, player_id, gamemode=None):
                 Date DESC;
             """
 
-            cursor.execute(query, [player_id])
+            cursor.execute(query, [player_name])
             
         victor = cursor.fetchall()
         cursor.close()
@@ -286,12 +286,58 @@ def fetch_latest_victors(app):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
     
+def fetch_map_sections(app, id):
+    try:
+        cursor = get_cursor(dictionary=True)
+
+        query = """
+        SELECT
+            Section.Name AS Name,
+            Section.SectionIndex AS `Index`,
+            Player.ID AS PlayerID
+        FROM
+            Section
+        JOIN
+            SectionPlayer ON Section.ID = SectionPlayer.SectionID
+        JOIN
+            Player ON SectionPlayer.PlayerID = Player.ID
+        WHERE
+            Section.MapID = %s
+        """
+
+        cursor.execute(query, (id,))
+        results = cursor.fetchall()
+        sections = {}
+
+        for result in results:
+            section_name = result['Name']
+            section_index = result['Index']
+            player_id = result['PlayerID']
+
+            if section_name not in sections:
+                sections[section_name] = {
+                    'Index': section_index,
+                    'Players': []
+                }
+            
+            player_query = "SELECT Name FROM Player WHERE Player.ID = %s"
+            cursor.execute(player_query, (player_id,))
+            player_name = cursor.fetchone()['Name']
+
+            sections[section_name]['Players'].append(player_name)
+
+        return sections
+    
+    except Error as e:
+        app.logger.error(f"Error while fetching sections for a map: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
+    
 def fetch_map(app, id):
     try:
         cursor = get_cursor(dictionary=True)
         
         query = """
-        SELECT Map.Name AS MapName, Gamemode.Name AS Gamemode, Map.Extra AS Extra, Map.VideoURL AS VideoURL
+        SELECT Map.Name AS MapName, Gamemode.Name AS Gamemode, Map.Extra AS Extra, Map.VideoURL AS VideoURL, Map.FailsMessage AS FailsMessage
         FROM Map
         JOIN Gamemode ON Gamemode.ID = Map.GamemodeID
         WHERE Map.Id = %s
@@ -425,7 +471,7 @@ def fetch_victors(app, map_id):
             victor["Country"] = pycountry.countries.get(alpha_2=victor.get("CountryCode")).name
             victor["CountryURL"] = f"/profile/country/{victor['CountryCode']}"
             victor["FlagPath"] = f"/static/images/flags/{victor['CountryCode'].lower()}.svg"
-
+            victor["ProfileURL"] = f"/profile/player/{victor['ID']}"
          
         return victors
     

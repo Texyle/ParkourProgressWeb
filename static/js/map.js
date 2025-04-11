@@ -59,3 +59,40 @@ document.querySelectorAll('.collapse').forEach(function(button) {
         }
     });
 });
+
+document.querySelectorAll(".country-link").forEach(link => {
+  link.addEventListener("click", (e) => {
+    e.stopPropagation(); 
+    const href = link.dataset.href;
+    if (href) {
+      window.location.href = href;
+    }
+  });
+});
+
+document.querySelectorAll(".player-row").forEach(row => {
+  row.addEventListener("click", () => {
+    const href = row.dataset.href;
+    if (href) {
+      window.location.href = href;
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const sectionItems = document.querySelectorAll('.section-item');
+
+    sectionItems.forEach(item => {
+      const header = item.querySelector('.section-header');
+      const list = item.querySelector('.list-section-players');
+
+      header.addEventListener('click', () => {
+        item.classList.toggle('open');
+        if (item.classList.contains('open')) {
+          list.style.display = 'block';  
+        } else {
+          list.style.display = 'none';   
+        }
+      });
+    });
+});
