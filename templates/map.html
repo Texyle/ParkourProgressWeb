@@ -148,7 +148,7 @@
                         <ul class="list list-section-players">
                           {% for player in section_data['Players'] %}
                           <li>
-                            <a href="/profile/player{{ player }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: white;">
+                            <a href="/profile/player/{{ get_player_id(app, nick=player) }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: white;">
                               <img src="https://vzge.me/face/{{ player }}.png" onerror="this.src='https://vzge.me/face/X-Steve.png'" alt="{{ player }}">
                               {{ player }}
                             </a>

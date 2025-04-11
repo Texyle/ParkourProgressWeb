@@ -29,6 +29,7 @@ files = Files(app.static_folder)
 discord = DiscordOAuth2Session(app)
 key = Fernet.generate_key()
 fernet = Fernet(key)
+app.jinja_env.globals['get_player_id'] = database.get_player_id
 
 def get_guild_member(guild_id, user_id, bot_token):
     url = f"https://discord.com/api/v10/guilds/{guild_id}/members/{user_id}"

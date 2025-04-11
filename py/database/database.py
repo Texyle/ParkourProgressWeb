@@ -81,7 +81,7 @@ def fetch_player_info(app, id):
         query = """
         SELECT DiscordID, CountryCode, Name
         FROM Player 
-        WHERE Name = %s
+        WHERE ID = %s
         """
 
         cursor.execute(query, (id,))
@@ -104,7 +104,7 @@ def fetch_player_info(app, id):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
 
-def fetch_maps_in_progress(app, player_name):
+def fetch_maps_in_progress(app, player_id):
     try:
         cursor = get_cursor(dictionary=True)
 
@@ -119,10 +119,10 @@ def fetch_maps_in_progress(app, player_name):
         ON Map.ID = Section.MapID
         JOIN Gamemode
         ON Gamemode.ID = Map.GamemodeID
-        WHERE Player.Name = %s
+        WHERE Player.ID = %s
         """
 
-        cursor.execute(query, (player_name,))
+        cursor.execute(query, (player_id,))
         prog = cursor.fetchall()
         cursor.close()
         commit()
@@ -135,7 +135,7 @@ def fetch_maps_in_progress(app, player_name):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
     
-def fetch_completed_maps(app, player_name, gamemode=None):
+def fetch_completed_maps(app, player_id, gamemode=None):
     try:
         cursor = get_cursor(dictionary=True)
 
@@ -168,13 +168,13 @@ def fetch_completed_maps(app, player_name, gamemode=None):
             JOIN
                 Gamemode ON Gamemode.ID = Map.GamemodeID
             WHERE
-                Player.Name = %s
+                Player.ID = %s
                 Gamemode.Name = %s
             ORDER BY
                 Date DESC;
             """
 
-            cursor.execute(query, (player_name, gamemode))
+            cursor.execute(query, (player_id, gamemode))
         else:
             query = """
             SELECT
@@ -209,7 +209,7 @@ def fetch_completed_maps(app, player_name, gamemode=None):
                 Date DESC;
             """
 
-            cursor.execute(query, [player_name])
+            cursor.execute(query, [player_id])
             
         victor = cursor.fetchall()
         cursor.close()
@@ -225,6 +225,17 @@ def fetch_completed_maps(app, player_name, gamemode=None):
         
         return victor
     
+    except Error as e:
+        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
+    
+def get_player_id(app, nick):
+    try:
+        cursor = get_cursor()
+        query = "SELECT ID AS ID FROM Player WHERE Player.Name = %s"
+        cursor.execute(query, (nick,))
+        id = cursor.fetchone()
+        return id[0]
     except Error as e:
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
