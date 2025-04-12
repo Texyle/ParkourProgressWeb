@@ -146,7 +146,7 @@ body::-webkit-scrollbar {
     margin-bottom: 1rem;
     pointer-events: none;
     transition: max-height 0.7s ease;
-    max-height: 1rem;
+    /* max-height: 3rem; */
     overflow: hidden;
 }
 
@@ -326,6 +326,7 @@ tbody {
     padding-left: 20px;
     margin-bottom: 1rem;
     justify-content: left;
+    overflow: hidden;
 }
 
 
@@ -687,10 +688,12 @@ a {
 }
 
 .list-section-players {
-    display: none;
+    /* display: none; */
+    max-height: 0;
     list-style-type: none;
-    padding: 0 0 10px 2rem;
+    padding: 0 0 0 2rem;
     margin: 0;
+    transition: max-height 0.3s;
 }
 
 .section-item.open .list-section-players {

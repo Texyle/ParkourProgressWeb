@@ -305,7 +305,8 @@ def fetch_map_sections(app, id):
         SELECT
             Section.Name AS Name,
             Section.SectionIndex AS `Index`,
-            Player.ID AS PlayerID
+            Player.ID AS PlayerID,
+            Player.Name AS PlayerName
         FROM
             Section
         JOIN
@@ -331,11 +332,11 @@ def fetch_map_sections(app, id):
                     'Players': []
                 }
             
-            player_query = "SELECT Name FROM Player WHERE Player.ID = %s"
-            cursor.execute(player_query, (player_id,))
-            player_name = cursor.fetchone()['Name']
+            # player_query = "SELECT Name FROM Player WHERE Player.ID = %s"
+            # cursor.execute(player_query, (player_id,))
+            # player_name = cursor.fetchone()['Name']
 
-            sections[section_name]['Players'].append(player_name)
+            sections[section_name]['Players'].append(result['PlayerName'])
 
         return sections
     

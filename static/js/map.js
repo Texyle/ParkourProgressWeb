@@ -42,21 +42,30 @@ victorsBox.style.maxHeight = buttonHeight+5 + 'px';
 const sectionsBox = document.getElementById('table-box-sections');
 sectionsBox.style.maxHeight = buttonHeight+5 + 'px';
 
+function setBoxHeight(box) {
+  const button = box.querySelector("button")
+  const table = box.querySelector(".table")
+
+  const buttonHeight = getAbsoluteHeight(button);
+  const tableHeight = getAbsoluteHeight(table);
+
+  if (box.classList.contains("collapsed")) {
+    box.style.maxHeight = buttonHeight+5 + 'px';
+  } else {
+    box.style.maxHeight = buttonHeight+5 + tableHeight + 'px';
+  }
+}
+
 document.querySelectorAll('.collapse').forEach(function(button) {
     button.addEventListener('click', function() {
         const tableBox = button.parentElement;
-        const table = button.parentNode.querySelector(".table");
-
-        const buttonHeight = getAbsoluteHeight(button);
-        const tableHeight = getAbsoluteHeight(table);
 
         if (!tableBox.classList.contains("collapsed")) {
-            tableBox.style.maxHeight = buttonHeight+5 + 'px';
-            tableBox.classList.add("collapsed");
+          tableBox.classList.add("collapsed");
         } else {
-            tableBox.style.maxHeight = buttonHeight+5 + tableHeight + 'px';
-            tableBox.classList.remove("collapsed");
+          tableBox.classList.remove("collapsed");
         }
+      setBoxHeight(tableBox);
     });
 });
 
@@ -79,6 +88,39 @@ document.querySelectorAll(".player-row").forEach(row => {
   });
 });
 
+function getTotalHeightWithChildren(el) {
+  el = (typeof el === 'string') ? document.querySelector(el) : el;
+
+  if (!el) {
+      console.error("Element not found");
+      return 0;
+  }
+
+  let totalHeight = 0;
+  const children = el.children;
+
+  for (let i = 0; i < children.length; i++) {
+      const child = children[i];
+      const styles = window.getComputedStyle(child);
+      const marginTop = parseFloat(styles['marginTop']) || 0;
+      const marginBottom = parseFloat(styles['marginBottom']) || 0;
+      const margin = marginTop + marginBottom;
+
+      totalHeight += child.offsetHeight + margin;
+  }
+
+  const ulStyles = window.getComputedStyle(el);
+  const ulMarginTop = parseFloat(ulStyles['marginTop']) || 0;
+  const ulMarginBottom = parseFloat(ulStyles['marginBottom']) || 0;
+  const ulPaddingTop = parseFloat(ulStyles['paddingTop']) || 0;
+  const ulPaddingBottom = parseFloat(ulStyles['paddingBottom']) || 0;
+
+  totalHeight += ulMarginTop + ulMarginBottom + ulPaddingTop + ulPaddingBottom;
+
+  return totalHeight;
+}
+
+
 document.addEventListener("DOMContentLoaded", function() {
     const sectionItems = document.querySelectorAll('.section-item');
 
@@ -87,11 +129,29 @@ document.addEventListener("DOMContentLoaded", function() {
       const list = item.querySelector('.list-section-players');
 
       header.addEventListener('click', () => {
-        item.classList.toggle('open');
-        if (item.classList.contains('open')) {
-          list.style.display = 'block';  
+    //     item.classList.toggle('open');
+    //     if (item.classList.contains('open')) {
+    //       list.style.display = 'block';  
+    //     } else {
+    //       list.style.display = 'none';   
+    //     }
+    //   });
+
+        const listHeight = getTotalHeightWithChildren(list);
+        console.log(listHeight);
+
+        if (!list.classList.contains("collapsed")) {
+          list.style.maxHeight = 0;
+          list.classList.add("collapsed");
         } else {
-          list.style.display = 'none';   
+          list.style.maxHeight = listHeight + 'px';
+          list.classList.remove("collapsed");
+
+          const sectionsBox = document.getElementById('table-box-sections');
+          sectionsBox.style.maxHeight = '100rem';
+          setTimeout(function() {
+            setBoxHeight(sectionsBox);
+        }, 300);
         }
       });
     });

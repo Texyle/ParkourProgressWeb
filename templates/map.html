@@ -145,10 +145,10 @@
                           <span class="section-name">{{ section_name }}</span> 
                           <span class="section-reached">{{ section_data['Players']|length }} players reached</span>
                         </div>
-                        <ul class="list list-section-players">
+                        <ul class="list list-section-players collapsed">
                           {% for player in section_data['Players'] %}
                           <li>
-                            <a href="/profile/player/{{ get_player_id(app, nick=player) }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: white;">
+                            <a href="/profile/player/<insert id here>" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: white;">
                               <img src="https://vzge.me/face/{{ player }}.png" onerror="this.src='https://vzge.me/face/X-Steve.png'" alt="{{ player }}">
                               {{ player }}
                             </a>
