@@ -29,6 +29,7 @@ files = Files(app.static_folder)
 discord = DiscordOAuth2Session(app)
 key = Fernet.generate_key()
 fernet = Fernet(key)
+app.jinja_env.globals['get_player_id'] = database.get_player_id
 
 def get_guild_member(guild_id, user_id, bot_token):
     url = f"https://discord.com/api/v10/guilds/{guild_id}/members/{user_id}"
@@ -154,6 +155,27 @@ def profile():
     gamemodes = database.fetch_gamemodes(app)
     return render_template("profile.html", player_names = player_names, player_data = None, gamemodes = gamemodes)
 
+@app.route('/profile/player/<player_name>')
+def profile_with_playername(player_name):
+    player_names = database.fetch_player_names(app)
+    
+    player_data = database.fetch_player_info(app, player_name)
+    maps = database.fetch_completed_maps(app, player_name)
+    progress = database.fetch_maps_in_progress(app, player_name)
+    gamemodes = database.fetch_gamemodes(app)
+    
+    if player_data != None:
+        return render_template("profile.html", 
+                               player_names = player_names, 
+                               player_data = player_data, 
+                               maps = maps,
+                               progress = progress,
+                               gamemodes = gamemodes,
+                               map_images=files.map_images,
+                               flags=files.flags)
+    else:
+        return render_template("notfound.html")
+
 @app.route('/profile/player/<int:player_id>')
 def profile_with_player(player_id):
     player_names = database.fetch_player_names(app)
@@ -196,14 +218,16 @@ def country_profile_with_country(country_code):
                            data = data,
                            map_images=files.map_images,
                            gamemodes = gamemodes,
-                           flags=files.flags)
+                           flags=files.flags) 
 
 @app.route('/map/<int:map_id>')
 def map(map_id):
     map = database.fetch_map(app, map_id)
     victors = database.fetch_victors(app, map_id)
+    sections = database.fetch_map_sections(app, map_id)
+    print(sections, flush=True)
     if map != None:
-        return render_template('map.html', map = map, victors = victors)
+        return render_template('map.html', map = map, victors = victors, sections = sections)
     else:
         return render_template("notfound.html")
 

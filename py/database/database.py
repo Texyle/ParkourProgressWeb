@@ -4,8 +4,13 @@ import traceback
 from flask import Flask, request, jsonify, send_from_directory
 import pycountry
 from py.database.countryprofile import fetch_country_profile_data
+from embeddify import Embedder
 
 connection = None
+plugin_config = {
+    'youtube': {'width' : 350, 'height' : 650},
+}
+embedder = Embedder(plugin_config = plugin_config)
 
 def get_cursor(*args, **kwargs):
     global connection
@@ -223,6 +228,17 @@ def fetch_completed_maps(app, player_id, gamemode=None):
     except Error as e:
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
+    
+def get_player_id(app, nick):
+    try:
+        cursor = get_cursor()
+        query = "SELECT ID AS ID FROM Player WHERE Player.Name = %s"
+        cursor.execute(query, (nick,))
+        id = cursor.fetchone()
+        return id[0]
+    except Error as e:
+        app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
 
 def fetch_country_player_counts(app):
     try:
@@ -281,22 +297,81 @@ def fetch_latest_victors(app):
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
     
+def fetch_map_sections(app, id):
+    try:
+        cursor = get_cursor(dictionary=True)
+
+        query = """
+        SELECT
+            Section.Name AS Name,
+            Section.SectionIndex AS `Index`,
+            Player.ID AS PlayerID
+        FROM
+            Section
+        JOIN
+            SectionPlayer ON Section.ID = SectionPlayer.SectionID
+        JOIN
+            Player ON SectionPlayer.PlayerID = Player.ID
+        WHERE
+            Section.MapID = %s
+        """
+
+        cursor.execute(query, (id,))
+        results = cursor.fetchall()
+        sections = {}
+
+        for result in results:
+            section_name = result['Name']
+            section_index = result['Index']
+            player_id = result['PlayerID']
+
+            if section_name not in sections:
+                sections[section_name] = {
+                    'Index': section_index,
+                    'Players': []
+                }
+            
+            player_query = "SELECT Name FROM Player WHERE Player.ID = %s"
+            cursor.execute(player_query, (player_id,))
+            player_name = cursor.fetchone()['Name']
+
+            sections[section_name]['Players'].append(player_name)
+
+        return sections
+    
+    except Error as e:
+        app.logger.error(f"Error while fetching sections for a map: {e.msg}\n{traceback.format_exc()}")
+        return jsonify({"error": e.msg}), 500
+    
 def fetch_map(app, id):
     try:
         cursor = get_cursor(dictionary=True)
         
         query = """
-        SELECT Map.Name AS MapName FROM Map
-        JOIN Gamemode
-        ON Gamemode.ID = Map.GamemodeID
+        SELECT Map.Name AS MapName, Gamemode.Name AS Gamemode, Map.Extra AS Extra, Map.VideoURL AS VideoURL, Map.FailsMessage AS FailsMessage
+        FROM Map
+        JOIN Gamemode ON Gamemode.ID = Map.GamemodeID
         WHERE Map.Id = %s
         """
         cursor.execute(query, [id])
         map = cursor.fetchone()
         commit()
 
+        if map.get("Extra") == 0:
+            map["Extra"] = False
+        elif map.get("Extra") == 1:
+            map["Extra"] = True
+
+        if map["VideoURL"] != "Unknown":
+            elink = embedder(map.get("VideoURL"))
+            elink = elink.replace(
+                'referrerpolicy="strict-origin-when-cross-origin"',
+                'referrerpolicy="no-referrer-when-downgrade"'
+            )
+            map["VideoURL"] = elink
+
         return map
-    
+
     except Error as e:
         app.logger.error(f"Error while fetching data: {e.msg}\n{traceback.format_exc()}")
         return jsonify({"error": e.msg}), 500
@@ -390,7 +465,7 @@ def fetch_victors(app, map_id):
         cursor = get_cursor(dictionary=True)
         
         query = """
-        SELECT Player.Name AS Name, Victor.Date AS Date, Victor.Fails AS Fails
+        SELECT Player.Name AS Name, Victor.Date AS Date, Victor.Fails AS Fails, Player.ID AS ID, Player.CountryCode as CountryCode
         FROM Victor
         JOIN Player ON Player.ID = Victor.PlayerID
         WHERE Victor.MapID = %s
@@ -404,7 +479,11 @@ def fetch_victors(app, map_id):
         for victor in victors:
             strfdate = victor['Date'].strftime("%b %d, %Y")
             victor['Date'] = strfdate
-        
+            victor["Country"] = pycountry.countries.get(alpha_2=victor.get("CountryCode")).name
+            victor["CountryURL"] = f"/profile/country/{victor['CountryCode']}"
+            victor["FlagPath"] = f"/static/images/flags/{victor['CountryCode'].lower()}.svg"
+            victor["ProfileURL"] = f"/profile/player/{victor['ID']}"
+         
         return victors
     
     except Error as e:
