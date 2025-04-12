@@ -1,11 +1,69 @@
-{% extends "base.html" %}
-
-{% block head %}
-    {{ super() }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardstyles.css') }}">
-    <title>Dashboard</title>
-{% endblock %}
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+</head>
+<body class="dark-mode">
+    <div id="container">
+        <div id="sidebar">
+            <div id="logo">
+                <img src="/static/images/icon-circle.png" alt="Logo"/>
+                <p>Parkour Progress</p>
+            </div>
+            <ul id="tabs">
+                <li>
+                    <img src="/static/images/dashboard/icon-logs.svg" alt-"Logs"/>
+                    <div class="text-container">
+                        <span class="tab-name">LOGS</span>
+                        <span class="tab-description">See logs</span>
+                    </div>
+                </li>
+                <li>
+                    <img src="/static/images/dashboard/icon-progress.svg" alt-"Progress"/>
+                    <div class="text-container">
+                        <span class="tab-name">PROGRESS</span>
+                        <span class="tab-description">Update progress</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
 
-{% block content %}
-    <h1>Welcome, {{ discordname }}, {{ pos }}, what would you like to do?</h1>
-{% endblock %}
+        <div id="content">
+
+        </div>
+    </div>
+
+    <div class="switch-container" onclick="toggleTheme()">
+        <div class="switch-circle">
+            <i class="fas fa-moon"></i>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            document.body.classList.toggle('dark-mode');
+
+            const isLightMode = document.body.classList.contains('light-mode');
+            localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+
+            document.querySelector(".switch-circle i").className = isLightMode ? "fas fa-sun" : "fas fa-moon";
+        }
+
+        (function applySavedTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                document.body.classList.remove('dark-mode');
+                document.querySelector(".switch-circle i").className = "fas fa-sun";
+            }
+        })();
+    </script>
+</body>
+</html>
+
