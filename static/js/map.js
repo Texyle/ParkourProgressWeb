@@ -166,11 +166,14 @@ function onYouTubeIframeAPIReady() {
     videoId: videoId,
     events: {
       'onReady': function (event) {
-        const iframe = document.getElementById('video-player').querySelector('iframe');
+        console.log("yes it works");
+        
+        const iframe = document.getElementById('video-player');
         if (iframe) {
           iframe.style.borderRadius = "3px !important";
           iframe.style.border = "3px solid gray !important";
           iframe.style.boxShadow = "0px 0px 10px 2px gray inset !important";
+          console.log(iframe)
         }
       },
       'onError': function (event) {
