@@ -110,7 +110,8 @@ def callback():
 
 @app.route("/dashboard")
 def dashboard():
-    cookie = checkcookie()
+    # cookie = checkcookie()
+    cookie = {"discordname": "texyle", "pos": "Admin"}
     
     if cookie is not None:
         discordname = cookie.get("discordname")

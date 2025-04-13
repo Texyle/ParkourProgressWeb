@@ -16,21 +16,56 @@
                 <p>Parkour Progress</p>
             </div>
             <ul id="tabs">
-                <li>
-                    <img src="/static/images/dashboard/icon-logs.svg" alt-"Logs"/>
-                    <div class="text-container">
+                <li class="divider">
+                    <img src="/static/images/dashboard/icon-logs.svg" alt="Logs"/>
+                    <div class="tab-text-container">
                         <span class="tab-name">LOGS</span>
                         <span class="tab-description">See logs</span>
                     </div>
                 </li>
                 <li>
-                    <img src="/static/images/dashboard/icon-progress.svg" alt-"Progress"/>
-                    <div class="text-container">
+                    <img src="/static/images/dashboard/icon-progress.svg" alt="Progress"/>
+                    <div class="tab-text-container">
                         <span class="tab-name">PROGRESS</span>
                         <span class="tab-description">Update progress</span>
                     </div>
                 </li>
+                <li>
+                    <img src="/static/images/dashboard/icon-players.svg" alt="Players"/>
+                    <div class="tab-text-container">
+                        <span class="tab-name">PLAYERS</span>
+                        <span class="tab-description">Manage player info</span>
+                    </div>
+                </li>
+                <li class="divider">
+                    <img src="/static/images/dashboard/icon-maps.svg" alt="Maps"/>
+                    <div class="tab-text-container">
+                        <span class="tab-name">MAPS</span>
+                        <span class="tab-description">Manage map info</span>
+                    </div>
+                </li>
+                <li class="show-for-role divider" data-role="Developer">
+                    <img src="/static/images/dashboard/icon-backups.svg" alt="Backups"/>
+                    <div class="tab-text-container">
+                        <span class="tab-name">BACKUPS</span>
+                        <span class="tab-description">Load data backups</span>
+                    </div>
+                </li>
+                <li class="show-for-role" data-role="Admin">
+                    <img src="/static/images/dashboard/icon-staff.svg" alt="Staff"/>
+                    <div class="tab-text-container">
+                        <span class="tab-name">STAFF</span>
+                        <span class="tab-description">Manage staff members</span>
+                    </div>
+                </li>
             </ul>
+            <div id="user-container">
+                <img src="https://cdn.discordapp.com/avatars/606385859704520704/fedf2c7fb3b63387a528aa39f5d5ce0f.png?size=2048"/>
+                <div id="user-text-container">
+                    <span id="user-name">Username</span>
+                    <span id="role-list">Role | Role | Role</span>
+                </div>
+            </div>
         </div>
 
         <div id="content">
