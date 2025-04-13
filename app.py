@@ -48,7 +48,7 @@ def createcookie():
     discordname = session.get("discordname")
     pos = session.get("pos")
     data = json.dumps({"ip": ip, "discordname": discordname, "pos": pos})
-    encrypted = fernet.encrypt(data).decode()
+    encrypted = fernet.encrypt(data.encode()).decode()
 
     try:
         resp = make_response(redirect(url_for('dashboard')))
@@ -106,7 +106,6 @@ def callback():
                 
     session['errormsg'] = "You are not a Staff member! You do not have access to this Dashboard."
     return redirect(url_for('dashboard'))  
-
 
 @app.route("/dashboard")
 def dashboard():
