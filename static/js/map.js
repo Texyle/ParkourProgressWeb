@@ -120,7 +120,6 @@ function getTotalHeightWithChildren(el) {
   return totalHeight;
 }
 
-
 document.addEventListener("DOMContentLoaded", function() {
     const sectionItems = document.querySelectorAll('.section-item');
 
@@ -156,3 +155,30 @@ document.addEventListener("DOMContentLoaded", function() {
       });
     });
 });
+
+const players = {};
+    
+function onYouTubeIframeAPIReady() {
+  const container = document.getElementById('video-player');
+  const videoId = container.dataset.videoid;
+    
+  players['video-player'] = new YT.Player('video-player', {
+    videoId: videoId,
+    events: {
+      'onReady': function (event) {
+        const iframe = document.getElementById('video-player').querySelector('iframe');
+        if (iframe) {
+          iframe.style.borderRadius = "3px !important";
+          iframe.style.border = "3px solid gray !important";
+          iframe.style.boxShadow = "0px 0px 10px 2px gray inset !important";
+        }
+      },
+      'onError': function (event) {
+        if ([100, 101, 150].includes(event.data)) {
+          const contdiv = document.querySelector(".container");
+          contdiv.style.display = "none";
+        }
+      }
+    }
+  });
+}

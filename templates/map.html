@@ -63,14 +63,10 @@
             <h3>{{ map.Gamemode }} - {% if map.Extra %}Extra{% else %}Main{% endif %}</h3>
             <hr />
             {% if map.VideoURL != "Unknown" %}
-                <div class="container">
-                    <div class="video-container">
-                        {{ map.VideoURL | safe }}
-                    </div>
-                </div>
-            {% endif %}
-
-
+  <div class="container">
+    <div class="video-container" id="video-player" data-videoid="{{ map.VideoURL.split('embed/')[1].split('?')[0] }}"></div>
+  </div>
+{% endif %}
             <div class="table-box-wrapper">
                 <div class="table-box collapsed" id="table-box-victors">
                     <button type="button" class="collapse" id="collapse-victors">Victors</button>
@@ -171,6 +167,7 @@
     <script src="/static/js/utils.js"></script>
     <script src="/static/js/map.js"></script>
     <script src="/static/js/pagetitle.js" defer></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
       async function changeTitle() {
         const mapName = "{{ map.MapName }}";
@@ -178,7 +175,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", changeTitle)
-    </script>
+    </script> 
 </body>
 
 </html> 
