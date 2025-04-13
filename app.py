@@ -22,7 +22,7 @@ app = Flask(__name__)
 app.secret_key = secrets.token_hex(64)
 app.config["DISCORD_CLIENT_ID"] = "1263772933483139143"
 app.config["DISCORD_CLIENT_SECRET"] = "rFVXxCBDdBJDDu7fFBWRrQwiQbWcXJv9"
-app.config["DISCORD_REDIRECT_URI"] = "http://193.124.204.44/callback"
+app.config["DISCORD_REDIRECT_URI"] = "http://127.0.0.1:20000/callback"
 app.config["DISCORD_BOT_TOKEN"] = "MTIxODI4MzcxNjIwMDM2NjEzMQ.GdjgrS.OqmS8ixXmtmmbi8OKbfzGKhdmmLYOxGWvz6nUs"
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "true"
 files = Files(app.static_folder)    
@@ -48,7 +48,7 @@ def createcookie():
     discordname = session.get("discordname")
     pos = session.get("pos")
     data = json.dumps({"ip": ip, "discordname": discordname, "pos": pos})
-    encrypted = fernet.encrypt(data).decode()
+    encrypted = fernet.encrypt(data.encode()).decode()
 
     try:
         resp = make_response(redirect(url_for('dashboard')))
@@ -106,7 +106,6 @@ def callback():
                 
     session['errormsg'] = "You are not a Staff member! You do not have access to this Dashboard."
     return redirect(url_for('dashboard'))  
-
 
 @app.route("/dashboard")
 def dashboard():
