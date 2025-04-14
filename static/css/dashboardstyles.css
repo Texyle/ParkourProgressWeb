@@ -1,9 +1,14 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
     font-family: 'Montserrat', sans-serif;
     overflow: hidden;
     transition: background-color 0.3s;
@@ -84,8 +89,8 @@ body.light-mode .switch-circle i {
 
 #container {
     display: flex;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
 }
 
 #sidebar {
@@ -144,13 +149,21 @@ body.light-mode .switch-circle i {
     position: absolute;
     content: "";
     inset: 0;
-    background-image: linear-gradient(90deg,rgba(204, 204, 204, 0.2) 0%, rgba(0, 0, 0, 0) 100%);
+    background-image: linear-gradient(90deg,rgba(204, 204, 204, 0.3) 0%, rgba(0, 0, 0, 0) 100%);
     z-index: 1;
     opacity: 0;
     transition: opacity 0.3s;
 }
 
-#tabs li:hover:after {
+#tabs li.selected::before {
+    opacity: 1 !important;
+}
+
+#tabs li:hover::before {
+    opacity: 0.4;
+}
+
+#tabs li.selected:after {
     right: 10px;
 }
 
@@ -200,20 +213,19 @@ body.light-mode .switch-circle i {
     margin: 0;
 }
 
-#tabs li:hover::before {
-    opacity: 1;
-}
-
-#tabs li:hover img {
+#tabs li:hover img,
+#tabs li.selected img {
     filter: invert(0);
 }
 
-#tabs li:hover .tab-name {
+#tabs li:hover .tab-name,
+#tabs li.selected .tab-name {
     transform: translateY(-75%);
     color: white;
 }
 
-#tabs li:hover .tab-description {
+#tabs li:hover .tab-description,
+#tabs li.selected .tab-description {
     transform: translateY(10%);
     opacity: 1;
 }
@@ -250,4 +262,23 @@ body.light-mode .switch-circle i {
 
 #content {
     flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.tab {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 1rem;
+    right: 1rem;
+    top: 1rem;
+    bottom: 1rem;
+    transform: translateX(110%);
+    transition: transform 0.3s ease;
+}
+
+.tab.default {
+    transform: translateX(0);
 }

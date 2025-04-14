@@ -16,42 +16,42 @@
                 <p>Parkour Progress</p>
             </div>
             <ul id="tabs">
-                <li class="divider">
+                <li class="divider selected" data-tab="logs">
                     <img src="/static/images/dashboard/icon-logs.svg" alt="Logs"/>
                     <div class="tab-text-container">
                         <span class="tab-name">LOGS</span>
                         <span class="tab-description">See logs</span>
                     </div>
                 </li>
-                <li>
+                <li data-tab="progress">
                     <img src="/static/images/dashboard/icon-progress.svg" alt="Progress"/>
                     <div class="tab-text-container">
                         <span class="tab-name">PROGRESS</span>
                         <span class="tab-description">Update progress</span>
                     </div>
                 </li>
-                <li>
+                <li data-tab="players">
                     <img src="/static/images/dashboard/icon-players.svg" alt="Players"/>
                     <div class="tab-text-container">
                         <span class="tab-name">PLAYERS</span>
                         <span class="tab-description">Manage player info</span>
                     </div>
                 </li>
-                <li class="divider">
+                <li class="divider" data-tab="maps">
                     <img src="/static/images/dashboard/icon-maps.svg" alt="Maps"/>
                     <div class="tab-text-container">
                         <span class="tab-name">MAPS</span>
                         <span class="tab-description">Manage map info</span>
                     </div>
                 </li>
-                <li class="show-for-role divider" data-roles="['Developer', 'Admin']">
+                <li class="show-for-role divider" data-roles="['Developer', 'Admin']" data-tab="backups">
                     <img src="/static/images/dashboard/icon-backups.svg" alt="Backups"/>
                     <div class="tab-text-container">
                         <span class="tab-name">BACKUPS</span>
                         <span class="tab-description">Load data backups</span>
                     </div>
                 </li>
-                <li class="show-for-role" data-roles="['Admin']">
+                <li class="show-for-role" data-roles="['Admin']" data-tab="staff">
                     <img src="/static/images/dashboard/icon-staff.svg" alt="Staff"/>
                     <div class="tab-text-container">
                         <span class="tab-name">STAFF</span>
@@ -69,7 +69,29 @@
         </div>
 
         <div id="content">
+            <div class="tab selected default" data-tab="logs">
+                logs
+            </div>
 
+            <div class="tab" data-tab="progress">
+                progress
+            </div>
+
+            <div class="tab" data-tab="players">
+                players
+            </div>
+
+            <div class="tab" data-tab="maps">
+                maps
+            </div>
+
+            <div class="tab" data-tab="backups">
+                backups
+            </div>
+
+            <div class="tab" data-tab="staff">
+                staff
+            </div>
         </div>
     </div>
 
@@ -99,6 +121,7 @@
             }
         })();
     </script>
+    <script src="{{ url_for('static', filename='js/dashboard/tabs.js') }}"></script>
 </body>
 </html>
 
