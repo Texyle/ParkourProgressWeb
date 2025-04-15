@@ -99,7 +99,7 @@ def callback():
     target_guild_id = 913838786947977256
     staff_role_ids = list(role_strings.keys())
     realroles = []
-    
+
     '''
     if user.id == 269105396587823104:
         return redirect(url_for('dashboard', error="nostaff"))
@@ -139,20 +139,8 @@ def dashboard():
         database.commit()
         if info:
             pos = []
-            otherperms = {
-                "Admin": bool(info["Admin"]),
-                "Developer": bool(info["Developer"]),
-                "Moderator": bool(info["Moderator"]),
-                "Helper": bool(info["Helper"]),
-            }
-            if info["Admin"]:       
-                pos.append("Admin")
-            if info["Developer"]:
-                pos.append("Developer")
-            if info["Moderator"]:
-                pos.append("Moderator")
-            if info["Helper"]:
-                pos.append("Helper")
+            otherperms = {key: bool(value) for key, value in info.items() if value in [0, 1]}
+            pos = [key for key, value in info.items() if value == 1]
 
         return render_template("dashboard.html", discordname=discordname, pos=pos, discordid=discordid, otherperms=otherperms)
     
