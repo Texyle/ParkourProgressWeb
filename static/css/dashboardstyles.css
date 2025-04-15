@@ -282,3 +282,16 @@ body.light-mode .switch-circle i {
 .tab.default {
     transform: translateX(0);
 }
+
+#progress-conatiner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#progress-maps-container {
+    width: 15rem;
+    height: 75%;
+    background-color: #5865F2;
+    border-radius: 10px;
+}

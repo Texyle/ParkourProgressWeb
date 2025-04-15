@@ -38,8 +38,13 @@ files = Files(app.static_folder)
 
 @app.route("/login")
 def login():
-    app.config['DISCORD_REDIRECT_URI'] = url_for('callback', _external=True)
+    scheme = request.scheme
+    host = request.host
+    
+    redirect_uri = f"{scheme}://{host}/callback"
+    app.config['DISCORD_REDIRECT_URI'] = redirect_uri
     print(app.config['DISCORD_REDIRECT_URI'], flush=True)
+
     global discord
     discord = DiscordOAuth2Session(app)
     return discord.create_session()
