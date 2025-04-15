@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect, make_response
+from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect, make_response, g
 import py.database.database as database
 import re
 from py.files import Files
@@ -19,14 +19,21 @@ IMAGES_DIR = os.path.join(PROJECT_DIR, "images")
 TEMPLATES_DIR = os.path.join(PROJECT_DIR, "templates")
 
 app = Flask(__name__)
+
 app.secret_key = secrets.token_hex(64)
 app.config["DISCORD_CLIENT_ID"] = "1263772933483139143"
 app.config["DISCORD_CLIENT_SECRET"] = "rFVXxCBDdBJDDu7fFBWRrQwiQbWcXJv9"
-app.config["DISCORD_REDIRECT_URI"] = "http://127.0.0.1:20000/callback"
 app.config["DISCORD_BOT_TOKEN"] = "MTIxODI4MzcxNjIwMDM2NjEzMQ.GdjgrS.OqmS8ixXmtmmbi8OKbfzGKhdmmLYOxGWvz6nUs"
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "true"
 files = Files(app.static_folder)    
-discord = DiscordOAuth2Session(app)
+
+@app.route("/login")
+def login():
+    app.config['DISCORD_REDIRECT_URI'] = request.host_url.rstrip("/") + "/callback"
+    global discord
+    discord = DiscordOAuth2Session(app)
+    return discord.create_session()
+
 key = Fernet.generate_key()
 fernet = Fernet(key)
 app.jinja_env.globals['get_player_id'] = database.get_player_id
@@ -47,7 +54,8 @@ def createcookie():
     ip = request.remote_addr
     discordname = session.get("discordname")
     pos = session.get("pos")
-    data = json.dumps({"ip": ip, "discordname": discordname, "pos": pos})
+    discordid = session.get("discordid")
+    data = json.dumps({"ip": ip, "discordname": discordname, "discordid": discordid, "pos": pos})
     encrypted = fernet.encrypt(data.encode()).decode()
 
     try:
@@ -74,10 +82,6 @@ def checkcookie():
     
     return None
 
-@app.route("/login")
-def login():
-    return discord.create_session()
-
 @app.route('/callback')
 def callback():
     discord.callback()
@@ -94,33 +98,65 @@ def callback():
 
     target_guild_id = 913838786947977256
     staff_role_ids = list(role_strings.keys())
+    realroles = []
+    
+    '''
+    if user.id == 269105396587823104:
+        return redirect(url_for('dashboard', error="nostaff"))
+    '''
 
     for guild in guilds:
         if guild.id == target_guild_id:
             roles = get_guild_member(guild.id, user.id, app.config.get("DISCORD_BOT_TOKEN"))
             for role in roles:
                 if role in staff_role_ids:
-                    session['discordname'] = str(user).replace("#0", "")
-                    session['pos'] = role_strings.get(role)
-                    return redirect(url_for('createcookie'))
-                
-    session['errormsg'] = "You are not a Staff member! You do not have access to this Dashboard."
-    return redirect(url_for('dashboard'))  
+                    realroles.append(role_strings.get(role))
+
+            if len(realroles) != 0:
+                session['discordname'] = str(user).replace("#0", "")
+                session['discordid'] = str(user.id)
+                session['pos'] = realroles
+                return redirect(url_for('createcookie'))
+            else:
+                return redirect(url_for('dashboard', error="nostaff"))
+
+    return redirect(url_for('dashboard', error="noguild"))
 
 @app.route("/dashboard")
 def dashboard():
     cookie = checkcookie()
+    error = request.args.get("error")
     # cookie = {"discordname": "texyle", "pos": "Admin"}
     
     if cookie is not None:
         discordname = cookie.get("discordname")
-        pos = cookie.get("pos")
-        return render_template("dashboard.html", discordname=discordname, pos=pos)
-    
-    errormsg = session.get('errormsg', None)
-    session.pop("errormsg", None)
-    return render_template("stafflogin.html", errormsg=errormsg)
+        discordid = cookie.get("discordid")
+        cursor = database.get_cursor(dictionary=True)
+        query = "SELECT * FROM Staff WHERE ID = %s"
+        cursor.execute(query, (discordid,))
+        info = cursor.fetchone()
+        cursor.close()
+        database.commit()
+        if info:
+            pos = []
+            otherperms = {
+                "Admin": bool(info["Admin"]),
+                "Developer": bool(info["Developer"]),
+                "Moderator": bool(info["Moderator"]),
+                "Helper": bool(info["Helper"]),
+            }
+            if info["Admin"]:       
+                pos.append("Admin")
+            if info["Developer"]:
+                pos.append("Developer")
+            if info["Moderator"]:
+                pos.append("Moderator")
+            if info["Helper"]:
+                pos.append("Helper")
 
+        return render_template("dashboard.html", discordname=discordname, pos=pos, discordid=discordid, otherperms=otherperms)
+    
+    return render_template("stafflogin.html", error=error)
 
 @app.route("/")
 def home():
