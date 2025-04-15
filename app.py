@@ -30,6 +30,7 @@ files = Files(app.static_folder)
 @app.route("/login")
 def login():
     app.config['DISCORD_REDIRECT_URI'] = request.host_url.rstrip("/") + "/callback"
+    print(app.config['DISCORD_REDIRECT_URI'], flush=True)
     global discord
     discord = DiscordOAuth2Session(app)
     return discord.create_session()
