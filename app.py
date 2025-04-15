@@ -40,8 +40,14 @@ files = Files(app.static_folder)
 def login():
     scheme = request.scheme
     host = request.host
-    
-    redirect_uri = f"{scheme}://{host}/callback"
+    port = request.environ.get('SERVER_PORT')
+
+    if port:
+        host_with_port = f"{host}:{port}" if ':' not in host else host
+    else:
+        host_with_port = host
+
+    redirect_uri = f"{scheme}://{host_with_port}/callback"
     app.config['DISCORD_REDIRECT_URI'] = redirect_uri
     print(app.config['DISCORD_REDIRECT_URI'], flush=True)
 
@@ -147,7 +153,7 @@ def dashboard():
         discordname = cookie.get("discordname")
         discordid = cookie.get("discordid")
         cursor = database.get_cursor(dictionary=True)
-        query = "SELECT * FROM Staff WHERE ID = %s"
+        query = "SELECT * FROM Staff WHERE DiscordID = %s"
         cursor.execute(query, (discordid,))
         info = cursor.fetchone()
         cursor.close()

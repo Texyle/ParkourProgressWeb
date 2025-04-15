@@ -283,15 +283,27 @@ body.light-mode .switch-circle i {
     transform: translateX(0);
 }
 
-#progress-conatiner {
+#progress-container {
     display: flex;
+    position: relative;
+    height: 100%;
+    width: 100%;
     justify-content: center;
     align-items: center;
+    gap: 10rem;
 }
 
 #progress-maps-container {
-    width: 15rem;
-    height: 75%;
+    width: 25rem;
+    height: 90%;
     background-color: #5865F2;
     border-radius: 10px;
+}
+
+#progress-sections-container {
+    width: 25rem;
+    height: 90%;
+    background-color: #5865F2;
+    border-radius: 10px;
+    display: none;
 }
