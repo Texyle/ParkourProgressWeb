@@ -19,7 +19,6 @@ IMAGES_DIR = os.path.join(PROJECT_DIR, "images")
 TEMPLATES_DIR = os.path.join(PROJECT_DIR, "templates")
 
 app = Flask(__name__)
-
 app.secret_key = secrets.token_hex(64)
 app.config["DISCORD_CLIENT_ID"] = "1263772933483139143"
 app.config["DISCORD_CLIENT_SECRET"] = "rFVXxCBDdBJDDu7fFBWRrQwiQbWcXJv9"
@@ -55,7 +54,24 @@ def login():
     discord = DiscordOAuth2Session(app)
     return discord.create_session()
 
-key = Fernet.generate_key()
+def load_key():
+    cursor = database.get_cursor()
+    cursor.execute("SELECT Fernet FROM Credentials LIMIT 1")
+    row = cursor.fetchone()
+    cursor.close()
+    return row[0] if row else None
+
+def save_key():
+    key = load_key()
+    if key is None:
+        key = Fernet.generate_key()
+        cursor = database.get_cursor()
+        cursor.execute("INSERT INTO Credentials (Fernet) VALUES (%s)", (key,))
+        database.commit()
+        cursor.close()
+    return key
+
+key = save_key()
 fernet = Fernet(key)
 app.jinja_env.globals['get_player_id'] = database.get_player_id
 
