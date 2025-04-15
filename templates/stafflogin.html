@@ -8,19 +8,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/static/css/staffloginstyles.css">
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
 </head>
 <body class="dark-mode">
     <div class="container">
-        {% if session['errormsg'] %}
+        {% if error %}
         <div class="error-container">
             <div class="error-box">
-                {{ session['errormsg'] }}
+                {% if error == "noguild" %}You are not member of Parkour Progress Discord server!{% else %}You are not a Staff member! You do not have access to this Dashboard.{% endif %}
             </div>
         </div>
         {% endif %}
         <div class="form">
             <div class="logoicon">
-                <img src="https://cdn.discordapp.com/icons/913838786947977256/31e403312e7ac1efd09c901d391a3538.webp" alt="Logo">
+                <img src="/static/images/icon-circle.png" alt="Logo">
             </div>
             <h1>Authorization</h1>
             <p>Authorize yourself to continue to the Dashboard.</p>

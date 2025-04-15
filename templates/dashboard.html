@@ -37,7 +37,7 @@
                         <span class="tab-description">Manage player info</span>
                     </div>
                 </li>
-                <li class="divider" data-tab="maps">
+                <li class="show-for-role divider" data-tab="maps" data-roles="['Developer', 'Admin']">
                     <img src="/static/images/dashboard/icon-maps.svg" alt="Maps"/>
                     <div class="tab-text-container">
                         <span class="tab-name">MAPS</span>
@@ -60,10 +60,16 @@
                 </li>
             </ul>
             <div id="user-container">
-                <img src="https://cdn.discordapp.com/avatars/606385859704520704/fedf2c7fb3b63387a528aa39f5d5ce0f.png?size=2048"/>
+                <img src="" id="avatar"/>
                 <div id="user-text-container">
-                    <span id="user-name">Username</span>
-                    <span id="role-list">Role | Role | Role</span>
+                    <span id="user-name">{{discordname}}</span>
+                    <span id="role-list">
+                        {% if pos|length != 1 %}
+                        {{" | ".join(pos)}}
+                        {% else %}
+                        {{ pos[0] }}
+                        {% endif %}
+                    </span>
                 </div>
             </div>
         </div>
@@ -121,8 +127,10 @@
             }
         })();
     </script>
+    <script>const discordId = {{ discordid | tojson }};</script>
     <script src="{{ url_for('static', filename='js/dashboard/tabs.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dashboard/perms.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dashboard/utils.js') }}"></script>
 </body>
 </html>
 
