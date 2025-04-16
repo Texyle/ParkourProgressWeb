@@ -40,7 +40,14 @@ const victorsBox = document.getElementById('table-box-victors');
 victorsBox.style.maxHeight = buttonHeight+5 + 'px';
 
 const sectionsBox = document.getElementById('table-box-sections');
-sectionsBox.style.maxHeight = buttonHeight+5 + 'px';
+
+if (sectionsBox) {
+  sectionsBox.style.maxHeight = buttonHeight + 5 + 'px';
+} else {
+  const marginBottom = parseFloat(window.getComputedStyle(collapseButton).marginBottom);
+  victorsBox.style.maxHeight = buttonHeight + marginBottom + 10 + 'px'; 
+  console.warn("Element 'table-box-sections' neexistuje, nastavujeme vysku podla marginu tlacidla 'Victors'.");
+}
 
 function setBoxHeight(box) {
   const button = box.querySelector("button")
@@ -167,13 +174,15 @@ function onYouTubeIframeAPIReady() {
     events: {
       'onReady': function (event) {
         console.log("yes it works");
-        
-        const iframe = document.getElementById('video-player');
+
+        const iframe = event.target.getIframe();
         if (iframe) {
-          iframe.style.borderRadius = "3px !important";
-          iframe.style.border = "3px solid gray !important";
-          iframe.style.boxShadow = "0px 0px 10px 2px gray inset !important";
-          console.log(iframe)
+          iframe.style.borderRadius = "3px";
+          iframe.style.border = "3px solid gray";
+          iframe.style.boxShadow = "0px 0px 10px 2px gray inset";
+          iframe.style.width = "560px";
+          iframe.style.height = "315px";
+          console.log(iframe);
         }
       },
       'onError': function (event) {

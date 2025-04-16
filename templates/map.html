@@ -131,30 +131,53 @@
                 </div>
             </div>
             <div class="table-box-wrapper">
+              {% if not map['Extra'] %}
                 <div class="table-box collapsed" id="table-box-sections">
                     <button type="button" class="collapse" id="collapse-sections">Sections</button>
+                    {% set progress_start = sections['ProgressStart'] %}
                     <ul class="table list-sections">
                       {% for section_name, section_data in sections.items() %}
-                      <li class="section-item">
-                        <div class="section-header">
-                          <span class="toggle-icon">&#9654;</span> 
-                          <span class="section-name">{{ section_name }}</span> 
-                          <span class="section-reached">{{ section_data['Players']|length }} players reached</span>
-                        </div>
-                        <ul class="list list-section-players collapsed">
-                          {% for player in section_data['Players'] %}
-                          <li>
-                            <a href="/profile/player/<insert id here>" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: white;">
-                              <img src="https://vzge.me/face/{{ player }}.png" onerror="this.src='https://vzge.me/face/X-Steve.png'" alt="{{ player }}">
-                              {{ player }}
-                            </a>
+                      {% if section_name != "ProgressStart" %}  
+                          <li class="section-item 
+                              {% if section_data['Index'] < progress_start %} no-progress {% endif %}
+                              {% if section_data['Players']|length == 0 and section_data['Index'] >= progress_start %} no-players {% endif %}
+                          ">
+                              
+                              <div class="section-header">
+                                  {% if section_data['Index'] >= progress_start and section_data['Players']|length > 0 %}
+                                      <span class="toggle-icon">&#9654;</span> 
+                                  {% endif %}
+                                  <span class="section-name">{{ section_name }}</span> 
+                  
+                                  {% if section_data['Index'] >= progress_start %}
+                                      {% if section_data['Players']|length == 1 %}
+                                          <span class="section-reached">1 player</span>
+                                      {% elif section_data['Players']|length > 1 %}
+                                          <span class="section-reached">{{ section_data['Players']|length }} players</span>
+                                      {% else %}
+                                          <span class="section-reached no-players">No players</span>
+                                      {% endif %}
+                                  {% endif %}
+                              </div>
+                  
+                              {% if section_data['Index'] >= progress_start and section_data['Players']|length > 0 %}
+                              <ul class="list list-section-players collapsed">
+                                  {% for player in section_data['Players'] %}
+                                  <li>
+                                      <a href="/profile/player/{{ player['ID'] }}" class="player-link">
+                                          <img src="https://vzge.me/face/{{ player['Name'] }}.png" onerror="this.src='https://vzge.me/face/X-Steve.png'" alt="{{ player['Name'] }}">
+                                          {{ player['Name'] }}
+                                      </a>
+                                  </li>
+                                  {% endfor %}
+                              </ul>
+                              {% endif %}
                           </li>
-                          {% endfor %}
-                        </ul>
-                      </li>
+                      {% endif %}
                       {% endfor %}
-                    </ul>
+                  </ul>          
                 </div>
+                {%endif%}
             </div>
         </div>
 

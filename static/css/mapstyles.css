@@ -655,8 +655,8 @@ a {
     transition: background-color 0.3s ease;
 }
 
-.section-item:nth-child(even) .section-header {
-    background-color: rgba(255, 255, 255, 0.03);
+.section-item.no-progress:nth-child(even) .section-header {
+    background-color: transparent !important;
 }
 
 .section-header {
@@ -672,29 +672,30 @@ a {
     transition: all 0.25s ease;
 }
 
+.section-item.no-progress,
+.section-item.no-players {
+    cursor: not-allowed !important;
+}
+
+.no-progress .toggle-icon,
+.no-players .toggle-icon {
+    display: none;
+}
+
 .section-header:hover {
     background-color: rgba(0, 0, 0, 0.3);
+}
+
+.section-header:not(.no-progress):not(.no-players):hover {
     border-left: 5px solid #4dd0e1;
 }
 
-.toggle-icon {
-    font-size: 0.9rem;
-    margin-left: 1.5rem;
-    margin-right: 10px;
-    transition: transform 0.3s ease;
-}
-
-.section-name {
-    flex: 1;
-    text-align: left;
-}
-
-.section-reached {
-    margin-right: 1.5rem;
+.section-header .section-reached.no-players {
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
 }
 
 .list-section-players {
-    /* display: none; */
     max-height: 0;
     list-style-type: none;
     padding: 0 0 0 2rem;
@@ -714,24 +715,4 @@ a {
 
 .section-item.open .toggle-icon {
     transform: rotate(90deg);
-}
-
-.list-section-players li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 6px;
-    gap: 10px;
-    background-color: rgba(255, 255, 255, 0.05);
-    padding: 5px 10px;
-    border-radius: 5px;
-    transition: background-color 0.2s;
-}
-
-.list-section-players li:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-}
-
-.list-section-players img {
-    height: 24px;
-    border-radius: 3px;
 }
