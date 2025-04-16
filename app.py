@@ -9,7 +9,6 @@ import secrets
 from flask_discord import DiscordOAuth2Session
 from cryptography.fernet import Fernet
 import requests
-import base64
 import pycountry
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
@@ -90,9 +89,8 @@ def get_guild_member(guild_id, user_id, bot_token):
 def createcookie():
     ip = request.remote_addr
     discordname = session.get("discordname")
-    pos = session.get("pos")
     discordid = session.get("discordid")
-    data = json.dumps({"ip": ip, "discordname": discordname, "discordid": discordid, "pos": pos})
+    data = json.dumps({"ip": ip, "discordname": discordname, "discordid": discordid})
     encrypted = fernet.encrypt(data.encode()).decode()
 
     try:
@@ -125,34 +123,33 @@ def callback():
     user = discord.fetch_user()
     guilds = discord.fetch_guilds()
 
-    role_strings = {
-        "921147495374024714": "Owner",
-        "913840524627177573": "Admin",
-        "1222953168208658518": "Developer",
-        "916739439177371688": "Moderator",
-        "1244782886595465256": "Helper",
-    }
+    staff_role_ids = [
+        "921147495374024714",
+        "913840524627177573",
+        "1222953168208658518",
+        "916739439177371688",
+        "1244782886595465256"
+    ]
 
     target_guild_id = 913838786947977256
-    staff_role_ids = list(role_strings.keys())
-    realroles = []
 
     '''
     if user.id == 269105396587823104:
         return redirect(url_for('dashboard', error="nostaff"))
     '''
+    staff = False
 
     for guild in guilds:
         if guild.id == target_guild_id:
             roles = get_guild_member(guild.id, user.id, app.config.get("DISCORD_BOT_TOKEN"))
             for role in roles:
                 if role in staff_role_ids:
-                    realroles.append(role_strings.get(role))
+                    staff = True
+                    break
 
-            if len(realroles) != 0:
+            if staff:
                 session['discordname'] = str(user).replace("#0", "")
                 session['discordid'] = str(user.id)
-                session['pos'] = realroles
                 return redirect(url_for('createcookie'))
             else:
                 return redirect(url_for('dashboard', error="nostaff"))
@@ -175,9 +172,8 @@ def dashboard():
         cursor.close()
         database.commit()
         if info:
-            pos = []
-            otherperms = {key: bool(value) for key, value in info.items() if value in [0, 1]}
             pos = [key for key, value in info.items() if value == 1]
+            otherperms = {key: bool(value) for key, value in info.items() if value in [0, 1]}
 
         return render_template("dashboard.html", discordname=discordname, pos=pos, discordid=discordid, otherperms=otherperms)
     

@@ -22,3 +22,22 @@ const setAvatar = async (discordId) => {
 };
 
 setAvatar(discordId);
+
+function toggleTheme() {
+    document.body.classList.toggle('light-mode');
+    document.body.classList.toggle('dark-mode');
+
+    const isLightMode = document.body.classList.contains('light-mode');
+    localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+
+    document.querySelector(".switch-circle i").className = isLightMode ? "fas fa-sun" : "fas fa-moon";
+}
+
+(function applySavedTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        document.body.classList.remove('dark-mode');
+        document.querySelector(".switch-circle i").className = "fas fa-sun";
+    }
+})();
