@@ -37,7 +37,7 @@
                         </div>
                         <div id="players-list-container">
                             {% for player in data["Stats"]["Players"] %}
-                                <div class="player-container" onclick="redirectToPlayerPage('{{ player['ID'] }}')">
+                                <div class="player-container" onclick="redirectToPlayerPage(event, '{{ player['ID'] }}')">
                                     <img src="https://vzge.me/face/{{ player["Name"] }}" class="player-face">
                                     {{ player["Name"] }}
                                 </div>
