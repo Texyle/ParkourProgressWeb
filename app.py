@@ -19,8 +19,8 @@ TEMPLATES_DIR = os.path.join(PROJECT_DIR, "templates")
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(64)
-app.config["DISCORD_CLIENT_ID"] = "1263772933483139143"
-app.config["DISCORD_CLIENT_SECRET"] = "rFVXxCBDdBJDDu7fFBWRrQwiQbWcXJv9"
+app.config["DISCORD_CLIENT_ID"] = "1135144510691758210"
+app.config["DISCORD_CLIENT_SECRET"] = "IIn3dvMsGkmW7D7BzgcYs-JxgolZGUPH"
 app.config["DISCORD_BOT_TOKEN"] = "MTIxODI4MzcxNjIwMDM2NjEzMQ.GdjgrS.OqmS8ixXmtmmbi8OKbfzGKhdmmLYOxGWvz6nUs"
 app.config["PREFERRED_URL_SCHEME"] = "http"
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "true"
