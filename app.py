@@ -157,9 +157,9 @@ def callback():
 
 @app.route("/dashboard")
 def dashboard():
-    # cookie = checkcookie()
+    cookie = checkcookie()
     error = request.args.get("error")
-    cookie = {"discordname": "texyle", "discordid": "540505831116898305", "pos": "Admin"}
+    # cookie = {"discordname": "texyle", "discordid": "540505831116898305", "pos": "Admin"}
     
     if cookie is not None:
         discordname = cookie.get("discordname")
