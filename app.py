@@ -145,7 +145,7 @@ def callback():
                 if role in staff_role_ids:
                     staff = True
                     break
-
+ 
             if staff:
                 session['discordname'] = str(user).replace("#0", "")
                 session['discordid'] = str(user.id)
@@ -180,8 +180,7 @@ def dashboard():
 
 @app.route("/")
 def home():
-    success = request.args.get("success")
-    return render_template("index.html", success=success)
+    return render_template("index.html")
 
 @app.route("/staff")
 def staff():
