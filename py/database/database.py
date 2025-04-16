@@ -301,48 +301,67 @@ def fetch_map_sections(app, id):
     try:
         cursor = get_cursor(dictionary=True)
 
+        progress_query = "SELECT ProgressStart FROM Map WHERE ID = %s"
+        cursor.execute(progress_query, (id,))
+        progress_result = cursor.fetchone()
+
+        if not progress_result: 
+            return {"error": "Map not found"}
+
+        progress_start = progress_result["ProgressStart"]
+
         query = """
         SELECT
             Section.Name AS Name,
             Section.SectionIndex AS `Index`,
-            Player.ID AS PlayerID,
-            Player.Name AS PlayerName
+            CASE 
+                WHEN Section.SectionIndex < %s THEN NULL 
+                ELSE Player.ID
+            END AS PlayerID,
+            CASE 
+                WHEN Section.SectionIndex < %s THEN NULL 
+                ELSE Player.Name
+            END AS PlayerName
         FROM
             Section
         JOIN
+            Map ON Section.MapID = Map.ID  -- Presunuté skôr, aby bolo ProgressStart dostupné
+        LEFT JOIN
             SectionPlayer ON Section.ID = SectionPlayer.SectionID
-        JOIN
+        LEFT JOIN
             Player ON SectionPlayer.PlayerID = Player.ID
         WHERE
             Section.MapID = %s
         """
 
-        cursor.execute(query, (id,))
+        cursor.execute(query, (progress_start, progress_start, id))
         results = cursor.fetchall()
-        sections = {}
+
+        sections = {
+            "ProgressStart": progress_start  
+        }
 
         for result in results:
             section_name = result['Name']
             section_index = result['Index']
-            player_id = result['PlayerID']
 
-            if section_name not in sections:
+            if section_name not in sections and section_name is not None: 
                 sections[section_name] = {
                     'Index': section_index,
-                    'Players': []
+                    'Players': []  
                 }
-            
-            # player_query = "SELECT Name FROM Player WHERE Player.ID = %s"
-            # cursor.execute(player_query, (player_id,))
-            # player_name = cursor.fetchone()['Name']
 
-            sections[section_name]['Players'].append(result['PlayerName'])
+            if section_index >= progress_start and result['PlayerID'] is not None:
+                sections[section_name]['Players'].append({
+                    "ID": result['PlayerID'],
+                    "Name": result['PlayerName']
+                })
 
         return sections
     
-    except Error as e:
-        app.logger.error(f"Error while fetching sections for a map: {e.msg}\n{traceback.format_exc()}")
-        return jsonify({"error": e.msg}), 500
+    except Exception as e:
+        app.logger.error(f"Error while fetching sections: {str(e)}\n{traceback.format_exc()}")
+        return {"error": str(e)}
     
 def fetch_map(app, id):
     try:
