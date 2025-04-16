@@ -49,7 +49,6 @@ def login():
 
     redirect_uri = f"{scheme}://{host_with_port}/callback"
     app.config['DISCORD_REDIRECT_URI'] = redirect_uri
-    print(app.config['DISCORD_REDIRECT_URI'], flush=True)
 
     global discord
     discord = DiscordOAuth2Session(app)
@@ -145,9 +144,9 @@ def callback():
 
 @app.route("/dashboard")
 def dashboard():
-    cookie = checkcookie()
+    # cookie = checkcookie()
     error = request.args.get("error")
-    # cookie = {"discordname": "texyle", "pos": "Admin"}
+    cookie = {"discordname": "texyle", "discordid": "540505831116898305", "pos": "Admin"}
     
     if cookie is not None:
         discordname = cookie.get("discordname")
@@ -163,7 +162,7 @@ def dashboard():
             otherperms = {key: bool(value) for key, value in info.items() if value in [0, 1]}
             pos = [key for key, value in info.items() if value == 1]
 
-        return render_template("dashboard.html", discordname=discordname, pos=pos, discordid=discordid, otherperms=otherperms)
+            return render_template("dashboard.html", discordname=discordname, pos=pos, discordid=discordid, otherperms=otherperms)
     
     return render_template("stafflogin.html", error=error)
 
