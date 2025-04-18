@@ -148,6 +148,8 @@ body::-webkit-scrollbar {
     transition: max-height 0.7s ease;
     /* max-height: 3rem; */
     overflow: hidden;
+    z-index: -1;
+    position: relative;
 }
 
 .collapse {
@@ -312,7 +314,7 @@ tbody {
 
 .toggle-icon {
     font-size: 0.8rem;
-    margin-left: 2rem;
+    margin-left: 0.8rem;
     margin-right: 8px;
     transition: transform 0.3s;
 }
@@ -320,6 +322,10 @@ tbody {
 .section-name {
     flex: 1;
     text-align: left;
+}
+
+.section-name:not(.toggle-icon + .section-name) {
+    margin-left: 2rem;
 }
 
 .section-reached {
@@ -338,9 +344,10 @@ tbody {
 
 .list-section-players li {
     display: block;
-    padding: 5px 0;
+    /* padding: 5px 0; */
     text-align: left;
     margin-left: 3rem;
+    height: 2rem;
 }
 
 .list-sections {
@@ -465,6 +472,7 @@ header {
     padding: 10px 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     width: 100%;
+    z-index: 1000;
 }
 
 .discord-container {
@@ -632,13 +640,14 @@ a {
   
 .player-row {
     outline: 0px solid transparent;
+    border-left: 4px solid transparent;
     transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, border-left 0.2s ease-in-out;
     pointer-events: auto;
 }
 
 .player-row:hover {
     transform: scale(1.005);
-    border-left: 4px solid #4e9aff; 
+    border-left: 4px solid #4e9aff;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     cursor: pointer;
 }
@@ -655,9 +664,9 @@ a {
     transition: background-color 0.3s ease;
 }
 
-.section-item.no-progress:nth-child(even) .section-header {
+/* .section-item.no-progress:nth-child(even) .section-header {
     background-color: transparent !important;
-}
+} */
 
 .section-header {
     display: flex;
@@ -701,6 +710,19 @@ a {
     padding: 0 0 0 2rem;
     margin: 0;
     transition: max-height 0.3s;
+}
+
+.player-link {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 1px;
+}
+
+.player-link img {
+    height: 1.8rem;
+    box-shadow: 0 0 4px 0 black;
 }
 
 .section-item.open .list-section-players {

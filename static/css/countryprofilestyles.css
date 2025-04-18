@@ -344,6 +344,7 @@
     width: 12rem;
     height: 2.5rem;
     padding: 0;
+    cursor: pointer;
 }
 
 .profile-dropdown-button:active {
