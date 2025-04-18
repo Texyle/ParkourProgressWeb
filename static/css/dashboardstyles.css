@@ -6,7 +6,7 @@ html, body {
   }
 
 body {
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     align-items: center;
     font-family: 'Montserrat', sans-serif;
@@ -264,6 +264,73 @@ body.light-mode .switch-circle i {
     flex-grow: 1;
     position: relative;
     overflow: hidden;
+}
+
+.logs-header {
+    text-align: center !important;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 40px !important; 
+    color: white;
+}
+
+.logs-controls {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center;
+    gap: 20px;
+    width: 100%; 
+}
+
+.dropdown-toggle {
+    background-color: #1a1a2e;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: default; 
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu label {
+    display: block;
+    color: white;
+    margin: 5px 0;
+    cursor: pointer;
+}
+
+.dropdown-menu input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    appearance: none;
+    border: 2px solid gray;
+    background-color: #262626;
+    border-radius: 3px;
+}
+
+.dropdown-menu input[type="checkbox"]:checked {
+    background-color: #4dd0e1;
+}
+
+.date-picker {
+    background-color: #1a1a2e;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.date-picker input[type="date"] {
+    background-color: black;
+    color: white;
+    border: 1px solid gray;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.results-found {
+    text-align: center;
+    font-size: 1.2rem;
+    color: white;
 }
 
 .tab {

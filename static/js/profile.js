@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function load_discord() {
-        const apiUrl = `https://discordlookup.mesalytic.moe/v1/user/${playerData.DiscordID}`;
+        const apiUrl = `https://avatar-cyan.vercel.app/api/${playerData.DiscordID}`;
 
         try {
             const response = await fetch(apiUrl);
@@ -90,9 +90,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             const data = await response.json();
 
-            document.getElementById('discord-pfp').src = data.avatar.link;
+            document.getElementById('discord-pfp').src = data.avatarUrl;
 
-            const username = data.global_name;
+            const username = data.username;
 
             if (username.length > 13) {
                 document.getElementById('discord-username').textContent = username.substring(0, 13) + '...';

@@ -78,55 +78,62 @@
                           <col span="1" style="width: 20%;">
                         </colgroup>
                         <tbody>
-                          {% for victor in victors %}
-                          <tr class="player-row" data-href="{{ victor.ProfileURL }}">
-                            <td>
-                              <div style="font-size: 2rem; font-weight: 800;">{{ loop.index }}</div>
+                          {% if victors|length == 0 %}
+                          <tr>
+                            <td colspan="4" style="text-align: center; font-weight: bold; font-size: 1.5rem; color: rgb(255, 110, 110);">
+                              No Victors
                             </td>
-                            <td>
-                              <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="min-width: 48px; height: 48px; display: flex; align-items: center;">
-                                  <img src="https://vzge.me/bust/{{ victor.Name }}.png"
-                                       onerror="this.src='https://vzge.me/bust/X-Steve.png'"
-                                       alt="Bust"
-                                       style="height: 48px; display: block;"
-                                       class="Bust">
-                                </div>
-                                <div style="display: flex; flex-direction: column; text-align: left;">
-                                  <div style="font-weight: bold;">{{ victor.Name }}</div>
-                                  <div style="margin-top: 5px;" data-href="{{ victor.CountryURL }}" class="country-link">
-                                    <img src="/static/images/flags/{{ victor.CountryCode | lower }}.svg"
-                                         alt="{{ victor.CountryCode }}"
-                                         style="height: 0.9rem;" class="flag">
-                                    <span style="font-size: 0.9rem; color: gray">{{ victor.Country }}</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                          
-                            {% if map.FailsMessage %}
-                              <td>
-                                <div style="font-style: italic; color: #4e9aff; font-size: 1.1rem;">
-                                  {{ victor.Date }}
-                                </div>
-                              </td>
-                              <td>
-                                <div style="color: #f55; font-weight: 600;">
-                                  {{ victor.Fails }} {{ map.FailsMessage }} {% if victor.Fails == 1 %}fail{% else %}fails{% endif %}
-                                </div>
-                              </td>
-                            {% else %}
-                              <td></td> 
-                              <td>
-                                <div style="font-style: italic; color: #4e9aff; font-size: 1.1rem;">
-                                  {{ victor.Date }}
-                                </div>
-                              </td>
-                            {% endif %}
                           </tr>
-                          
-                          {% endfor %}
+                          {% else %}
+                            {% for victor in victors %}
+                              <tr class="player-row" data-href="{{ victor.ProfileURL }}">
+                                <td>
+                                  <div style="font-size: 2rem; font-weight: 800;">{{ loop.index }}</div>
+                                </td>
+                                <td>
+                                  <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="min-width: 48px; height: 48px; display: flex; align-items: center;">
+                                      <img src="https://vzge.me/bust/{{ victor.Name }}.png"
+                                           onerror="this.src='https://vzge.me/bust/X-Steve.png'"
+                                           alt="Bust"
+                                           style="height: 48px; display: block;"
+                                           class="Bust">
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; text-align: left;">
+                                      <div style="font-weight: bold;">{{ victor.Name }}</div>
+                                      <div style="margin-top: 5px;" data-href="{{ victor.CountryURL }}" class="country-link">
+                                        <img src="/static/images/flags/{{ victor.CountryCode | lower }}.svg"
+                                             alt="{{ victor.CountryCode }}"
+                                             style="height: 0.9rem;" class="flag">
+                                        <span style="font-size: 0.9rem; color: gray">{{ victor.Country }}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                {% if map.FailsMessage %}
+                                  <td>
+                                    <div style="font-style: italic; color: #4e9aff; font-size: 1.1rem;">
+                                      {{ victor.Date }}
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div style="color: #f55; font-weight: 600;">
+                                      {{ victor.Fails }} {{ map.FailsMessage }} {% if victor.Fails == 1 %}fail{% else %}fails{% endif %}
+                                    </div>
+                                  </td>
+                                {% else %}
+                                  <td></td> 
+                                  <td>
+                                    <div style="font-style: italic; color: #4e9aff; font-size: 1.1rem;">
+                                      {{ victor.Date }}
+                                    </div>
+                                  </td>
+                                {% endif %}
+                              </tr>
+                            {% endfor %}
+                          {% endif %}
                         </tbody>
+                        
                     </table>                             
                 </div>
             </div>
@@ -185,20 +192,11 @@
     </div>
 
     <script type="text/javascript">
-        const mapName = "{{ map.MapName|safe }}";
+        const mapName = {{ map.MapName|tojson }};
     </script>
     <script src="/static/js/utils.js"></script>
     <script src="/static/js/map.js"></script>
     <script src="/static/js/pagetitle.js" defer></script>
     <script src="https://www.youtube.com/iframe_api"></script>
-    <script>
-      async function changeTitle() {
-        const mapName = "{{ map.MapName }}";
-        document.title = mapName + " - Parkour Progress";
-    }
-
-    document.addEventListener("DOMContentLoaded", changeTitle)
-    </script> 
 </body>
-
 </html> 

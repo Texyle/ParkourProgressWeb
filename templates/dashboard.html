@@ -51,7 +51,7 @@
                         <span class="tab-description">Load data backups</span>
                     </div>
                 </li>
-                <li class="show-for-role" data-roles="['noger']" data-tab="staff">
+                <li class="show-for-role" data-roles="['Admin']" data-tab="staff">
                     <img src="/static/images/dashboard/icon-staff.svg" alt="Staff"/>
                     <div class="tab-text-container">
                         <span class="tab-name">STAFF</span>
@@ -76,8 +76,46 @@
 
         <div id="content">
             <div class="tab selected default" data-tab="logs">
-                logs
+                <h1 class="logs-header">LOGS</h1>
+            
+                <div class="logs-controls">
+                    <div class="dropdown">
+                        <button class="dropdown-toggle">Sort by: Date ▼</button>
+                        <div class="dropdown-menu">
+                            <label><input type="radio" name="sort" value="asc"> Date Ascending</label>
+                            <label><input type="radio" name="sort" value="desc"> Date Descending</label>
+                        </div>
+                    </div>
+            
+                    <div class="dropdown">
+                        <button class="dropdown-toggle">Filter by: Action ▼</button>
+                        <div class="dropdown-menu">
+                            <label><input type="checkbox" value="map_change"> Map Change</label>
+                            <label><input type="checkbox" value="progress_change"> Progress Change</label>
+                            <label><input type="checkbox" value="player_edit"> Player Edit</label>
+                            <label><input type="checkbox" value="backup_load"> Backup Load</label>
+                        </div>
+                    </div>
+            
+                    <div class="dropdown">
+                        <button class="dropdown-toggle">Filter by: Staff ▼</button>
+                        <div class="dropdown-menu">
+                            <label><input type="checkbox" value="staff1"> Staff 1</label>
+                            <label><input type="checkbox" value="staff2"> Staff 2</label>
+                            <label><input type="checkbox" value="staff3"> Staff 3</label>
+                        </div>
+                    </div>
+            
+                    <div class="date-picker">
+                        <label>Date Range:</label>
+                        <input type="date">
+                        <input type="date">
+                    </div>
+                </div>
+            
+                <p class="results-found">Results Found: 0</p>
             </div>
+            
 
             <div class="tab" data-tab="progress">
                 <div id="progress-container">

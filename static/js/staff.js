@@ -23,18 +23,15 @@ const userDict = {
 
 const fetchAvatar = async (name, userId) => {
     try {
-        const response = await fetch(`https://discordlookup.mesalytic.moe/v1/user/${userId}`);
+        const response = await fetch(`https://avatar-cyan.vercel.app/api/${userId}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         const img = document.querySelector(`img[alt="${name}"]`);
-        if (img && data.avatar && data.avatar.link) {
-            img.src = data.avatar.link;
-            console.log(`Aktualizovaný avatar pre ${name} na ${data.avatar.link}`);
-        } else {
-            console.log(`Nenašiel sa avatar pre ${name}`);
+        if (img && data && data.avatarUrl) {
+            img.src = data.avatarUrl;
         }
     } catch (error) {
-        console.error(`Chyba pri získavaní dát pre ${name}:`, error);
+        console.error(`Error getting data for ${name}:`, error);
     }
 };
 

@@ -194,3 +194,9 @@ function onYouTubeIframeAPIReady() {
     }
   });
 }
+
+async function changeTitle() {
+  document.title = mapName + " - Parkour Progress";
+}
+
+document.addEventListener("DOMContentLoaded", changeTitle)
