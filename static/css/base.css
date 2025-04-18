@@ -285,17 +285,20 @@ header nav ul > div {
 }
 
 .discord-widget {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
     position: absolute;
     top: 100%;
     left: -370px;
     z-index: 1;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out !important;
 }
 
-.discord-button:hover + .discord-widget,
-.discord-widget:hover {
-    display: block;
+.discord-button:hover + .discord-widget {
+    opacity: 1;
+    visibility: visible;
 }
+
 
 @media (max-width: 768px) {
     header {
