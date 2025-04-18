@@ -180,7 +180,9 @@ def dashboard():
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    files = [f for f in os.listdir("static/images/maps") if f.endswith((".jpg", ".png", ".jpeg", ".gif"))]
+    random_image = random.choice(files) if files else "spac.jpg"  
+    return render_template("index.html", random_image=random_image)
 
 @app.route("/staff")
 def staff():
