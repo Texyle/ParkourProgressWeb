@@ -83,6 +83,10 @@ def get_guild_member(guild_id, user_id, bot_token):
         return response.json().get("roles")
     else:
         return None
+    
+def get_random_img():
+    files = [f for f in os.listdir("static/images/maps") if f.endswith((".jpg", ".png", ".jpeg", ".gif"))]
+    return random.choice(files) if files else "space.jpg"
 
 @app.route("/createcookie")
 def createcookie():
@@ -180,37 +184,36 @@ def dashboard():
 
 @app.route("/")
 def home():
-    files = [f for f in os.listdir("static/images/maps") if f.endswith((".jpg", ".png", ".jpeg", ".gif"))]
-    random_image = random.choice(files) if files else "spac.jpg"  
-    return render_template("index.html", random_image=random_image)
+      
+    return render_template("index.html", random_image=get_random_img())
 
 @app.route("/staff")
 def staff():
-    return render_template("staff.html")
+    return render_template("staff.html", random_image=get_random_img())
 
 @app.route("/leaderboard")
 def leaderboard():
-    return render_template("leaderboard.html")
+    return render_template("leaderboard.html", random_image=get_random_img())
 
 @app.route("/leaderboard/players")
 def leaderboard1():
-    return render_template("playerslb.html")
+    return render_template("playerslb.html", random_image=get_random_img())
 
 @app.route("/leaderboard/country")
 def leaderboard2():
-    return render_template("countrylb.html")
+    return render_template("countrylb.html", random_image=get_random_img())
 
 @app.route("/maps")
 def maps():
     maps = database.fetch_map_list(app)
 
-    return render_template("maps.html", maps=maps, flags=files.flags, map_images=files.map_images)
+    return render_template("maps.html", maps=maps, flags=files.flags, map_images=files.map_images, random_image=get_random_img())
 
 @app.route("/profile/player")
 def profile():
     player_names = database.fetch_player_names(app)
     gamemodes = database.fetch_gamemodes(app)
-    return render_template("profile.html", player_names = player_names, player_data = None, gamemodes = gamemodes)
+    return render_template("profile.html", player_names = player_names, player_data = None, gamemodes = gamemodes, random_image=get_random_img())
 
 @app.route('/profile/player/<player_name>')
 def profile_with_playername(player_name):
@@ -229,7 +232,7 @@ def profile_with_playername(player_name):
                                progress = progress,
                                gamemodes = gamemodes,
                                map_images=files.map_images,
-                               flags=files.flags)
+                               flags=files.flags, random_image=get_random_img())
     else:
         return render_template("notfound.html")
 
@@ -250,7 +253,7 @@ def profile_with_player(player_id):
                                progress = progress,
                                gamemodes = gamemodes,
                                map_images=files.map_images,
-                               flags=files.flags)
+                               flags=files.flags, random_image=get_random_img())
     else:
         return render_template("notfound.html")
     
@@ -263,7 +266,7 @@ def country_profile():
                            data = None,
                            gamemodes = gamemodes,
                            map_images=files.map_images,
-                           flags=files.flags)
+                           flags=files.flags, random_image=get_random_img())
 
 @app.route("/profile/country/<string:country_code>")
 def country_profile_with_country(country_code):
@@ -275,7 +278,7 @@ def country_profile_with_country(country_code):
                            data = data,
                            map_images=files.map_images,
                            gamemodes = gamemodes,
-                           flags=files.flags) 
+                           flags=files.flags, random_image=get_random_img()) 
 
 @app.route('/map/<int:map_id>')
 def map(map_id):
