@@ -184,7 +184,6 @@ def dashboard():
 
 @app.route("/")
 def home():
-      
     return render_template("index.html", random_image=get_random_img())
 
 @app.route("/staff")
@@ -234,7 +233,7 @@ def profile_with_playername(player_name):
                                map_images=files.map_images,
                                flags=files.flags, random_image=get_random_img())
     else:
-        return render_template("notfound.html")
+        return render_template("notfound.html", random_image=get_random_img())
 
 @app.route('/profile/player/<int:player_id>')
 def profile_with_player(player_id):
@@ -255,7 +254,7 @@ def profile_with_player(player_id):
                                map_images=files.map_images,
                                flags=files.flags, random_image=get_random_img())
     else:
-        return render_template("notfound.html")
+        return render_template("notfound.html", random_image=get_random_img())
     
 @app.route("/profile/country")
 def country_profile():
@@ -289,7 +288,7 @@ def map(map_id):
     if map != None:
         return render_template('map.html', map = map, victors = victors, sections = sections)
     else:
-        return render_template("notfound.html")
+        return render_template("notfound.html", random_image=get_random_img())
 
 @app.route("/load_victories", methods=["POST"])
 def load_victories():
@@ -374,7 +373,7 @@ def images(filename):
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template("notfound.html"), 404
+    return render_template("notfound.html", random_image=get_random_img()), 404
 
 @app.after_request
 def add_header(response):
