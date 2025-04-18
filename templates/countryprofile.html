@@ -139,6 +139,15 @@
                                 </div>
                             </div>
                         </div>
+                        {% set juku_cps = {
+                            "<@&1120013547892646050>": "CP2",
+                            "<@&1120013758920654909>": "CP3",
+                            "<@&1120013825907892265>": "CP4",
+                            "<@&1120013855746170940>": "CP5",
+                            "<@&1120013881847324823>": "CP6",
+                            "<@&1120013899991875724>": "CP7",
+                            "<@&1120013930782265425>": "CP8"
+                        } %}
                         <div id="maps-list-container">
                             {% for map in data['Maps'] %}
                                 <div class="map-container" onclick="redirectToMapPage('{{ map['MapID'] }}')" data-position="{{ map['Position'] }}">
@@ -172,7 +181,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="map-progress-section">
-                                                    <div> at {{ map['Section'] }}</div>
+                                                    <div> at {% if map['MapName'] == "Juku Section" %}{{ juku_cps.get(map['Section']) }}{% else %}{{ map['Section'] }}{% endif %}</div>
                                                 </div>
                                             </div>
                                         {% else %}
