@@ -16,8 +16,8 @@
                 <div id="suggestions-container"></div>
             </div>
         </div>
+        {% if player_data is not none %}
         <div id="profile-container">
-            {% if player_data is not none %}
                 <div class="container" id="player-container">
                     <div id="skin-container">
                         <img src="" id="skin-img">
@@ -170,10 +170,8 @@
                 <script>
                     const playerData = {{ player_data | tojson }};
                 </script>
-            {% else %}
-                reminder for myself to do something with this blank box (go search for a player)
-            {% endif %}
-        </div>
+        {% endif %}
+        </div> 
     </div>
 
     <script>

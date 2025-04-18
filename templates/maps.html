@@ -30,7 +30,7 @@
                             <div class="map-container" onclick="redirectToMapPage('{{ map['MapID'] }}')">
                                 <div class="map-field map-position">{{ loop.index0 + 1 }}</div>
                                 <div class="map-field map-title">
-                                    <div class="map-name">{{ map['Name'] }}</div>
+                                    <div class="map-name">{% if map['Name'] == "Realm Of Champions CP Mode" %}ROC CP Mode{% else %}{{ map['Name'] }}{% endif %}</div>
                                     <div class="map-creator">{{ map['Builder'] }}</div>
                                 </div>
 

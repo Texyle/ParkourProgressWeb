@@ -626,12 +626,13 @@ table {
 }
 
 a {
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease-in-out;
     pointer-events: auto;
 }
   
 .player-row {
-    transition: transform 0.3s ease, background-color 0.3s ease;
+    outline: 0px solid transparent;
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, border-left 0.2s ease-in-out;
     pointer-events: auto;
 }
 
@@ -640,7 +641,6 @@ a {
     border-left: 4px solid #4e9aff; 
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     cursor: pointer;
-    pointer-events: auto;
 }
 
 .table {
