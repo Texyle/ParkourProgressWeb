@@ -41,12 +41,17 @@ victorsBox.style.maxHeight = buttonHeight+5 + 'px';
 
 const sectionsBox = document.getElementById('table-box-sections');
 
+// if (sectionsBox) {
+//   sectionsBox.style.maxHeight = buttonHeight + 5 + 'px';
+// } else {
+//   const marginBottom = parseFloat(window.getComputedStyle(collapseButton).marginBottom);
+//   victorsBox.style.maxHeight = buttonHeight + marginBottom + 10 + 'px'; 
+//   console.warn("Element 'table-box-sections' neexistuje, nastavujeme vysku podla marginu tlacidla 'Victors'.");
+// }
+
+setBoxHeight(victorsBox);
 if (sectionsBox) {
-  sectionsBox.style.maxHeight = buttonHeight + 5 + 'px';
-} else {
-  const marginBottom = parseFloat(window.getComputedStyle(collapseButton).marginBottom);
-  victorsBox.style.maxHeight = buttonHeight + marginBottom + 10 + 'px'; 
-  console.warn("Element 'table-box-sections' neexistuje, nastavujeme vysku podla marginu tlacidla 'Victors'.");
+  setBoxHeight(sectionsBox);
 }
 
 function setBoxHeight(box) {

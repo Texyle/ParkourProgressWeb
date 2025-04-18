@@ -81,36 +81,41 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function load_discord() {
-        const apiUrl = `https://avatar-cyan.vercel.app/api/${playerData.DiscordID}`;
+        if (playerData.DiscordID != -1) {
+            const apiUrl = `https://avatar-cyan.vercel.app/api/${playerData.DiscordID}`;
 
-        try {
-            const response = await fetch(apiUrl);
-            if (!response.ok) {
-                throw new Error('Error while fetching discord data');
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error('Error while fetching discord data');
+                }
+                const data = await response.json();
+
+                document.getElementById('discord-pfp').src = data.avatarUrl;
+
+                const username = data.username;
+
+                if (username.length > 13) {
+                    document.getElementById('discord-username').textContent = username.substring(0, 13) + '...';
+                } else {
+                    document.getElementById('discord-username').textContent = username;
+                }
+            } catch (error) {
+                console.error('Error fetching Discord user data:', error);
             }
-            const data = await response.json();
-
-            document.getElementById('discord-pfp').src = data.avatarUrl;
-
-            const username = data.username;
-
-            if (username.length > 13) {
-                document.getElementById('discord-username').textContent = username.substring(0, 13) + '...';
-            } else {
-                document.getElementById('discord-username').textContent = username;
-            }
-        } catch (error) {
-            console.error('Error fetching Discord user data:', error);
         }
     }
 
     if (typeof playerData !== 'undefined') {
         load_skin();
-        load_discord();
 
-        document.getElementById('discord-container').addEventListener('click', function() {
-            window.location.href = `https://discord.com/users/${playerData.DiscordID}`;
-        });
+        if (playerData.DiscordID != -1) {
+            load_discord();
+
+            document.getElementById('discord-container').addEventListener('click', function() {
+                window.location.href = `https://discord.com/users/${playerData.DiscordID}`;
+            });
+        }
     }
 
     input.addEventListener('input', function () {

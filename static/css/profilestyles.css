@@ -266,6 +266,7 @@
     width: 12rem;
     height: 2.5rem;
     padding: 0;
+    cursor: pointer;
 }
 
 .profile-dropdown-button:active {
@@ -346,6 +347,10 @@
 
 .gamemode-dropdown-changed {
     font-style: italic;
+}
+
+#sort-direction-button {
+    width: 2rem;
 }
 
 .sort-dropdown-content button {

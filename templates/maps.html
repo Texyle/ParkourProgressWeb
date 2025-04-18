@@ -48,8 +48,10 @@
                                             <div>{{ map['FirstVictorName'] }}</div>
                                         </div>
                                     </div>
-                                    {% if map['VictorCount']-1 > 0 %}
-                                        <div>and {{ map['VictorCount']-1 }} others</div>
+                                    {% if map['VictorCount'] - 1 > 0 %}
+                                        <div>
+                                            and {{ map['VictorCount'] - 1 }} other{{ "" if map['VictorCount'] - 1 == 1 else "s" }}
+                                        </div>
                                     {% endif %}
                                 </div>
 

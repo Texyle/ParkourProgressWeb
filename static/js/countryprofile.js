@@ -162,6 +162,7 @@ function doDropdowns() {
     openCloseDropdowns();
     doFilters();
     doSorting();
+    sortMaps();
 }
 
 function openCloseDropdowns() {

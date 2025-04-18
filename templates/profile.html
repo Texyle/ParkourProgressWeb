@@ -19,14 +19,22 @@
         {% if player_data is not none %}
         <div id="profile-container">
                 <div class="container" id="player-container">
-                    <div id="skin-container">
-                        <img src="" id="skin-img">
-                    </div>
-                    <div id="discord-container">
-                        <i class="fas fa-external-link-alt external-link-icon"></i>
-                        <img id="discord-pfp" src="" alt="">
-                        <p id="discord-username">
-                    </div>
+                    {% if player_data['DiscordID'] != '-1' %}
+                        <div id="skin-container">
+                            <img src="" id="skin-img"/>
+                        </div>
+                    {% else %}
+                        <div id="skin-container" style="height: 100%;">
+                            <img src="" id="skin-img"/>
+                        </div>
+                    {% endif %}
+                    {% if player_data['DiscordID'] != '-1' %}
+                        <div id="discord-container">
+                            <i class="fas fa-external-link-alt external-link-icon"></i>
+                            <img id="discord-pfp" src="" alt="">
+                            <p id="discord-username">
+                        </div>
+                    {% endif %}
                 </div>
                 <div id="info-container">
                     <div id="player-info">
@@ -56,12 +64,25 @@
                                     {% endfor %}
                                 </div>
                             </div>
-                            <div class="sort-dropdown profile-dropdown">
+                            <!-- <div class="sort-dropdown profile-dropdown">
                                 <button onclick="toggleDropdown(event)" class="profile-dropdown-button">Sort by: Recent</button>
                                 <div id="maps-sort-dropdown-content" class="sort-dropdown-content profile-dropdown-content">
                                     <button onclick="selectOption(event, 'Recent')">Recent</button>
                                     <button onclick="selectOption(event, 'Difficulty')">Difficulty</button>
                                 </div>
+                            </div>
+                        -->
+                            <div id="sort-wrapper">
+                                <div class="sort-dropdown profile-dropdown">
+                                    <button onclick="toggleDropdown(event)" class="profile-dropdown-button" id="sort-button">Sort by: Date</button>
+                                    <div id="maps-sort-dropdown-content" class="sort-dropdown-content profile-dropdown-content">
+                                        <button onclick="selectOption(event, 'Date')">Date</button>
+                                        <button onclick="selectOption(event, 'Difficulty')">Difficulty</button>
+                                    </div>
+                                </div>
+                                <button id="sort-direction-button" class="profile-dropdown-button">
+                                    <span class="arrow">&#9660;</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -104,27 +125,14 @@
                         <div class="header-filters-container">
                             <div class="gamemode-dropdown profile-dropdown">
                                 <button onclick="toggleDropdown(event)" class="profile-dropdown-button">Gamemodes</button>
-                                <div id="profile-gamemode-dropdown-content" class="gamemode-dropdown-content profile-dropdown-content">
-                                    <label>    
-                                        <input type="checkbox" value="Option 1" checked>
-                                        <span class="custom-checkbox"></span>
-                                        <span class="label-text">Rankup</span>
-                                    </label>
-                                    <label>    
-                                        <input type="checkbox" value="Option 1" checked>
-                                        <span class="custom-checkbox"></span>
-                                        <span class="label-text">Segmented</span>
-                                    </label>
-                                    <label>    
-                                        <input type="checkbox" value="Option 1" checked>
-                                        <span class="custom-checkbox"></span>
-                                        <span class="label-text">Onlysprint</span>
-                                    </label>
-                                    <label>    
-                                        <input type="checkbox" value="Option 1" checked>
-                                        <span class="custom-checkbox"></span>
-                                        <span class="label-text">Tag</span>
-                                    </label>
+                                <div id="progress-gamemode-dropdown-content" class="gamemode-dropdown-content profile-dropdown-content">
+                                    {% for gamemode in gamemodes %}
+                                        <label>    
+                                            <input type="checkbox" value="Option {{ loop.index0 + 1 }}" checked>
+                                            <span class="custom-checkbox"></span>
+                                            <span class="label-text">{{ gamemode['Name'] }}</span>
+                                        </label>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
