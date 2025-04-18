@@ -25,5 +25,5 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    changeBackground();
+    setTimeout(changeBackground, interval);
 });
