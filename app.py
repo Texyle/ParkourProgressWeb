@@ -269,6 +269,8 @@ def country_profile():
 
 @app.route("/profile/country/<string:country_code>")
 def country_profile_with_country(country_code):
+    if country_code.lower() not in [country.alpha_2.lower() for country in pycountry.countries]:
+        return render_template("notfound.html", random_image=get_random_img())
     data = database.fetch_country_profile_data(app, country_code)
     countries = [{'Code': country.alpha_2.lower(), 'Name': country.name} for country in pycountry.countries]
     gamemodes = database.fetch_gamemodes(app)
