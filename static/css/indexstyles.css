@@ -12,6 +12,20 @@
     z-index: 1000;
 }
 
+.player-item:hover {
+    color: yellow;
+    transition: 0.3s ease-in-out;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.map-item:hover {
+    color: lightcoral;
+    transition: 0.3s ease-in-out;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 .description {
     background-color: rgba(44, 42, 42, 0.965);
     padding: 20px;
