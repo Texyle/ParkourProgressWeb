@@ -188,9 +188,10 @@ header nav ul > div {
   
 .dropdown {
     float: left;
-    overflow: hidden;
+    /* overflow: hidden; */
     display: flex;
     justify-content: center;
+    position: relative;
 }
   
 .dropdown .dropbtn {
@@ -213,7 +214,7 @@ header nav ul > div {
     z-index: 1;
     margin-left: 1vw;
     transition: max-height 0.3s;
-    transform: translateY(5vh);
+    top: 100%;
 }
   
 .dropdown-content a {
