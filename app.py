@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect, make_response, g
+from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect, make_response, g, abort
 import py.database.database as database
 import re
 from py.files import Files
@@ -391,4 +391,4 @@ if __name__ == "__main__":
     # env.filters['to_filename'] = to_filename
     app.add_template_filter(to_filename, 'to_filename')
     
-    app.run(host="0.0.0.0", port=20000)
+    app.run(host="0.0.0.0", port=20000, debug=True)
