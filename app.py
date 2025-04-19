@@ -159,7 +159,7 @@ def callback():
 
     return redirect(url_for('dashboard', error="noguild"))
 
-@app.route(subdomain="/dashboard")
+@app.route("/dashboard", subdomain="/dashboard")
 def dashboard():
     cookie = checkcookie()
     error = request.args.get("error")
