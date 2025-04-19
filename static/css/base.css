@@ -213,6 +213,7 @@ header nav ul > div {
     z-index: 1;
     margin-left: 1vw;
     transition: max-height 0.3s;
+    transform: translateY(5vh);
 }
   
 .dropdown-content a {
@@ -233,7 +234,8 @@ header nav ul > div {
 }
   
 .dropdown:hover .dropdown-content {
-    display: block;
+    /* display: block; */
+    visibility: visible;
     max-height: 6rem;
 }
 
