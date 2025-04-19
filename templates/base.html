@@ -9,9 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
     <script src="/static/js/navbar.js" defer></script>
-    <script src="{{ url_for('static', filename='js/pagetitle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bgchanger.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/lazyload.js') }}" defer></script>
     {% endblock %}
 </head>
 <body class="darken">
@@ -66,6 +63,11 @@
     </div>
     <i class="far fa-eye eye-icon"></i>
 
+    {% block bgscript %}
+        <script src="{{ url_for('static', filename='js/bgchanger.js') }}" defer></script>
+    {% endblock %}
     <script src="{{ url_for('static', filename='js/showbg.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pagetitle.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lazyload.js') }}" defer></script>
 </body>
 </html>

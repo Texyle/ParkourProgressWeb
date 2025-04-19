@@ -77,7 +77,7 @@ header {
     flex-shrink: 0;
     z-index: 10000;
     height: 9vh;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     /* overflow-x: scroll; */
 }
 
@@ -189,6 +189,8 @@ header nav ul > div {
 .dropdown {
     float: left;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
 }
   
 .dropdown .dropbtn {

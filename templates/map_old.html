@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parkour Progress - Map</title>
+    <link rel="stylesheet" href="/static/css/mapstyles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+</head>
+
+<body>
+    <div id="bg-blur">
+      <header>
+        <div class="logo">
+            <a href="/"><img src="/static/images/icon.jpg" alt="Logo" class="logo-image"></a>
+            <div class="logo-text">
+                <a href="/">Parkour Progress</a>
+                <p>Crafted by ImChill1n and Texyle</p>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/staff" class="nav-link">Staff</a></li>
+                <li><a href="/maps" class="nav-link">Maps</a></li>
+                <div class="dropdown">
+                    <li><a class="nav-link">Profile</a></li>
+                    <div class="dropdown-content">
+                      <a href="/profile/player">Player</a>
+                      <a href="/profile/country">Country</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <li><a class="nav-link">Leaderboard</a></li>
+                    <div class="dropdown-content">
+                      <a href="/leaderboard/players">Players</a>
+                      <a href="/leaderboard/country">Country</a>
+                    </div>
+                </div>
+            </ul>
+        </nav>
+        <div class="discord-container">
+            <div class="dashboard-button">
+                <a href="/dashboard">
+                    <i class="fa-solid fa-right-to-bracket"></i> Dashboard
+                </a>
+            </div>
+            <div class="discord-button">
+                <a href="https://discord.gg/n6uxKDMsNZ" target="_blank">
+                    <i class="fab fa-discord"></i> Join Discord
+                </a>
+            </div>
+            <div class="discord-widget">
+                <iframe src="https://discord.com/widget?id=913838786947977256&theme=dark" width="350" height="650" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+            </div>
+        </div>
+    </header>
+        <div id="main-box" class="content">
+            <h1>{{ map.MapName }}</h1>
+            <h3>{{ map.Gamemode }} - {% if map.Extra %}Extra{% else %}Main{% endif %}</h3>
+            <hr />
+            {% if map.VideoURL != "Unknown" %}
+              <div class="container">
+                <div class="video-container" id="video-player" data-videoid="{{ map.VideoURL.split('embed/')[1].split('?')[0] }}"></div>
+              </div>
+            {% endif %}
+            <div class="table-box-wrapper">
+                <div class="table-box collapsed" id="table-box-victors">
+                    <button type="button" class="collapse" id="collapse-victors">Victors</button>
+                    <table class="table table-victors">
+                        <colgroup>
+                          <col span="1" style="width: 10%;">
+                          <col span="1" style="width: 45%;">
+                          <col span="1" style="width: 25%;">
+                          <col span="1" style="width: 20%;">
+                        </colgroup>
+                        <tbody>
+                          {% if victors|length == 0 %}
+                          <tr>
+                            <td colspan="4" style="text-align: center; font-weight: bold; font-size: 1.5rem; color: rgb(255, 110, 110);">
+                              No Victors
+                            </td>
+                          </tr>
+                          {% else %}
+                            {% for victor in victors %}
+                              <tr class="player-row" data-href="{{ victor.ProfileURL }}">
+                                <td>
+                                  <div style="font-size: 2rem; font-weight: 800;">{{ loop.index }}</div>
+                                </td>
+                                <td>
+                                  <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="min-width: 48px; height: 48px; display: flex; align-items: center;">
+                                      <img src="https://vzge.me/bust/{{ victor.Name }}.png"
+                                           onerror="this.src='https://vzge.me/bust/X-Steve.png'"
+                                           alt="Bust"
+                                           style="height: 48px; display: block;"
+                                           class="Bust">
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; text-align: left;">
+                                      <div style="font-weight: bold;">{{ victor.Name }}</div>
+                                      <div style="margin-top: 5px;" data-href="{{ victor.CountryURL }}" class="country-link">
+                                        <img src="/static/images/flags/{{ victor.CountryCode | lower }}.svg"
+                                             alt="{{ victor.CountryCode }}"
+                                             style="height: 0.9rem;" class="flag">
+                                        <span style="font-size: 0.9rem; color: gray">{{ victor.Country }}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                {% if map.FailsMessage %}
+                                  <td>
+                                    <div style="font-style: italic; //color: #4e9aff; font-size: 1.1rem;">
+                                      {{ victor.Date }}
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div style="//color: #f55; font-weight: 600;">
+                                      {{ victor.Fails }} {{ map.FailsMessage }} {% if victor.Fails == 1 %}fail{% else %}fails{% endif %}
+                                    </div>
+                                  </td>
+                                {% else %}
+                                  <td></td> 
+                                  <td>
+                                    <div style="font-style: italic; //color: #4e9aff; font-size: 1.1rem;">
+                                      {{ victor.Date }}
+                                    </div>
+                                  </td>
+                                {% endif %}
+                              </tr>
+                            {% endfor %}
+                          {% endif %}
+                        </tbody>
+                        
+                    </table>                             
+                </div>
+            </div>
+            <div class="table-box-wrapper">
+              {% if not map['Extra'] %}
+                <div class="table-box collapsed" id="table-box-sections">
+                    <button type="button" class="collapse" id="collapse-sections">Sections</button>
+                    {% set progress_start = sections['ProgressStart'] %}
+                    <ul class="table list-sections">
+                      {% for section_name, section_data in sections.items() %}
+                      {% if section_name != "ProgressStart" %}  
+                          <li class="section-item 
+                              {% if section_data['Index'] < progress_start %} no-progress {% endif %}
+                              {% if section_data['Players']|length == 0 and section_data['Index'] >= progress_start %} no-players {% endif %}
+                          ">
+                              
+                              <div class="section-header">
+                                  {% if section_data['Index'] >= progress_start and section_data['Players']|length > 0 %}
+                                      <span class="toggle-icon">&#9654;</span> 
+                                  {% endif %}
+                                  <span class="section-name">{{ section_name }}</span> 
+                  
+                                  {% if section_data['Index'] >= progress_start %}
+                                      {% if section_data['Players']|length == 1 %}
+                                          <span class="section-reached">1 player</span>
+                                      {% elif section_data['Players']|length > 1 %}
+                                          <span class="section-reached">{{ section_data['Players']|length }} players</span>
+                                      {% else %}
+                                          <span class="section-reached no-players">No players</span>
+                                      {% endif %}
+                                  {% endif %}
+                              </div>
+                  
+                              {% if section_data['Index'] >= progress_start and section_data['Players']|length > 0 %}
+                              <ul class="list list-section-players collapsed">
+                                  {% for player in section_data['Players'] %}
+                                  <li>
+                                      <a href="/profile/player/{{ player['ID'] }}" class="player-link">
+                                          <img src="https://vzge.me/face/{{ player['Name'] }}.png" onerror="this.src='https://vzge.me/face/X-Steve.png'" alt="{{ player['Name'] }}">
+                                          {{ player['Name'] }}
+                                      </a>
+                                  </li>
+                                  {% endfor %}
+                              </ul>
+                              {% endif %}
+                          </li>
+                      {% endif %}
+                      {% endfor %}
+                  </ul>          
+                </div>
+                {%endif%}
+            </div>
+        </div>
+
+        <i class="far fa-eye eye-icon"></i>
+    </div>
+
+    <script type="text/javascript">
+        const mapName = {{ map.MapName|tojson }};
+    </script>
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/map.js"></script>
+    <script src="/static/js/pagetitle.js" defer></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html> 

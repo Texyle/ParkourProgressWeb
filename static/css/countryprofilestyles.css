@@ -602,7 +602,6 @@
     justify-content: center;
     align-items: center;
     flex-grow: 1;
-    position: absolute;
     height: 35rem;
 }
 
