@@ -272,7 +272,8 @@ def fetch_latest_victors(app):
         cursor = get_cursor()
         
         query = """
-        SELECT Player.Name AS PlayerName, Map.Name AS MapName, Victor.Date AS Date FROM Victor
+        SELECT Player.Name AS PlayerName, Map.Name AS MapName, Victor.Date AS Date, Player.ID AS ID, Map.ID AS MapID
+        FROM Victor
         JOIN Player
         ON Player.ID = Victor.PlayerID
         JOIN Map
@@ -287,7 +288,13 @@ def fetch_latest_victors(app):
         commit()
 
         victors_list = [
-            {"player_name": row[0], "map_name": row[1], "date": row[2].isoformat()} 
+            {
+                "player_name": row[0],
+                "map_name": row[1],
+                "date": row[2].isoformat(),
+                "ID": row[3],
+                "MapID": row[4]
+            }
             for row in victors
         ]
 
