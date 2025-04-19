@@ -385,7 +385,7 @@ def fetch_map(app, id):
         commit()
 
         if map is None:
-            return None
+            return None 
 
         if map.get("Extra") == 0:
             map["Extra"] = False

@@ -393,4 +393,4 @@ if __name__ == "__main__":
     # env.filters['to_filename'] = to_filename
     app.add_template_filter(to_filename, 'to_filename')
     
-    app.run(host="0.0.0.0", port=20000, debug=True)
+    app.run(host="0.0.0.0", port=20000)
