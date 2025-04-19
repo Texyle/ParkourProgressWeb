@@ -98,7 +98,7 @@ def createcookie():
 
     try:
         resp = make_response(redirect(url_for('dashboard')))
-        resp.set_cookie("login", encrypted, httponly=True)
+        resp.set_cookie("login", encrypted, secure=True, httponly=True, samesite="Strict")
         return resp
     except Exception as e:
         print(f"Error while creating cookie: {e}")
@@ -159,7 +159,7 @@ def callback():
 
     return redirect(url_for('dashboard', error="noguild"))
 
-@app.route("/dashboard")
+@app.route(subdomain="/dashboard")
 def dashboard():
     cookie = checkcookie()
     error = request.args.get("error")
