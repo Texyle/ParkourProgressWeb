@@ -1,5 +1,4 @@
 const fetchAvatar = async () => {
-    console.log(discordId)
     try {
         const response = await fetch(`https://discordlookup.mesalytic.moe/v1/user/${discordId}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
