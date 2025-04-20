@@ -10,6 +10,7 @@ from flask_discord import DiscordOAuth2Session
 from cryptography.fernet import Fernet
 import requests
 import pycountry
+from dotenv import load_dotenv
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 PROJECT_DIR = os.path.dirname(BASE_DIR)  
@@ -25,6 +26,13 @@ app.config["DISCORD_BOT_TOKEN"] = "MTIxODI4MzcxNjIwMDM2NjEzMQ.GdjgrS.OqmS8ixXmtm
 app.config["PREFERRED_URL_SCHEME"] = "http"
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "true"
 files = Files(app.static_folder)    
+
+load_dotenv()
+env = os.getenv("ENVIRONMENT")
+if env == "development":
+    app.debug = True
+elif env == "production":
+    app.debug = False
 
 # @app.route("/login")
 # def login():
