@@ -8,6 +8,7 @@
 
 ### Changed
 
+  - Correctly sort Victors by using VictorIndex in query
 
 ### Removed
 
