@@ -495,12 +495,19 @@ def fetch_victors(app, map_id):
         cursor = get_cursor(dictionary=True)
         
         query = """
-        SELECT Player.Name AS Name, Victor.Date AS Date, Victor.Fails AS Fails, Player.ID AS ID, Player.CountryCode as CountryCode
+        SELECT 
+        Player.Name AS Name,
+        Victor.Date AS Date,
+        Victor.Fails AS Fails,
+        Victor.VictorIndex AS VictorIndex,
+        Player.ID AS ID,
+        Player.CountryCode AS CountryCode
         FROM Victor
         JOIN Player ON Player.ID = Victor.PlayerID
         WHERE Victor.MapID = %s
-        ORDER BY Date ASC
+        ORDER BY Date ASC, VictorIndex ASC;
         """
+        
         cursor.execute(query, [map_id])
         victors = cursor.fetchall()
             
