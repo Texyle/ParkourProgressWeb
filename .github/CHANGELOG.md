@@ -5,6 +5,7 @@
 ### Added
 
   - This changelog file
+  - .env file for enviroment variables
 
 ### Changed
 

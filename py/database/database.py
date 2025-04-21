@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, send_from_directory
 import pycountry
 from py.database.countryprofile import fetch_country_profile_data
 from embeddify import Embedder
+from py.env import get_var
 
 connection = None
 plugin_config = {
@@ -12,29 +13,22 @@ plugin_config = {
 }
 embedder = Embedder(plugin_config = plugin_config)
 
-def get_cursor(*args, **kwargs):
+def connect():
     global connection
     
     if connection == None or not connection.is_connected():
         connection = mysql.connector.connect(
-            host="193.124.204.44", 
-            database="progressbot",
-            user="user",
-            password="I2F0HN3Ffe")
-    
+            host=get_var("DATABASE_HOST"), 
+            database=get_var("DATABASE_NAME"),
+            user=get_var("DATABASE_USER"),
+            password=get_var("DATABASE_PASSWORD"))
+
+def get_cursor(*args, **kwargs):
+    connect()
     return connection.cursor(*args, **kwargs)
 
 def commit():
-    global connection
-    
-    if connection == None or not connection.is_connected():
-        connection = mysql.connector.connect(
-            host="193.124.204.44", 
-            database="progressbot",
-            user="user",
-            password="I2F0HN3Ffe")
-        return
-    
+    connect()
     connection.commit()
 
 def fetch_player_names(app):
