@@ -1,8 +1,8 @@
 from mysql.connector import Error
 import traceback
-from flask import Flask, request, jsonify, send_from_directory
+from flask import jsonify
 import pycountry
-import py.database.database as database
+import database
 from collections import Counter, defaultdict
 import datetime
 

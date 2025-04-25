@@ -1,11 +1,10 @@
 import mysql.connector
 from mysql.connector import Error
 import traceback
-from flask import Flask, request, jsonify, send_from_directory
+from flask import jsonify
 import pycountry
-from py.database.countryprofile import fetch_country_profile_data
 from embeddify import Embedder
-from py.env import get_var
+from app.env import get_var
 
 connection = None
 plugin_config = {

@@ -1,10 +1,10 @@
 import os
 import json
-from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect, make_response, g, abort
-import py.database.database as database
+from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect, make_response
+import app.database.database as database
 import re
-from py.files import Files
-from py.env import get_var
+from app.files import Files
+from app.env import get_var
 import random
 import secrets
 from flask_discord import DiscordOAuth2Session
