@@ -1,9 +1,10 @@
 import os
 import json
-from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect, make_response, g, abort
-import py.database.database as database
+from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect, make_response
+import app.database.database as database
 import re
-from py.files import Files
+from app.files import Files
+from app.env import get_var
 import random
 import secrets
 from flask_discord import DiscordOAuth2Session
@@ -19,12 +20,18 @@ TEMPLATES_DIR = os.path.join(PROJECT_DIR, "templates")
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(64)
-app.config["DISCORD_CLIENT_ID"] = "1218283716200366131"
-app.config["DISCORD_CLIENT_SECRET"] = "CP2SZuHf-f4ZVgagFBi_pvXqvymImVD-"
-app.config["DISCORD_BOT_TOKEN"] = "MTIxODI4MzcxNjIwMDM2NjEzMQ.GdjgrS.OqmS8ixXmtmmbi8OKbfzGKhdmmLYOxGWvz6nUs"
-app.config["PREFERRED_URL_SCHEME"] = "http"
+app.config["DISCORD_CLIENT_ID"] = get_var("DISCORD_CLIENT_ID")
+app.config["DISCORD_CLIENT_SECRET"] = get_var("DISCORD_CLIENT_SECRET")
+app.config["DISCORD_BOT_TOKEN"] = get_var("DISCORD_BOT_TOKEN")
+app.config["PREFERRED_URL_SCHEME"] = get_var("PREFERRED_URL_SCHEME")
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "true"
 files = Files(app.static_folder)    
+
+debug = get_var("DEBUG")
+if debug == "1":
+    app.debug = True
+elif debug == "0":
+    app.debug = False
 
 # @app.route("/login")
 # def login():
@@ -223,7 +230,7 @@ def profile_with_playername(player_name):
     progress = database.fetch_maps_in_progress(app, player_name)
     gamemodes = database.fetch_gamemodes(app)
     
-    if player_data != None:
+    if player_data is not None:
         return render_template("profile.html", 
                                player_names = player_names, 
                                player_data = player_data, 
@@ -244,7 +251,7 @@ def profile_with_player(player_id):
     progress = database.fetch_maps_in_progress(app, player_id)
     gamemodes = database.fetch_gamemodes(app)
     
-    if player_data != None:
+    if player_data is not None:
         return render_template("profile.html", 
                                player_names = player_names, 
                                player_data = player_data, 
@@ -287,7 +294,7 @@ def map(map_id):
     victors = database.fetch_victors(app, map_id)
     sections = database.fetch_map_sections(app, map_id)
     print(sections, flush=True)
-    if map != None:
+    if map is not None:
         return render_template('map.html', map = map, victors = victors, sections = sections)
     else:
         return render_template("notfound.html", random_image=get_random_img())
@@ -356,9 +363,6 @@ def load_latest():
 
 @app.route("/load_map", methods=["POST"])
 def load_map():
-    data = request.json
-    name = data.get("id")
-
     return database.fetch_map(app, id)
 
 @app.route("/load_players", methods=["POST"])
@@ -393,4 +397,6 @@ if __name__ == "__main__":
     # env.filters['to_filename'] = to_filename
     app.add_template_filter(to_filename, 'to_filename')
     
-    app.run(host="0.0.0.0", port=20000)
+    port = get_var("PORT")
+    if port is not None:
+        app.run(host="0.0.0.0", port=int(port))
