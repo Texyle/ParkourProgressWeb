@@ -1,10 +1,10 @@
 import os
 import json
-from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect, make_response, g, abort
-import py.database.database as database
+from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect, make_response
+import app.database.database as database
 import re
-from py.files import Files
-from py.env import get_var
+from app.files import Files
+from app.env import get_var
 import random
 import secrets
 from flask_discord import DiscordOAuth2Session
@@ -231,7 +231,7 @@ def profile_with_playername(player_name):
     progress = database.fetch_maps_in_progress(app, player_name)
     gamemodes = database.fetch_gamemodes(app)
     
-    if player_data != None:
+    if player_data is not None:
         return render_template("profile.html", 
                                player_names = player_names, 
                                player_data = player_data, 
@@ -252,7 +252,7 @@ def profile_with_player(player_id):
     progress = database.fetch_maps_in_progress(app, player_id)
     gamemodes = database.fetch_gamemodes(app)
     
-    if player_data != None:
+    if player_data is not None:
         return render_template("profile.html", 
                                player_names = player_names, 
                                player_data = player_data, 
@@ -295,7 +295,7 @@ def map(map_id):
     victors = database.fetch_victors(app, map_id)
     sections = database.fetch_map_sections(app, map_id)
     print(sections, flush=True)
-    if map != None:
+    if map is not None:
         return render_template('map.html', map = map, victors = victors, sections = sections)
     else:
         return render_template("notfound.html", random_image=get_random_img())
@@ -364,9 +364,6 @@ def load_latest():
 
 @app.route("/load_map", methods=["POST"])
 def load_map():
-    data = request.json
-    name = data.get("id")
-
     return database.fetch_map(app, id)
 
 @app.route("/load_players", methods=["POST"])
@@ -402,5 +399,5 @@ if __name__ == "__main__":
     app.add_template_filter(to_filename, 'to_filename')
     
     port = get_var("PORT")
-    if port != None:
+    if port is not None:
         app.run(host="0.0.0.0", port=int(port))
