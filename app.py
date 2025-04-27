@@ -2,7 +2,7 @@ import os
 import json
 from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect, make_response
 import app.database.database as database
-from app.database.sqlalchemy import db, init_db
+from app.database.db import db, init_db
 import app.database.models as models
 import re
 from app.files import Files
