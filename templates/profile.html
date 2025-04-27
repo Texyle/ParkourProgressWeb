@@ -183,7 +183,7 @@
     </div>
 
     <script>
-        const playerNames = {{ player_names | tojson }};
+        const players = {{ players | tojson | safe }};
         {% if maps | length > 0 %}
         const maps = {{ maps | tojson }}
         {% endif %}

@@ -6,3 +6,4 @@ embeddify
 python-dotenv
 flask_discord
 cryptography
+Flask-SQLAlchemy

@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showSuggestions() {
         const query = input.value.toLowerCase();
-        const matchingNames = findBestMatches(playerNames, query);
+        const matchingNames = findBestMatches(players, query);
 
         suggestionsContainer.innerHTML = '';
 

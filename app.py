@@ -2,6 +2,8 @@ import os
 import json
 from flask import Flask, request, jsonify, send_from_directory, render_template, session, url_for, redirect, make_response
 import app.database.database as database
+from app.database.sqlalchemy import db, init_db
+import app.database.models as models
 import re
 from app.files import Files
 from app.env import get_var
@@ -11,6 +13,7 @@ from flask_discord import DiscordOAuth2Session
 from cryptography.fernet import Fernet
 import requests
 import pycountry
+from flask_sqlalchemy import SQLAlchemy
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 PROJECT_DIR = os.path.dirname(BASE_DIR)  
@@ -25,7 +28,8 @@ app.config["DISCORD_CLIENT_SECRET"] = get_var("DISCORD_CLIENT_SECRET")
 app.config["DISCORD_BOT_TOKEN"] = get_var("DISCORD_BOT_TOKEN")
 app.config["PREFERRED_URL_SCHEME"] = get_var("PREFERRED_URL_SCHEME")
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "true"
-files = Files(app.static_folder)    
+
+files = Files(app.static_folder)
 
 debug = get_var("DEBUG")
 if debug == "1":
@@ -212,18 +216,24 @@ def leaderboard2():
 @app.route("/maps")
 def maps():
     maps = database.fetch_map_list(app)
-
+    
     return render_template("maps.html", maps=maps, flags=files.flags, map_images=files.map_images, random_image=get_random_img())
 
 @app.route("/profile/player")
 def profile():
-    player_names = database.fetch_player_names(app)
+    #player_names = database.fetch_player_names(app)
+    players = db.session.execute(db.select(models.Player)).scalars().all()
+    players = [player.to_dict() for player in players]
+    
     gamemodes = database.fetch_gamemodes(app)
-    return render_template("profile.html", player_names = player_names, player_data = None, gamemodes = gamemodes, random_image=get_random_img())
+    
+    return render_template("profile.html", players = players, player_data = None, gamemodes = gamemodes, random_image=get_random_img())
 
 @app.route('/profile/player/<player_name>')
 def profile_with_playername(player_name):
-    player_names = database.fetch_player_names(app)
+    #player_names = database.fetch_player_names(app)
+    players = db.session.execute(db.select(models.Player)).scalars().all()
+    players = [player.to_dict() for player in players]
     
     player_data = database.fetch_player_info(app, player_name)
     maps = database.fetch_completed_maps(app, player_name)
@@ -232,7 +242,7 @@ def profile_with_playername(player_name):
     
     if player_data is not None:
         return render_template("profile.html", 
-                               player_names = player_names, 
+                               players = players, 
                                player_data = player_data, 
                                maps = maps,
                                progress = progress,
@@ -244,7 +254,9 @@ def profile_with_playername(player_name):
 
 @app.route('/profile/player/<int:player_id>')
 def profile_with_player(player_id):
-    player_names = database.fetch_player_names(app)
+    #player_names = database.fetch_player_names(app)
+    players = db.session.execute(db.select(models.Player)).scalars().all()
+    players = [player.to_dict() for player in players]
     
     player_data = database.fetch_player_info(app, player_id)
     maps = database.fetch_completed_maps(app, player_id)
@@ -253,7 +265,7 @@ def profile_with_player(player_id):
     
     if player_data is not None:
         return render_template("profile.html", 
-                               player_names = player_names, 
+                               players = players, 
                                player_data = player_data, 
                                maps = maps,
                                progress = progress,
@@ -393,6 +405,11 @@ def to_filename(map_name):
     return re.sub(r'[^a-z0-9]', '', map_name.lower())
 
 if __name__ == "__main__":
+    init_db(app)
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+    
     # env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
     # env.filters['to_filename'] = to_filename
     app.add_template_filter(to_filename, 'to_filename')
