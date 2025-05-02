@@ -5,6 +5,7 @@ from flask import jsonify
 import pycountry
 from embeddify import Embedder
 from app.env import get_var
+from app.database.countryprofile import fetch_country_profile_data
 
 connection = None
 plugin_config = {
