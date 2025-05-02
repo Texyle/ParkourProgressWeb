@@ -2,7 +2,7 @@ from mysql.connector import Error
 import traceback
 from flask import jsonify
 import pycountry
-import database
+import app.database.database as database
 from collections import Counter, defaultdict
 import datetime
 
