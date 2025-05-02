@@ -72,7 +72,7 @@
     text-align: center;
 }
 
-.description2 p {
+.description21 div {
     font-size: 1.2rem;
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
@@ -80,5 +80,19 @@
     display: inline-block;
     white-space: nowrap;
     padding: 5px 10px;
+}
+
+.victor-row {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+    white-space: nowrap;
+}
+
+#latest-victors {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0;
 }
 

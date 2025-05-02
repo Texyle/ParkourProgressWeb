@@ -14,6 +14,7 @@ from cryptography.fernet import Fernet
 import requests
 import pycountry
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime, date
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 PROJECT_DIR = os.path.dirname(BASE_DIR)  
@@ -195,7 +196,16 @@ def dashboard():
 
 @app.route("/")
 def home():
-    return render_template("index.html", random_image=get_random_img())
+    stmt = (
+        db.select(models.Victor.Date, models.Victor.MapID, models.Victor.PlayerID, models.Map.Name.label("MapName"), models.Player.Name.label("PlayerName"))
+        .join(models.Map)
+        .join(models.Player)
+        .order_by(models.Victor.Date.desc())
+        .limit(5)
+    )
+    latest_victors = db.session.execute(stmt).all()
+        
+    return render_template("index.html", random_image=get_random_img(), latest_victors=latest_victors)
 
 @app.route("/staff")
 def staff():
@@ -216,6 +226,47 @@ def leaderboard2():
 @app.route("/maps")
 def maps():
     maps = database.fetch_map_list(app)
+    
+    victor_subquery = db.aliased(models.Victor)
+    player_subquery = db.aliased(models.Player)
+    stmt = (
+        db.select(
+            models.Gamemode.Name.label("Gamemode"),
+            models.Map.Extra,
+            models.Map.Name.label("Name"),
+            models.Map.ID.label("MapID"),
+            models.Map.Builder,
+            db.func.count(victor_subquery.MapID).label("VictorCount"),
+            db.select(models.Victor.PlayerID)
+            .where(models.Victor.MapID == models.Map.ID)
+            .order_by(models.Victor.Date.asc())
+            .limit(1)
+            .scalar_subquery()
+            .label("FirstVictorID"),
+            db.select(models.Player.Name)
+            .select_from(db.join(models.Victor, models.Player, models.Victor.PlayerID == models.Player.ID))
+            .where(models.Victor.MapID == models.Map.ID)
+            .order_by(models.Victor.Date.asc())
+            .limit(1)
+            .scalar_subquery()
+            .label("FirstVictorName"),
+            db.select(models.Player.CountryCode)
+            .select_from(db.join(models.Victor, models.Player, models.Victor.PlayerID == models.Player.ID))
+            .where(models.Victor.MapID == models.Map.ID)
+            .order_by(models.Victor.Date.asc())
+            .limit(1)
+            .scalar_subquery()
+            .label("FirstVictorCountry")
+        )
+        .select_from(
+            db.join(models.Map, models.Gamemode, models.Gamemode.ID == models.Map.GamemodeID)
+        )
+        .where(models.Map.Position > 0)
+        .group_by(models.Map.ID, models.Gamemode.Name, models.Map.Extra, models.Map.Name, models.Map.Builder)
+        .order_by(models.Map.Position.asc())
+    )
+
+    result = db.session.execute(stmt).all()
     
     return render_template("maps.html", maps=maps, flags=files.flags, map_images=files.map_images, random_image=get_random_img())
 
@@ -404,6 +455,14 @@ def to_filename(map_name):
     # to be used in jinja as a filter
     return re.sub(r'[^a-z0-9]', '', map_name.lower())
 
+def format_date(value, format='%b %#d, %Y'):
+    if isinstance(value, date) and not isinstance(value, datetime):
+        # Convert datetime.date to datetime.datetime
+        value = datetime(value.year, value.month, value.day)
+    if isinstance(value, datetime):
+        return value.strftime(format)
+    return value
+
 if __name__ == "__main__":
     init_db(app)
     db.init_app(app)
@@ -413,6 +472,7 @@ if __name__ == "__main__":
     # env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
     # env.filters['to_filename'] = to_filename
     app.add_template_filter(to_filename, 'to_filename')
+    app.add_template_filter(format_date, 'format_date')
     
     port = get_var("PORT")
     if port is not None:
