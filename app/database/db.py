@@ -7,7 +7,7 @@ db = SQLAlchemy()
 
 def init_db(app: Flask):
     url = URL.create(
-        "mysql",
+        "mysql+mysqlconnector",
         username=get_var("DATABASE_USER"),
         password=get_var("DATABASE_PASSWORD"),
         host=get_var("DATABASE_HOST"),
