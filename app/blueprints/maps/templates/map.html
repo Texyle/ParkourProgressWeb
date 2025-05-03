@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('maps.static', filename='/css/map.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Parkour Progress - Map</title>
+{% endblock %}
+
+{% block content %}
+  <div id="main-container">
+    <h1>{{ map.MapName }}</h1>
+    <h3>{{ map.Gamemode }} - {% if map.Extra %}Extra{% else %}Main{% endif %}</h3>
+    <hr />
+    <!-- {% if map.VideoURL != "Unknown" %}
+      <div class="container">
+        <div class="video-container" id="video-player" data-videoid=" map.VideoURL.split('embed/')[1].split('?')[0] "></div>
+      </div>
+    {% endif %} -->
+    <div class="table-box-wrapper">
+        <div class="table-box collapsed" id="table-box-victors">
+            <button type="button" class="collapse" id="collapse-victors">Victors</button>
+            <table class="table table-victors">
+                <colgroup>
+                  <col span="1" style="width: 10%;">
+                  <col span="1" style="width: 45%;">
+                  <col span="1" style="width: 25%;">
+                  <col span="1" style="width: 20%;">
+                </colgroup>
+                <tbody>
+                  {% if victors|length == 0 %}
+                  <tr>
+                    <td colspan="4" style="text-align: center; font-weight: bold; font-size: 1.5rem; color: rgb(255, 110, 110);">
+                      No Victors
+                    </td>
+                  </tr>
+                  {% else %}
+                    {% for victor in victors %}
+                      <tr class="player-row" data-href="{{ victor.ProfileURL }}">
+                        <td>
+                          <div style="font-size: 2rem; font-weight: 800;">{{ loop.index }}</div>
+                        </td>
+                        <td>
+                          <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="min-width: 48px; height: 48px; display: flex; align-items: center;">
+                              <img src="https://vzge.me/bust/{{ victor.Name }}.png"
+                                   onerror="this.src='https://vzge.me/bust/X-Steve.png'"
+                                   alt="Bust"
+                                   style="height: 48px; display: block;"
+                                   class="Bust">
+                            </div>
+                            <div style="display: flex; flex-direction: column; text-align: left;">
+                              <div style="font-weight: bold;">{{ victor.Name }}</div>
+                              <div style="margin-top: 5px;" data-href="{{ victor.CountryURL }}" class="country-link">
+                                <img src="/static/images/flags/{{ victor.CountryCode | lower }}.svg"
+                                     alt="{{ victor.CountryCode }}"
+                                     style="height: 0.9rem;" class="flag">
+                                <span style="font-size: 0.9rem; color: gray">{{ victor.Country }}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        {% if map.FailsMessage %}
+                          <td>
+                            <div style="font-style: italic; //color: #4e9aff; font-size: 1.1rem;">
+                              {{ victor.Date }}
+                            </div>
+                          </td>
+                          <td>
+                            <div style="//color: #f55; font-weight: 600;">
+                              {{ victor.Fails }} {{ map.FailsMessage }} {% if victor.Fails == 1 %}fail{% else %}fails{% endif %}
+                            </div>
+                          </td>
+                        {% else %}
+                          <td></td> 
+                          <td>
+                            <div style="font-style: italic; //color: #4e9aff; font-size: 1.1rem;">
+                              {{ victor.Date }}
+                            </div>
+                          </td>
+                        {% endif %}
+                      </tr>
+                    {% endfor %}
+                  {% endif %}
+                </tbody>
+                
+            </table>                             
+        </div>
+    </div>
+    <div class="table-box-wrapper">
+      {% if not map['Extra'] %}
+        <div class="table-box collapsed" id="table-box-sections">
+            <button type="button" class="collapse" id="collapse-sections">Sections</button>
+            {% set progress_start = sections['ProgressStart'] %}
+            <ul class="table list-sections">
+              {% for section_name, section_data in sections.items() %}
+              {% if section_name != "ProgressStart" %}  
+                  <li class="section-item 
+                      {% if section_data['Index'] < progress_start %} no-progress {% endif %}
+                      {% if section_data['Players']|length == 0 and section_data['Index'] >= progress_start %} no-players {% endif %}
+                  ">
+                      
+                      <div class="section-header">
+                          {% if section_data['Index'] >= progress_start and section_data['Players']|length > 0 %}
+                              <span class="toggle-icon">&#9654;</span> 
+                          {% endif %}
+                          <span class="section-name">{{ section_name }}</span> 
+          
+                          {% if section_data['Index'] >= progress_start %}
+                              {% if section_data['Players']|length == 1 %}
+                                  <span class="section-reached">1 player</span>
+                              {% elif section_data['Players']|length > 1 %}
+                                  <span class="section-reached">{{ section_data['Players']|length }} players</span>
+                              {% else %}
+                                  <span class="section-reached no-players">No players</span>
+                              {% endif %}
+                          {% endif %}
+                      </div>
+          
+                      {% if section_data['Index'] >= progress_start and section_data['Players']|length > 0 %}
+                      <ul class="list list-section-players collapsed">
+                          {% for player in section_data['Players'] %}
+                          <li>
+                              <a href="/profile/player/{{ player['ID'] }}" class="player-link">
+                                  <img src="https://vzge.me/face/{{ player['Name'] }}.png" onerror="this.src='https://vzge.me/face/X-Steve.png'" alt="{{ player['Name'] }}">
+                                  {{ player['Name'] }}
+                              </a>
+                          </li>
+                          {% endfor %}
+                      </ul>
+                      {% endif %}
+                  </li>
+              {% endif %}
+              {% endfor %}
+          </ul>          
+        </div>
+        {%endif%}
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    const mapName = {{ map.MapName|tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+  <script src="{{ url_for('maps.static', filename='js/maps.js') }}"></script>
+{% endblock %}
+
+{% block bgscript %}
+{% endblock %}

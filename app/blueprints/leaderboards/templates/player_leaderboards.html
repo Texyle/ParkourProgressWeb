@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('leaderboards.static', filename='css/leaderboards.css') }}">
+    <title>Players Leaderboard - Parkour Progress</title>
+{% endblock %}
+
+{% block content %}
+    <div class="main-container">
+        <p><strong style="font-size: 2rem;">RANKING SYSTEM TEST</strong></p>
+        <ol>
+            <li>Texyle - 1234 points</li>
+        </ol>
+    </div>
+{% endblock %}
