@@ -1,3 +1,5 @@
+# NOT USED
+
 from mysql.connector import Error
 import traceback
 from flask import jsonify

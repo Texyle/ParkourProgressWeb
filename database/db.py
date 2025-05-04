@@ -1,3 +1,5 @@
+# NOT USED
+
 from flask import Flask, current_app
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import URL
