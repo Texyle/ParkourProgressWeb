@@ -1,5 +1,5 @@
 from app.blueprints.profile import bp
-from flask import render_template
+from flask import render_template, current_app
 
 @bp.route("/player")
 def player_profile_initial():
@@ -10,7 +10,11 @@ def player_profile_initial():
     # gamemodes = database.fetch_gamemodes(app)
     
     # return render_template("profile.html", players = players, player_data = None, gamemodes = gamemodes, random_image=get_random_img())
-    return render_template("player_profile.html", players = [], player_data = None, gamemodes = [])
+    return render_template("player_profile.html", 
+                           players = [], 
+                           player_data = None, 
+                           gamemodes = [], 
+                           random_image=current_app.get_random_img())
 
 # not sure if this is needed, but keeping it for now
 # @bp.route('/player/<player_name>')
@@ -58,7 +62,11 @@ def player_profile(player_id: int):
 #                                flags=files.flags, random_image=get_random_img())
 #     else:
 #         return render_template("notfound.html", random_image=get_random_img())
-    return render_template("player_profile.html", players = [], player_data = None, gamemodes = [])
+    return render_template("player_profile.html", 
+                           players = [], 
+                           player_data = None, 
+                           gamemodes = [], 
+                           random_image=current_app.get_random_img())
     
 @bp.route("/country")
 def country_profile_initial():
@@ -76,7 +84,7 @@ def country_profile_initial():
                            gamemodes = [],
                            map_images = [],
                            flags = [],
-                           random_image = None)
+                           random_image=current_app.get_random_img())
 
 @bp.route("/country/<string:country_code>")
 def country_profile_with_country(country_code: str):
@@ -97,4 +105,4 @@ def country_profile_with_country(country_code: str):
                             gamemodes = [],
                             map_images = [],
                             flags = [],
-                            random_image = None)
+                            random_image=current_app.get_random_img())

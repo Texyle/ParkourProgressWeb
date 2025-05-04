@@ -1,16 +1,16 @@
 from app.blueprints.home import bp
-from flask import render_template
+from flask import render_template, current_app
+from app.models.victor import Victor
   
 @bp.route("")
 def home():
-    # stmt = (
-    #     db.select(models.Victor.Date, models.Victor.MapID, models.Victor.PlayerID, models.Map.Name.label("MapName"), models.Player.Name.label("PlayerName"))
-    #     .join(models.Map)
-    #     .join(models.Player)
-    #     .order_by(models.Victor.Date.desc())
-    #     .limit(5)
-    # )
-    # latest_victors = db.session.execute(stmt).all()
-        
-    # return render_template("index.html", random_image=get_random_img(), latest_victors=latest_victors)
-    return render_template("home.html")
+    latest_victors = (
+        Victor.query
+        .order_by(Victor.Date.desc())
+        .limit(5)
+        .all()
+    )
+    
+    return render_template("home.html", 
+                           random_image = current_app.images.get_random_map_image(),
+                           latest_victors = latest_victors)

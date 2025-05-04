@@ -1,5 +1,5 @@
 from app.blueprints.maps import bp
-from flask import render_template
+from flask import render_template, current_app
 
 @bp.route('')
 def map_list():
@@ -47,7 +47,11 @@ def map_list():
     # result = db.session.execute(stmt).all()
     
     # return render_template("maps.html", maps=maps, flags=files.flags, map_images=files.map_images, random_image=get_random_img())
-    return render_template("maps.html", maps={}, flags=[], map_images=[], random_image="")
+    return render_template("maps.html", 
+                           maps={}, 
+                           flags=[], 
+                           map_images=[], 
+                           random_image=current_app.get_random_img())
 
 @bp.route('/<int:map_id>')
 def map_page(map_id: int):
@@ -59,4 +63,8 @@ def map_page(map_id: int):
     #     return render_template('map.html', map = map, victors = victors, sections = sections)
     # else:
     #     return render_template("notfound.html", random_image=get_random_img())
-    return render_template('map.html', map = {"VideoURL": "", "MapName": "dqwwqdaw"}, victors = [], sections = {})
+    return render_template('map.html', 
+                           map = {"VideoURL": "", "MapName": "dqwwqdaw"}, 
+                           victors = [], 
+                           sections = {}, 
+                           random_image=current_app.get_random_img())

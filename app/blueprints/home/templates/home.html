@@ -24,9 +24,9 @@
                     {% for victor in latest_victors %}
                     <div class="victor-row">
                         <span>{{ loop.index0 + 1 }}.</span>
-                        <span class="player-item" onclick="window.location.href = `/profile/player/{{ victor.PlayerID }}`;">{{ victor.PlayerName }}</span>
+                        <span class="player-item" onclick="window.location.href = `/profile/player/{{ victor.player.ID }}`;">{{ victor.player.Name }}</span>
                         <span> - </span>
-                        <span class="map-item" onclick="window.location.href = `/map/{{ victor.MapID }}`;">{{ victor.MapName }}</span>
+                        <span class="map-item" onclick="window.location.href = `/map/{{ victor.map.ID }}`;">{{ victor.map.Name }}</span>
                         <span> - </span>
                         <span>{{ victor.Date | format_date }}</span>
                     </div>
