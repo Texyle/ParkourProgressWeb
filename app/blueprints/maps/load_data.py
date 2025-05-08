@@ -1,9 +1,11 @@
 from app.models.map import Map
 from app.models.gamemode import Gamemode
 from app.models.victor import Victor
+from app.models.section import Section
+from app.models.section_player import SectionPlayer
 from app.extensions import db 
 
-def load_data():
+def load_all_maps():
     gamemodes = Gamemode.query.order_by(Gamemode.ID.asc()).all()
 
     maps = {gamemode.Name: {"Main": [], "Extra": []} for gamemode in gamemodes}
@@ -30,3 +32,18 @@ def load_data():
             maps[gamemode_name]["Main"].append(map)
 
     return maps
+
+def load_map(id: int):
+    map_data = (
+        Map.query
+        .options(
+            db.joinedload(Map.victors).joinedload(Victor.player),
+            db.joinedload(Map.sections).joinedload(Section.players).joinedload(SectionPlayer.player)
+        )
+        .filter_by(ID = id)
+        .first()
+    )
+    
+    print(map_data.gamemode)
+    
+    return map_data

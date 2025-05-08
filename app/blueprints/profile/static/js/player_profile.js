@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showSuggestions() {
         const query = input.value.toLowerCase();
-        const matchingNames = findBestMatches(players, query);
+        const matchingNames = findBestMatches(playerNames, query);
 
         suggestionsContainer.innerHTML = '';
 
@@ -47,9 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const div = document.createElement('div');
             div.className = 'suggestion-item';
             div.textContent = name.Name;
-            const baseUrl = window.location.protocol + "//" + window.location.host;
-            const newUrl = `${baseUrl}/profile/player/${name.ID}`;
-            console.log(newUrl);
+            const newUrl = `/profile/player/${name.ID}`;
             div.setAttribute('data-url', newUrl);
 
             div.addEventListener('click', function () {
@@ -64,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function load_skin() {
         const skinImg = document.getElementById("skin-img");
-        const url = `https://vzge.me/full/512/${playerData.Name}`;
+        const url = `https://vzge.me/full/512/${playerName}`;
         const fallbackUrl = 'https://vzge.me/full/512/X-Steve';
     
         try {
@@ -81,8 +79,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function load_discord() {
-        if (playerData.DiscordID != -1) {
-            const apiUrl = `https://avatar-cyan.vercel.app/api/${playerData.DiscordID}`;
+        if (playerDiscord != -1) {
+            const apiUrl = `https://avatar-cyan.vercel.app/api/${playerDiscord}`;
 
             try {
                 const response = await fetch(apiUrl);
@@ -106,14 +104,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    if (typeof playerData !== 'undefined') {
+    if (typeof playerName !== 'undefined') {
         load_skin();
 
-        if (playerData.DiscordID != -1) {
+        if (playerDiscord != -1) {
             load_discord();
 
             document.getElementById('discord-container').addEventListener('click', function() {
-                window.location.href = `https://discord.com/users/${playerData.DiscordID}`;
+                window.location.href = `https://discord.com/users/${playerDiscord}`;
             });
         }
     }
@@ -213,7 +211,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function selectOption(event, option) {
     event.stopPropagation();
-    console.log("Selected option: " + option);
 
     var dropdownContent = event.target.parentElement;
     var dropdownButton = dropdownContent.previousElementSibling;

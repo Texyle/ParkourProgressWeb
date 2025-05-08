@@ -8,4 +8,4 @@ def random_image():
     if not random_image:
         return jsonify({"error": "No images found"}), 404
 
-    return jsonify({"image_url": f"static/{random_image}"})
+    return jsonify({"image_url": f"{random_image}"})

@@ -11,15 +11,6 @@ class Player(db.Model):
     
     victors = db.relationship("Victor", back_populates="player")
     sections = db.relationship("SectionPlayer", back_populates="player")
-    
-    def to_dict(self):
-        return {
-            "ID": self.ID,
-            "Name": self.Name,
-            "DiscordID": self.DiscordID,
-            "CountryCode": self.CountryCode,
-            "VisualFlag": self.VisualFlag
-        }
         
     def __repr__(self):
         return f"<Player {self.ID}: {self.Name}>"

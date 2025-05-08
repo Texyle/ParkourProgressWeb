@@ -1,10 +1,10 @@
 from app.blueprints.maps import bp
 from flask import render_template, current_app
-from .load_data import load_data
+from .load_data import load_all_maps, load_map
 
 @bp.route('')
 def map_list():
-    maps = load_data()
+    maps = load_all_maps()
         
     return render_template("maps.html", 
                            maps=maps, 
@@ -14,16 +14,8 @@ def map_list():
 
 @bp.route('/<int:map_id>')
 def map_page(map_id: int):
-    # map = database.fetch_map(app, map_id)
-    # victors = database.fetch_victors(app, map_id)
-    # sections = database.fetch_map_sections(app, map_id)
-    # print(sections, flush=True)
-    # if map is not None:
-    #     return render_template('map.html', map = map, victors = victors, sections = sections)
-    # else:
-    #     return render_template("notfound.html", random_image=get_random_img())
+    map = load_map(map_id)
+    
     return render_template('map.html', 
-                           map = {"VideoURL": "", "MapName": "dqwwqdaw"}, 
-                           victors = [], 
-                           sections = {}, 
+                           map = map, 
                            random_image=current_app.images.get_random_map_image())

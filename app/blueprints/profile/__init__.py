@@ -5,4 +5,4 @@ bp = Blueprint('profile',
                template_folder='templates', 
                static_folder='static')
 
-from app.blueprints.profile import routes
+from app.blueprints.profile import routes, filters

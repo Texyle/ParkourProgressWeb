@@ -4,7 +4,7 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('profile.static', filename='/css/player_profile.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>{{ player_data['Name']  }}'s Profile - Parkour Progress</title>
+    <title>{{ player.Name  }}'s Profile - Parkour Progress</title>
 {% endblock %}
 
 {% block content %}
@@ -16,10 +16,10 @@
                 <div id="suggestions-container"></div>
             </div>
         </div>
-        {% if player_data is not none %}
+        {% if player is not none %}
         <div id="profile-container">
                 <div class="container" id="player-container">
-                    {% if player_data['DiscordID'] != '-1' %}
+                    {% if player.DiscordID != '-1' %}
                         <div id="skin-container">
                             <img src="" id="skin-img"/>
                         </div>
@@ -28,7 +28,7 @@
                             <img src="" id="skin-img"/>
                         </div>
                     {% endif %}
-                    {% if player_data['DiscordID'] != '-1' %}
+                    {% if player.DiscordID != '-1' %}
                         <div id="discord-container">
                             <i class="fas fa-external-link-alt external-link-icon"></i>
                             <img id="discord-pfp" src="" alt="">
@@ -38,10 +38,10 @@
                 </div>
                 <div id="info-container">
                     <div id="player-info">
-                        <p id="player-name">{{ player_data['Name']  }}</p>
-                        <div id="player-country" onclick="redirectToCountryPage('{{ player_data['CountryCode'] }}')">
-                            <img class="flag" src="{{ url_for('static', filename=flags[player_data['CountryCode']]) }}" alt="{{ code }}">
-                            <div>{{ player_data['CountryName'] }}</div>
+                        <p id="player-name">{{ player.Name  }}</p>
+                        <div id="player-country" onclick="window.location.href = '{{ url_for('profile.country_profile', country_code = player.CountryCode) }}';">
+                            <img class="flag" src="{{ url_for('static', filename=flags[player.CountryCode]) }}" alt="{{ code }}">
+                            <div>{{ player.CountryCode | to_country_name }}</div>
                         </div>
                     </div>
                     <div id="rankings-container">
@@ -59,7 +59,7 @@
                                         <label>    
                                             <input type="checkbox" value="Option {{ loop.index0 + 1 }}" checked>
                                             <span class="custom-checkbox"></span>
-                                            <span class="label-text">{{ gamemode['Name'] }}</span>
+                                            <span class="label-text">{{ gamemode.Name }}</span>
                                         </label>
                                     {% endfor %}
                                 </div>
@@ -86,33 +86,32 @@
                             </div>
                         </div>
                     </div>
-                    {% if maps | length > 0 %}
+                    {% if player.victors | length > 0 %}
                         <div id="map-list-container">
-                            {% for map in maps %}
-                                <div class="map-container" data-position="{{ map['Position'] }}" onclick="redirectToMapPage('{{ map['MapID'] }}')">
+                            {% for victor in player.victors %}
+                                <div class="map-container" data-position="{{ victor.map.Position }}" onclick="window.location.href = '{{ url_for('maps.map_page', map_id = victor.MapID) }}';">
                                     <div class="map-field map-title">
-                                        <div class="map-name">{{ map['Name'] }}</div>
-                                        {% if map['FailsMessage'] is not none %}
-                                            <div class="map-fails">{{ map['Fails'] }} {{ map['FailsMessage'] }} fails</div>
+                                        <div class="map-name">{{ victor.map.Name }}</div>
+                                        {% if victor.map.FailsMessage is not none %}
+                                            <div class="map-fails">{{ victor.Fails }} {{ victor.map.FailsMessage }} fails</div>
                                         {% endif %}
                                     </div>
                                     <div class="map-field map-type">
-                                        <div class="map-gamemode">{{ map['Gamemode'] }}</div>
-                                        {% if map['Extra'] == 0 %}
+                                        <div class="map-gamemode">{{ victor.map.gamemode.Name }}</div>
+                                        {% if victor.map.Extra == 0 %}
                                             <div class="map-status">Main</div>
                                         {% else %}
                                             <div class="map-status">Extra</div>
                                         {% endif %}
                                     </div>
                                     <div class="map-field map-date">
-                                        <div class="map-date">{{ map['Date'] }}</div>
-                                        <div class="map-fails">#{{ map['VictorPosition'] }}</div>
+                                        <div class="map-date">{{ victor.Date }}</div>
+                                        <div class="map-fails">#{{ victor.VictorPosition }}</div>
                                     </div>
                                     <div class="map-field map-image-container">
-                                        {% set map_name = map['Name']|to_filename %}
-                                        {% set map_name = map_name ~ '_small' %}
+                                        {% set map_name = victor.map.Name|to_filename %}
                                         {% set filename = map_images[map_name] %}
-                                    <img class="map-image" loading="lazy" src="{{ url_for('static', filename=filename) }}" alt="{{ map['Name'] }}">
+                                    <img class="map-image" loading="lazy" src="{{ url_for('static', filename=filename) }}" alt="{{ victor.map.Name }}">
                                     </div>
                                 </div>
                             {% endfor %}
@@ -130,14 +129,14 @@
                                         <label>    
                                             <input type="checkbox" value="Option {{ loop.index0 + 1 }}" checked>
                                             <span class="custom-checkbox"></span>
-                                            <span class="label-text">{{ gamemode['Name'] }}</span>
+                                            <span class="label-text">{{ gamemode.Name }}</span>
                                         </label>
                                     {% endfor %}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {% if progress | length > 0 %}
+                    {% if player.sections | length > 0 %}
                         <div id="progress-list-container">
                             {% set juku_cps = {
                                 "<@&1120013547892646050>": "CP2",
@@ -148,26 +147,25 @@
                                 "<@&1120013899991875724>": "CP7",
                                 "<@&1120013930782265425>": "CP8"
                             } %}
-                            {% for map in progress %}                 
-                                <div class="progress-container" data-position="{{ map['Position'] }}" onclick="redirectToMapPage('{{ map['MapID'] }}')">
+                            {% for section_player in player.sections %}                 
+                                <div class="progress-container" data-position="{{ section_player.section.map.Position }}" onclick="redirectToMapPage('{{ section_player.section.MapID }}')">
                                     <div class="progress-field progress-title">
-                                        <div class="progress-name">{{ map['Name'] }}</div>
+                                        <div class="progress-name">{{ section_player.section.map.Name }}</div>
                                     </div>
                                     <div class="progress-field progress-type">
-                                        <div class="progress-gamemode">{{ map['Gamemode'] }}</div>
+                                        <div class="progress-gamemode">{{ section_player.section.map.gamemode.Name }}</div>
                                     </div>
                                     <div class="progress-field progress-section">
-                                        {% if map['Name'] == 'Juku Section' %}
-                                            <div class="progress-section">{{ juku_cps.get(map['Section']) }}</div>
+                                        {% if section_player.section.map.Name == 'Juku Section' %}
+                                            <div class="progress-section">{{ juku_cps.get(section_player.section.Name) }}</div>
                                         {% else %}
-                                            <div class="progress-section">{{ map['Section'] }}</div>
+                                            <div class="progress-section">{{ section_player.section.Name }}</div>
                                         {% endif %}
                                     </div>
                                     <div class="progress-field progress-image-container">
-                                        {% set map_name = map['Name']|to_filename %}
-                                        {% set map_name = map_name ~ '_small' %}
+                                        {% set map_name = section_player.section.map.Name | to_filename %}
                                         {% set filename = map_images[map_name] %}
-                                        <img class="map-image" loading="lazy" src="{{ url_for('static', filename=filename) }}" alt="{{ map['Name'] }}">
+                                        <img class="map-image" loading="lazy" src="{{ url_for('static', filename=filename) }}" alt="{{ section_player.section.map.Name }}">
                                     </div>
                                 </div>
                             {% endfor %}
@@ -176,16 +174,17 @@
                 </div>
 
                 <script>
-                    const playerData = {{ player_data | tojson }};
+                    const playerName = '{{ player_name }}';
+                    const playerDiscord = '{{ player_discord }}';
                 </script>
         {% endif %}
         </div> 
     </div>
 
     <script>
-        const players = {{ players | tojson | safe }};
+        const playerNames = {{ player_names | tojson }};
         {% if maps | length > 0 %}
-        const maps = {{ maps | tojson }}
+            const maps = {{ maps | tojson }}
         {% endif %}
     </script>
     <script src="{{ url_for('profile.static', filename='js/player_profile.js') }}"></script>

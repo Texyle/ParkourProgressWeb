@@ -14,7 +14,7 @@
 <body class="darken">
     <style>
         body {
-            background-image: url("/static/images/maps/{{ random_image }}");
+            background-image: url("/static/{{ random_image }}");
         }
     </style>
     <header>
@@ -68,6 +68,5 @@
     {% endblock %}
     <script src="{{ url_for('static', filename='js/showbg.js') }}"></script>
     <script src="{{ url_for('static', filename='js/pagetitle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/lazyload.js') }}" defer></script>
 </body>
 </html>

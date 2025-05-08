@@ -9,14 +9,16 @@
 
 {% block content %}
   <div id="main-container">
-    <h1>{{ map.MapName }}</h1>
-    <h3>{{ map.Gamemode }} - {% if map.Extra %}Extra{% else %}Main{% endif %}</h3>
+    <h1>{{ map.Name }}</h1>
+    <h3>{{ map.gamemode.Name }} - {% if map.Extra %}Extra{% else %}Main{% endif %}</h3>
     <hr />
-    <!-- {% if map.VideoURL != "Unknown" %}
+
+    {% if map.VideoURL != "Unknown" %}
       <div class="container">
         <div class="video-container" id="video-player" data-videoid=" map.VideoURL.split('embed/')[1].split('?')[0] "></div>
       </div>
-    {% endif %} -->
+    {% endif %}
+
     <div class="table-box-wrapper">
         <div class="table-box collapsed" id="table-box-victors">
             <button type="button" class="collapse" id="collapse-victors">Victors</button>
@@ -28,34 +30,35 @@
                   <col span="1" style="width: 20%;">
                 </colgroup>
                 <tbody>
-                  {% if victors|length == 0 %}
+                  {% if map.victors|length == 0 %}
                   <tr>
                     <td colspan="4" style="text-align: center; font-weight: bold; font-size: 1.5rem; color: rgb(255, 110, 110);">
                       No Victors
                     </td>
                   </tr>
                   {% else %}
-                    {% for victor in victors %}
-                      <tr class="player-row" data-href="{{ victor.ProfileURL }}">
+                    {% for victor in map.victors %}
+                      <tr class="player-row" data-href="{{ url_for('profile.player_profile', player_id = victor.player.ID) }}">
                         <td>
                           <div style="font-size: 2rem; font-weight: 800;">{{ loop.index }}</div>
                         </td>
                         <td>
                           <div style="display: flex; align-items: center; gap: 12px;">
                             <div style="min-width: 48px; height: 48px; display: flex; align-items: center;">
-                              <img src="https://vzge.me/bust/{{ victor.Name }}.png"
+                              <img src="https://vzge.me/bust/{{ victor.player.Name }}.png"
                                    onerror="this.src='https://vzge.me/bust/X-Steve.png'"
                                    alt="Bust"
                                    style="height: 48px; display: block;"
                                    class="Bust">
                             </div>
                             <div style="display: flex; flex-direction: column; text-align: left;">
-                              <div style="font-weight: bold;">{{ victor.Name }}</div>
-                              <div style="margin-top: 5px;" data-href="{{ victor.CountryURL }}" class="country-link">
-                                <img src="/static/images/flags/{{ victor.CountryCode | lower }}.svg"
-                                     alt="{{ victor.CountryCode }}"
+                              <div style="font-weight: bold;">{{ victor.player.Name }}</div>
+                              <div style="margin-top: 5px;" data-href="{{ victor.player.CountryURL }}" class="country-link">
+                              <div style="margin-top: 5px;" data-href="{{ url_for('profile.country_profile', country_code = victor.player.CountryCode) }}" class="country-link">
+                                <img src="/static/images/flags/{{ victor.player.CountryCode | lower }}.svg"
+                                     alt="{{ victor.player.CountryCode }}"
                                      style="height: 0.9rem;" class="flag">
-                                <span style="font-size: 0.9rem; color: gray">{{ victor.Country }}</span>
+                                <span style="font-size: 0.9rem; color: gray">{{ victor.player.Country }}</span>
                               </div>
                             </div>
                           </div>
@@ -88,42 +91,41 @@
         </div>
     </div>
     <div class="table-box-wrapper">
-      {% if not map['Extra'] %}
+      {% if not map.Extra %}
         <div class="table-box collapsed" id="table-box-sections">
             <button type="button" class="collapse" id="collapse-sections">Sections</button>
-            {% set progress_start = sections['ProgressStart'] %}
             <ul class="table list-sections">
-              {% for section_name, section_data in sections.items() %}
-              {% if section_name != "ProgressStart" %}  
+              {% for section in map.sections %}
+              {% if loop.index != map.ProgressStart %}  
                   <li class="section-item 
-                      {% if section_data['Index'] < progress_start %} no-progress {% endif %}
-                      {% if section_data['Players']|length == 0 and section_data['Index'] >= progress_start %} no-players {% endif %}
+                      {% if section.SectionIndex < map.ProgressStart %} no-progress {% endif %}
+                      {% if section.players|length == 0 and section.SectionIndex >= map.ProgressStart %} no-players {% endif %}
                   ">
                       
                       <div class="section-header">
-                          {% if section_data['Index'] >= progress_start and section_data['Players']|length > 0 %}
+                          {% if section.SectionIndex >= map.ProgressStart and section.players|length > 0 %}
                               <span class="toggle-icon">&#9654;</span> 
                           {% endif %}
-                          <span class="section-name">{{ section_name }}</span> 
+                          <span class="section-name">{{ section.Name }}</span> 
           
-                          {% if section_data['Index'] >= progress_start %}
-                              {% if section_data['Players']|length == 1 %}
+                          {% if section.SectionIndex >= map.ProgressStart %}
+                              {% if section.players|length == 1 %}
                                   <span class="section-reached">1 player</span>
-                              {% elif section_data['Players']|length > 1 %}
-                                  <span class="section-reached">{{ section_data['Players']|length }} players</span>
+                              {% elif section.players|length > 1 %}
+                                  <span class="section-reached">{{ section.players|length }} players</span>
                               {% else %}
                                   <span class="section-reached no-players">No players</span>
                               {% endif %}
                           {% endif %}
                       </div>
           
-                      {% if section_data['Index'] >= progress_start and section_data['Players']|length > 0 %}
+                      {% if section.SectionIndex >= map.ProgressStart and section.players|length > 0 %}
                       <ul class="list list-section-players collapsed">
-                          {% for player in section_data['Players'] %}
+                          {% for player in section.players %}
                           <li>
-                              <a href="/profile/player/{{ player['ID'] }}" class="player-link">
-                                  <img src="https://vzge.me/face/{{ player['Name'] }}.png" onerror="this.src='https://vzge.me/face/X-Steve.png'" alt="{{ player['Name'] }}">
-                                  {{ player['Name'] }}
+                              <a href="{{ url_for('profile.player_profile', player_id = player.player.ID) }}" class="player-link">
+                                  <img src="https://vzge.me/face/{{ player.player.Name }}.png" onerror="this.src='https://vzge.me/face/X-Steve.png'" alt="{{ player.player.Name }}">
+                                  {{ player.player.Name }}
                               </a>
                           </li>
                           {% endfor %}
@@ -139,10 +141,10 @@
   </div>
 
   <script type="text/javascript">
-    const mapName = {{ map.MapName|tojson }};
+    const mapName = {{ map.Name|tojson }};
   </script>
   <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
-  <script src="{{ url_for('maps.static', filename='js/maps.js') }}"></script>
+  <script src="{{ url_for('maps.static', filename='js/map.js') }}"></script>
 {% endblock %}
 
 {% block bgscript %}

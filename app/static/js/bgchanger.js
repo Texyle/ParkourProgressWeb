@@ -1,4 +1,4 @@
-const interval = 20000;
+const interval = 5000;
 let cachedImages = [];
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -12,19 +12,20 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json())
             .then(data => {
                 const img = new Image();
-                img.src = data.image_url;
+                const path = `/static/${data.image_url}`;
+                img.src = path;
 
                 img.onload = function () {
                     document.body.style.transition = "background-image 1.5s ease-in-out";
-                    document.body.style.backgroundImage = `url('${data.image_url}')`;
+                    document.body.style.backgroundImage = `url('${path}')`;
 
-                    preloadImage(data.image_url);
+                    preloadImage(path);
 
                     setTimeout(changeBackground, interval);
                 };
 
                 img.onerror = function () {
-                    console.error("Error loading image:", data.image_url);
+                    console.error("Error loading image:", path);
                     setTimeout(changeBackground, interval);
                 };
             })
