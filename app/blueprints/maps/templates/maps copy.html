@@ -27,38 +27,39 @@
                     <div class="list-container">
                         <p>MAIN LIST</p>
                         {% for map in lists['Main'] %}
-                            <div class="map-container" onclick="window.location.href = `{{ url_for('maps.map_page', map_id=map.ID) }}`;">
+                            <div class="map-container" onclick="redirectToMapPage('{{ map['MapID'] }}')">
                                 <div class="map-field map-position">{{ loop.index0 + 1 }}</div>
                                 <div class="map-field map-title">
-                                    <div class="map-name">{% if map.Name == "Realm Of Champions CP Mode" %}ROC CP Mode{% else %}{{ map.Name }}{% endif %}</div>
-                                    <div class="map-creator">{{ map.Builder }}</div>
+                                    <div class="map-name">{% if map['Name'] == "Realm Of Champions CP Mode" %}ROC CP Mode{% else %}{{ map['Name'] }}{% endif %}</div>
+                                    <div class="map-creator">{{ map['Builder'] }}</div>
                                 </div>
 
-                                {% if map.FirstVictor is none %}
+                                {% if map['FirstVictorID'] is none %}
 
-                                    <div class="map-field map-status unverified">UNVERIFIED</div>
+                                <div class="map-field map-status unverified">UNVERIFIED</div>
 
                                 {% else %}
 
-                                    <div class="map-field map-status beaten">
-                                        <div class="beaten-by">
-                                            <div>Beaten by</div>
-                                            <div class="player-card">
-                                                <img class="flag" loading="lazy" src="{{ url_for('static', filename=flags[map.FirstVictor.player.CountryCode]) }}" alt="{{ code }}">
-                                                <div>{{ map.FirstVictor.player.Name }}</div>
-                                            </div>
+                                <div class="map-field map-status beaten">
+                                    <div class="beaten-by">
+                                        <div>Beaten by</div>
+                                        <div class="player-card">
+                                            <img class="flag" loading="lazy" src="{{ url_for('static', filename=flags[map['FirstVictorCountry']]) }}" alt="{{ code }}">
+                                            <div>{{ map['FirstVictorName'] }}</div>
                                         </div>
-                                        {% if map.victors|length - 1 > 0 %}
-                                            <div>
-                                                and {{ map.victors|length - 1 }} other{{ "" if map.victors|length - 1 == 1 else "s" }}
-                                            </div>
-                                        {% endif %}
                                     </div>
+                                    {% if map['VictorCount'] - 1 > 0 %}
+                                        <div>
+                                            and {{ map['VictorCount'] - 1 }} other{{ "" if map['VictorCount'] - 1 == 1 else "s" }}
+                                        </div>
+                                    {% endif %}
+                                </div>
 
                                 {% endif %}
 
                                 <div class="map-field map-image-container">
-                                    {% set map_name = map.Name|to_filename %}
+                                    {% set map_name = map['Name']|to_filename %}
+                                    {% set map_name = map_name ~ '_small' %}
                                     {% set filename = map_images[map_name] %}
                                     <img class="map-image" loading="lazy" src="{{ url_for('static', filename=filename) }}" alt="{{ map['Name'] }}">
                                 </div>
@@ -70,15 +71,15 @@
                 {% if lists['Extra'] | length > 0 %}
                     <div class="list-container">
                         <p>EXTRA LIST</p>
-                        {% set index_start = lists.Main|length %}
+                        {% set index_start = lists['Main']|length %}
                         {% for map in lists['Extra'] %}
-                            <div class="map-container" onclick="window.location.href = `{{ url_for('maps.map_page', map_id=map.ID) }}`;">
+                            <div class="map-container" onclick="redirectToMapPage('{{ map['MapID'] }}')">
                                 <div class="map-field map-position">{{ loop.index0 + 1 + index_start }}</div>
                                 <div class="map-field map-title">
                                     <div class="map-name">{{ map['Name'] }}</div>
                                     <div class="map-creator">{{ map['Builder'] }}</div>
                                 </div>
-                                {% if map.FirstVictor is none %}
+                                {% if map['FirstVictorID'] is none %}
 
                                 <div class="map-field map-status unverified">UNVERIFIED</div>
 
@@ -88,18 +89,19 @@
                                     <div class="beaten-by">
                                         <div>Beaten by</div>
                                         <div class="player-card">
-                                            <img class="flag" loading="lazy" src="{{ url_for('static', filename=flags[map.FirstVictor.player.CountryCode]) }}" alt="{{ code }}">
-                                            <div>{{ map.FirstVictor.player.Name }}</div>
+                                            <img class="flag" loading="lazy" src="{{ url_for('static', filename=flags[map['FirstVictorCountry']]) }}" alt="{{ code }}">
+                                            <div>{{ map['FirstVictorName'] }}</div>
                                         </div>
                                     </div>
-                                    {% if map.victors|length - 1 > 0 %}
-                                        <div>and {{ map.victors|length - 1 }} others</div>
+                                    {% if map['VictorCount']-1 > 0 %}
+                                        <div>and {{ map['VictorCount']-1 }} others</div>
                                     {% endif %}
                                 </div>
 
                                 {% endif %}
                                 <div class="map-field map-image-container">
                                     {% set map_name = map['Name']|to_filename %}
+                                    {% set map_name = map_name ~ '_small' %}
                                     {% set filename = map_images[map_name] %}
                                     <img class="map-image" loading="lazy" src="{{ url_for('static', filename=filename) }}" alt="{{ map['Name'] }}">
                                 </div>

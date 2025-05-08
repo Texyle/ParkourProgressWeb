@@ -14,7 +14,7 @@ def player_profile_initial():
                            players = [], 
                            player_data = None, 
                            gamemodes = [], 
-                           random_image=current_app.get_random_img())
+                           random_image=current_app.images.get_random_map_image())
 
 # not sure if this is needed, but keeping it for now
 # @bp.route('/player/<player_name>')
@@ -66,7 +66,7 @@ def player_profile(player_id: int):
                            players = [], 
                            player_data = None, 
                            gamemodes = [], 
-                           random_image=current_app.get_random_img())
+                           random_image=current_app.images.get_random_map_image())
     
 @bp.route("/country")
 def country_profile_initial():
@@ -84,7 +84,7 @@ def country_profile_initial():
                            gamemodes = [],
                            map_images = [],
                            flags = [],
-                           random_image=current_app.get_random_img())
+                           random_image=current_app.images.get_random_map_image())
 
 @bp.route("/country/<string:country_code>")
 def country_profile_with_country(country_code: str):
@@ -105,4 +105,4 @@ def country_profile_with_country(country_code: str):
                             gamemodes = [],
                             map_images = [],
                             flags = [],
-                            random_image=current_app.get_random_img())
+                            random_image=current_app.images.get_random_map_image())
