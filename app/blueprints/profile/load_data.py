@@ -1,85 +1,121 @@
-# Импортируем необходимые модели и расширения из приложения
-from app.models.player import Player  # Модель игрока
-from app.models.gamemode import Gamemode  # Модель игрового режима
-from app.models.victor import Victor  # Модель победителя
-from app.models.section import Section  # Модель секции
-from app.models.section_player import SectionPlayer  # Модель игрока в секции
-from app.extensions import db  # Расширение для работы с базой данных
+from app.models.player import Player
+from app.models.gamemode import Gamemode
+from app.models.victor import Victor
+from app.models.section import Section
+from app.models.section_player import SectionPlayer
+from app.models.map import Map
+from app.extensions import db
 from collections import Counter, defaultdict
 import pycountry
 
-# Функция для загрузки имен игроков и их ID
 def load_player_names():
-    # Выполняем запрос к базе данных, чтобы получить только имена и ID игроков
     player_names = Player.query.with_entities(Player.Name, Player.ID).all()
     
-    # Преобразуем результат в список словарей с ключами "Name" и "ID"
     return [{"Name": name, "ID": id} for name, id in player_names]
 
-# Функция для загрузки данных конкретного игрока по его ID
 def load_player(id: int):
-    # Выполняем запрос с использованием joinedload для загрузки связанных данных
     player_data = (
         Player.query
         .options(
-            db.joinedload(Player.victors).joinedload(Victor.map),  # Загрузка побед и связанных карт
-            db.joinedload(Player.sections).joinedload(SectionPlayer.section).joinedload(Section.map),  # Загрузка секций и связанных карт
-            db.joinedload(Player.sections).joinedload(SectionPlayer.player)  # Загрузка игроков в секциях
+            db.joinedload(Player.victors).joinedload(Victor.map),
+            db.joinedload(Player.sections).joinedload(SectionPlayer.section).joinedload(Section.map),
+            db.joinedload(Player.sections).joinedload(SectionPlayer.player)
         )
-        .filter_by(ID=id)  # Фильтруем по ID игрока
-        .first()  # Получаем первый (и единственный) результат
+        .filter_by(ID=id)
+        .first()
     )
     
-    # Возвращаем данные игрока
     return player_data
 
-# Функция для загрузки всех игровых режимов
 def load_gamemodes():
-    # Выполняем запрос к базе данных для получения всех игровых режимов
     gamemodes = Gamemode.query.all()
     
-    # Возвращаем список игровых режимов
     return gamemodes
 
-# Функция для загрузки статистики игроков по коду страны
-def load_stats(country_code: str):
+def load_country_data(country_code: str):
     players_data = (
         Player.query
+        .options(db.joinedload(Player.victors).joinedload(Victor.map))
         .filter(db.or_(Player.victors.any(), Player.sections.any()))
         .all()
     )
-    
-    countries = [{'Code': country.alpha_2.lower(), 'Name': country.name} for country in pycountry.countries]
-    
-    stats = {}
-    
-    players = {}
-    
-    for player in players_data:
-        if player.CountryCode not in players:
-            players[player.CountryCode] = []
             
-        players[player.CountryCode].append(player)
-        
-    sorted_countries = sorted(players, key=lambda k: len(players[k]), reverse=True)
-    stats["PlayerCountPosition"] = sorted_countries.index(country_code) + 1
-        
-    stats["PlayerCount"] = len(players[country_code])
-    stats["PlayerCountPercent"] = get_percent(stats["PlayerCount"], len(players))
-        
+    stats = {}
+    countries = {}
     
-    return stats
+    total_players = 0
+    total_completions = 0
+    total_fails = 0
+    for player in players_data:
+        if player.CountryCode not in countries:
+            countries[player.CountryCode] = {"Players": [], "Completions": 0, "Fails": 0}
+            
+        countries[player.CountryCode]["Players"].append(player)
+        
+        total_players += 1
+        total_completions += len(player.victors)
+        countries[player.CountryCode]["Completions"] += len(player.victors)
+        for victor in player.victors:
+            if victor.map.FailsMessage is not None:
+                total_fails += victor.Fails
+                countries[player.CountryCode]["Fails"] += victor.Fails
+                
+    if countries.get(country_code) is None:
+        return [], [], {}
+        
+    stats["PlayerCount"] = len(countries[country_code]["Players"])
+    stats["PlayerCountPercent"] = get_percent(stats["PlayerCount"], total_players)
+    sorted_countries = sorted(countries, key=lambda k: len(countries[k]["Players"]), reverse=True)
+    stats["PlayerCountPosition"] = sorted_countries.index(country_code) + 1
+    
+    stats["Completions"] = countries[country_code]["Completions"]
+    stats["CompletionsPercent"] = get_percent(countries[country_code]["Completions"], total_completions)
+    sorted_countries = sorted(countries, key=lambda k: countries[k]["Completions"], reverse=True)
+    stats["CompletionsPosition"] = sorted_countries.index(country_code) + 1
+    
+    stats["Fails"] = countries[country_code]["Fails"]
+    stats["FailsPercent"] = get_percent(countries[country_code]["Fails"], total_fails)
+    sorted_countries = sorted(countries, key=lambda k: countries[k]["Fails"], reverse=True)
+    stats["FailsPosition"] = sorted_countries.index(country_code) + 1
+    
+    maps = load_country_maps(country_code)
+    
+    return countries[country_code]["Players"], maps, stats
 
-def load_players(country_code: str):
-    # Выполняем запрос к базе данных для получения всех игроков
-    players = (
-        Player.query
-        .filter_by(CountryCode = country_code)
-        .filter(db.or_(Player.victors.any(), Player.sections.any()))
+def load_country_maps(country_code: str):
+    maps_data = (
+        Map.query
+        .options(
+            db.joinedload(Map.victors.and_(Victor.player.has(CountryCode=country_code))),
+            db.joinedload(Map.sections).joinedload(Section.players.and_(SectionPlayer.player.has(CountryCode=country_code)))
+        )
         .all()
     )
+        
+    for map in maps_data:
+        found = False
+        
+        for victor in map.victors:
+            map.CompletionStatus = "Victor"
+            map.FirstVictor = victor
+            found = True
+            
+            break
+        
+        if not found:
+            for section in reversed(map.sections):
+                for section_player in section.players:   
+                    map.CompletionStatus = "Section"
+                    map.FurthestPlayer = section_player
+                    map.FurthestSection = section.Name
+                    found = True
+                    
+                    break
+                
+                if found: break
+                    
+    return maps_data
     
-    return players
 
 def get_percent(a: int, b: int):
     percent = a / b * 100.0

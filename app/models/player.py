@@ -6,7 +6,7 @@ class Player(db.Model):
     ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     Name = db.Column(db.String(16), nullable=False, unique=True)
     DiscordID = db.Column(db.String(20))
-    CountryCode = db.Column(db.String(3), default='idk')
+    CountryCode = db.Column(db.String(3), default='idk', index=True)
     VisualFlag = db.Column(db.String(60))
     
     victors = db.relationship("Victor", back_populates="player")

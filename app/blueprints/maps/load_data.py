@@ -43,7 +43,5 @@ def load_map(id: int):
         .filter_by(ID = id)
         .first()
     )
-    
-    print(map_data.gamemode)
-    
+        
     return map_data

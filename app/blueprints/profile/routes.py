@@ -42,33 +42,26 @@ def player_profile(player_id: int):
     player_names = load_player_names()
     player = load_player(player_id)
     gamemodes = load_gamemodes()
-
-    return render_template("player_profile.html", 
-                           player_names = player_names, 
-                           player = player,
-                           player_name = player.Name,
-                           player_discord = player.DiscordID,
-                           player_data = None, 
-                           gamemodes = gamemodes, 
-                           map_images=current_app.images.small_map_images,
-                           random_image=current_app.images.get_random_map_image(),
-                           flags=current_app.images.flag_images)
+    
+    if player is not None:
+        return render_template("player_profile.html", 
+                            player_names = player_names, 
+                            player = player,
+                            player_name = player.Name,
+                            player_discord = player.DiscordID,
+                            player_data = None, 
+                            gamemodes = gamemodes, 
+                            map_images=current_app.images.small_map_images,
+                            random_image=current_app.images.get_random_map_image(),
+                            flags=current_app.images.flag_images)
+    else:
+        return render_template("notfound.html", random_image=current_app.images.get_random_map_image())
     
 @bp.route("/country")
 def country_profile_initial():
     countries = [{'Code': country.alpha_2.lower(), 'Name': country.name} for country in pycountry.countries]
-    stats = load_stats()
-#     gamemodes = database.fetch_gamemodes(app)
-#     return render_template("countryprofile.html", 
-#                            countries = countries,
-#                            data = None,
-#                            gamemodes = gamemodes,
-#                            map_images=files.map_images,
-#                            flags=files.flags, random_image=get_random_img())
     return render_template("country_profile.html", 
                            countries = countries,
-                           stats = None,
-                           data = None,
                            gamemodes = [],
                            map_images = [],
                            flags=current_app.images.flag_images,
@@ -76,30 +69,23 @@ def country_profile_initial():
 
 @bp.route("/country/<string:country_code>")
 def country_profile(country_code: str):
-#     if country_code.lower() not in [country.alpha_2.lower() for country in pycountry.countries]:
-#         return render_template("notfound.html", random_image=get_random_img())
-#     data = database.fetch_country_profile_data(app, country_code)
-#     countries = [{'Code': country.alpha_2.lower(), 'Name': country.name} for country in pycountry.countries]
-#     gamemodes = database.fetch_gamemodes(app)
-#     return render_template("countryprofile.html", 
-#                            countries = countries,
-#                            data = data,
-#                            map_images=files.map_images,
-#                            gamemodes = gamemodes,
-#                            flags=files.flags, random_image=get_random_img())
     countries = [{'Code': country.alpha_2.lower(), 'Name': country.name} for country in pycountry.countries]
-    stats = load_stats(country_code)
-    players = load_players(country_code)
+    
+    if not any(country['Code'] == country_code.lower() for country in countries):
+        return render_template("notfound.html", random_image=current_app.images.get_random_map_image())
+    
+    players, maps, stats = load_country_data(country_code)
     country_name = next((country['Name'] for country in countries if country['Code'] == country_code.lower()), None)
+    gamemodes = load_gamemodes()
     
     return render_template("country_profile.html", 
-                            data = None,
                             country_code = country_code,
                             country_name = country_name,
                             stats = stats,
                             players = players,
+                            maps = maps,
                             countries = countries,
-                            gamemodes = [],
-                            map_images = [],
+                            gamemodes = gamemodes,
+                            map_images = current_app.images.small_map_images,
                             flags=current_app.images.flag_images,
                             random_image=current_app.images.get_random_map_image())

@@ -5,8 +5,8 @@ class Section(db.Model):
     __tablename__ = 'Section'
     
     ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    MapID = db.Column(db.Integer, db.ForeignKey('Map.ID', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    SectionIndex = db.Column(db.SmallInteger, nullable=False)
+    MapID = db.Column(db.Integer, db.ForeignKey('Map.ID', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
+    SectionIndex = db.Column(db.SmallInteger, nullable=False, index=True)
     Name = db.Column(db.String(100), nullable=False)
     Role = db.Column(db.String(20))
 

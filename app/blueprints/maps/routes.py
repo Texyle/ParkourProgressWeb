@@ -16,6 +16,9 @@ def map_list():
 def map_page(map_id: int):
     map = load_map(map_id)
     
-    return render_template('map.html', 
-                           map = map, 
-                           random_image=current_app.images.get_random_map_image())
+    if map is not None:
+        return render_template('map.html', 
+                            map = map, 
+                            random_image=current_app.images.get_random_map_image())
+    else:
+        return render_template("notfound.html", random_image=current_app.images.get_random_map_image())
