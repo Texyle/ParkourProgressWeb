@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('profile.static', filename='css/country_profile.css') }}">
+    <title>Country Profile - Parkour Progress</title>
+{% endblock %}
+
+{% block content %}
+    <div id="main-container">
+        <div id="search-container">
+            <div id="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Enter country" autocomplete="off" id="search-input">
+                <div id="suggestions-container"></div>
+            </div>
+        </div>
+        {% if stats is not undefined %}
+            {% if players|length > 0 %}
+                <div id="profile-container">
+                    <div id="country-title-container">
+                        <img class="flag" src="{{ url_for('static', filename=flags[country_code]) }}" alt="{{ flag }}">
+                        <span>{{ country_name }}</span>
+                    </div>
+
+                    <div id="players-container">
+                        <div id="players-header-container">
+                            <span id="players-header-text">Players</span>
+                            <div class="info-icon">
+                                i
+                                <div class="popup">
+                                    <span>
+                                        Currently sorted by number of maps completed, will likely be changed when the ranking system is implemented.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="players-list-container">
+                            {% for player in players %}
+                                <div class="player-container" onclick="window.location.href = '{{ url_for('profile.player_profile', player_id = player.ID) }}';">
+                                    <img src="https://vzge.me/face/{{ player.Name }}" class="player-face">
+                                    {{ player.Name }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div id="stats-container">
+                        <div class="stat-container">
+                            <img src="{{ url_for('static', filename='images/icon-players.png') }}"/>
+                            <div class="stat-title">
+                                <span>Players</span>
+                                <span class="stat-number">{{ stats['PlayerCount'] }}</span>
+                            </div>
+                            <div class="stat-rankings">
+                                <span class="stat-rankings-1"><strong>{{ stats['PlayerCountPercent'] }}%</strong> of all players</span>
+                                <span class="stat-rankings-2"><strong>#{{ stats['PlayerCountPosition'] }}</strong> global</span>
+                            </div>
+                        </div>
+                        <div class="stat-container">
+                            <img src="{{ url_for('static', filename='images/icon-trophy.png') }}"/>
+                            <div class="stat-title">
+                                <span>Map completions</span>
+                                <span class="stat-number">{{ stats['Completions'] }}</span>
+                            </div>
+                            <div class="stat-rankings">
+                                <span class="stat-rankings-1"><strong>{{ stats['CompletionsPercent'] }}%</strong> of all completions</span>
+                                <span class="stat-rankings-2"><strong>#{{ stats['CompletionsPosition'] }}</strong> global</span>
+                            </div>
+                        </div>
+                        <div class="stat-container">
+                            <img src="{{ url_for('static', filename='images/icon-fails.svg') }}"/>
+                            <div class="stat-title">
+                                <span>Sky fails</span>
+                                <span class="stat-number">{{ stats['Fails'] }}</span>
+                            </div>
+                            <div class="stat-rankings">
+                                <span class="stat-rankings-1"><strong>{{ stats['FailsPercent'] }}%</strong> of all sky fails</span>
+                                <span class="stat-rankings-2"><strong>#{{ stats['FailsPosition'] }}</strong> global</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="maps-container">
+                        <div id="maps-header-container">
+                            <p>Maps</p>
+                            <div class="header-filters-container">
+                                <div class="gamemode-dropdown profile-dropdown">
+                                    <button onclick="toggleDropdown(event)" class="profile-dropdown-button">Gamemodes</button>
+                                    <div id="maps-gamemode-dropdown-content" class="filter-dropdown-content profile-dropdown-content">
+                                        {% for gamemode in gamemodes %}
+                                            <label>    
+                                                <input type="checkbox" value="Option {{ loop.index0 + 1 }}" checked>
+                                                <span class="custom-checkbox"></span>
+                                                <span class="label-text">{{ gamemode.Name }}</span>
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="progress-dropdown profile-dropdown">
+                                    <button onclick="toggleDropdown(event)" class="profile-dropdown-button">Progress</button>
+                                    <div id="maps-progress-dropdown-content" class="filter-dropdown-content profile-dropdown-content">
+                                        <label>    
+                                            <input type="checkbox" value="Option 1" checked>
+                                            <span class="custom-checkbox"></span>
+                                            <span class="label-text">Beaten</span>
+                                        </label>
+                                        <label>    
+                                            <input type="checkbox" value="Option 2" checked>
+                                            <span class="custom-checkbox"></span>
+                                            <span class="label-text">In progress</span>
+                                        </label>
+                                        <label>    
+                                            <input type="checkbox" value="Option 3" checked>
+                                            <span class="custom-checkbox"></span>
+                                            <span class="label-text">No progress</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="sort-wrapper">
+                                    <div class="sort-dropdown profile-dropdown">
+                                        <button onclick="toggleDropdown(event)" class="profile-dropdown-button" id="sort-button">Sort by: Date</button>
+                                        <div id="maps-sort-dropdown-content" class="sort-dropdown-content profile-dropdown-content">
+                                            <button onclick="selectOption(event, 'Date')">Date</button>
+                                            <button onclick="selectOption(event, 'Difficulty')">Difficulty</button>
+                                        </div>
+                                    </div>
+                                    <button id="sort-direction-button" class="profile-dropdown-button">
+                                        <span class="arrow">&#9660;</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="info-icon">
+                                i
+                                <div class="popup">
+                                    <span>
+                                        Sorting by date only works for beaten maps, the rest will go below in undefined order. Dont mind sarina's pipelines at the top when sorting by difficulty (this is because trial maps are above in the channel list, something will be done to prevent this).
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        {% set juku_cps = {
+                            "<@&1120013547892646050>": "CP2",
+                            "<@&1120013758920654909>": "CP3",
+                            "<@&1120013825907892265>": "CP4",
+                            "<@&1120013855746170940>": "CP5",
+                            "<@&1120013881847324823>": "CP6",
+                            "<@&1120013899991875724>": "CP7",
+                            "<@&1120013930782265425>": "CP8"
+                        } %}
+                        <div id="maps-list-container">
+                            {% for map in maps %}
+                                <div class="map-container" onclick="window.location.href = '{{ url_for('maps.map_page', map_id = map.ID) }}';" data-position="{{ map.Position }}">
+                                    <div class="map-field map-title">
+                                        <div class="map-name">{{ map.Name }}</div>
+                                    </div>
+                                    <div class="map-field map-type">
+                                        <div class="map-gamemode">{{ map.gamemode.Name }}</div>
+                                        <div class="map-status">{{ "Extra" if map.Extra else "Main" }}</div>
+                                    </div>
+                                    {% if map.CompletionStatus == 'Victor' %}
+                                        <div class="map-field map-progress map-progress-beaten" data-progress="Beaten">
+                                            <div class="map-progress-beaten-by">
+                                                <div>Beaten by</div>
+                                                <div class="player-card" onclick="event.stopPropagation(); window.location.href = '{{ url_for('profile.player_profile', player_id = map.FirstVictor.PlayerID) }}';">
+                                                    <img src="https://vzge.me/face/{{ map.FirstVictor.player.Name }}" class="player-face" alt="{{ map.FirstVictor.player.Name }}"/>
+                                                    <div>{{ map.FirstVictor.player.Name }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="map-progress-date">
+                                                on {{ map.FirstVictor.Date | format_date }}
+                                            </div>
+                                        </div>
+                                        {% elif map.CompletionStatus == 'Section' %}
+                                            <div class="map-field map-progress map-progress-progress" data-progress="In progress">
+                                                <div class="map-progress-furthest-progress">
+                                                    <div>Furthest progress by</div>
+                                                    <div class="player-card" onclick="event.stopPropagation(); window.location.href = '{{ url_for('profile.player_profile', player_id = map.FurthestPlayer.PlayerID) }}';">
+                                                        <img src="https://vzge.me/face/{{ map.FurthestPlayer.player.Name }}" class="player-face" alt="{{ map.FurthestPlayer.player.Name }}"/>
+                                                        <div>{{ map.FurthestPlayer.player.Name }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="map-progress-section">
+                                                    <div> at {% if map.Name == "Juku Section" %}{{ juku_cps.get(map.FurthestSection) }}{% else %}{{ map.FurthestSection }}{% endif %}</div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="map-field map-progress map-progress-none" data-progress="No progress">
+                                                No progress
+                                            </div>
+                                        {% endif %}
+                                    <div class="map-field map-image-container">
+                                        {% set map_name = map.Name|to_filename %}
+                                        {% set filename = map_images[map_name] %}
+                                        <img class="map-image" loading="lazy" src="{{ url_for('static', filename=filename) }}" alt="{{ map.Name }}">
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                {% else %}
+                    <div id="profile-container-empty">
+                        <div id="country-title-container">
+                            <img class="flag" src="{{ url_for('static', filename=flags[country_code]) }}" alt="{{ flag }}">
+                            <span>{{ country_name }}</span>
+                        </div>
+                        <div id="empty-container">
+                            <div class="wave-container">
+                                <h1 class="wave-text">
+                                    <span>E</span><span>M</span><span>P</span><span>T</span><span>Y</span>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+        {% endif %}
+    </div>
+
+    <script>
+        var countries = {{ countries | tojson }};
+        const flags = {{ flags | tojson }}
+    </script>
+    <script src="{{ url_for('profile.static', filename='js/country_profile.js') }}"></script>
+{% endblock %}
