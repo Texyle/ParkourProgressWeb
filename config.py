@@ -5,12 +5,12 @@ from sqlalchemy.engine import URL
 load_dotenv()
 
 class Config:
-    FLASK_DEBUG = os.getenv("FLASK_DEBUG", True)
+    FLASK_DEBUG = FLASK_DEBUG = (os.getenv("FLASK_DEBUG", "False") == "True")
     FLASK_RUN_HOST = os.getenv("FLASK_RUN_HOST", "0.0.0.0")
     FLASK_RUN_PORT = int(os.getenv("FLASK_RUN_PORT", 20000))
     PREFERRED_URL_SCHEME = os.getenv("PREFERRED_URL_SCHEME", "https")
     SECRET_KEY = os.getenv("SECRET_KEY")
-    SQLALCHEMY_ECHO = os.getenv("SQLALCHEMY_ECHO", True)
+    SQLALCHEMY_ECHO = (os.getenv("SQLALCHEMY_ECHO", "False") == "True")
 
     DISCORD_CLIENT_ID = os.getenv("DISCORD_CLIENT_ID")
     DISCORD_CLIENT_SECRET = os.getenv("DISCORD_CLIENT_SECRET")
