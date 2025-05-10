@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <script src="/static/js/navbar.js" defer></script>
+    {% endblock %}
+</head>
+<body class="darken">
+    <style>
+        body {
+            background-image: url("/static/{{ random_image }}");
+        }
+    </style>
+    <header>
+        <div class="logo">
+            <a href="/"><img src="/static/images/icon.jpg" alt="Logo" class="logo-image"></a>
+            <div class="logo-text">
+                <a href="/">Parkour Progress</a>
+                <p>Crafted by ImChill1n and Texyle</p>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/staff" class="nav-link">Staff</a></li>
+                <li><a href="/maps" class="nav-link">Maps</a></li>
+                <div class="dropdown">
+                    <li><a class="nav-link">Profile</a></li>
+                    <div class="dropdown-content">
+                      <a href="/profile/player">Player</a>
+                      <a href="/profile/country">Country</a>
+                    </div>
+                </div>
+                <!-- <div class="dropdown">
+                    <li><a class="nav-link">Leaderboard</a></li>
+                    <div class="dropdown-content">
+                      <a href="/leaderboard/players">Players</a>
+                      <a href="/leaderboard/country">Country</a>
+                    </div>
+                </div> -->
+            </ul>
+        </nav>
+        <div class="discord-container">
+            <div class="discord-button">
+                <a href="https://discord.gg/n6uxKDMsNZ" target="_blank">
+                    <i class="fab fa-discord"></i> Join Discord
+                </a>
+            </div>
+            <div class="discord-widget">
+                <iframe src="https://discord.com/widget?id=913838786947977256&theme=dark" width="350" height="650" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+            </div>
+        </div>
+    </header>
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <i class="far fa-eye eye-icon"></i>
+
+    {% block bgscript %}
+        <script src="{{ url_for('static', filename='js/bgchanger.js') }}" defer></script>
+    {% endblock %}
+    <script src="{{ url_for('static', filename='js/showbg.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pagetitle.js') }}"></script>
+</body>
+</html>

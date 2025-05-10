@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+    <title>404 - Parkour Progress</title>
+    <link rel="stylesheet" href="/static/css/notfoundstyles.css">
+{% endblock %}
+
+{% block content %}
+    <section class="info">
+        <h1>404: Page Not Found</h1>
+        <div id="imgbtn">
+            <img src="/static/images/404.webp" alt="404">
+            <button id="btn" onclick="window.location.href = '{{ url_for('home.home') }}';">Return to Main Page</button>
+        </div>
+    </section>
+{% endblock %}
