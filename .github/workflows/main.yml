@@ -3,7 +3,11 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - master
+      - stable
+  pull_request:
+    branches:
+      - stable
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -24,5 +28,5 @@ jobs:
       run: |
         echo "$SSH_PRIVATE_KEY" > private_key
         chmod 600 private_key
-        rsync -avz --delete --exclude='.venv' -e "ssh -i private_key -o StrictHostKeyChecking=no" . $SERVER_USER@$SERVER_HOST:$SERVER_PATH
+        rsync -avz --delete --exclude='.venv' --exclude='.env' -e "ssh -i private_key -o StrictHostKeyChecking=no" . $SERVER_USER@$SERVER_HOST:$SERVER_PATH
         rm private_key
