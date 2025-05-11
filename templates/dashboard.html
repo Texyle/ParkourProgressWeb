@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardstyles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+</head>
+<body class="dark-mode">
+    <div id="container">
+        <div id="sidebar">
+            <div id="logo">
+                <img src="/static/images/icon-circle.png" alt="Logo"/>
+                <p>Parkour Progress</p>
+            </div>
+            <ul id="tabs">
+                <li class="divider" data-tab="logs">
+                    <img src="/static/images/dashboard/icon-logs.svg" alt="Logs"/>
+                    <div class="tab-text-container">
+                        <span class="tab-name">LOGS</span>
+                        <span class="tab-description">See logs</span>
+                    </div>
+                </li>
+                <li class="selected" data-tab="progress">
+                    <img src="/static/images/dashboard/icon-progress.svg" alt="Progress"/>
+                    <div class="tab-text-container">
+                        <span class="tab-name">PROGRESS</span>
+                        <span class="tab-description">Update progress</span>
+                    </div>
+                </li>
+                <li data-tab="players">
+                    <img src="/static/images/dashboard/icon-players.svg" alt="Players"/>
+                    <div class="tab-text-container">
+                        <span class="tab-name">PLAYERS</span>
+                        <span class="tab-description">Manage player info</span>
+                    </div>
+                </li>
+                <li class="divider" data-tab="maps">
+                    <img src="/static/images/dashboard/icon-maps.svg" alt="Maps"/>
+                    <div class="tab-text-container">
+                        <span class="tab-name">MAPS</span>
+                        <span class="tab-description">Manage map info</span>
+                    </div>
+                </li>
+                <li class="show-for-role divider" data-roles="['Developer', 'Admin']" data-tab="backups">
+                    <img src="/static/images/dashboard/icon-backups.svg" alt="Backups"/>
+                    <div class="tab-text-container">
+                        <span class="tab-name">BACKUPS</span>
+                        <span class="tab-description">Load data backups</span>
+                    </div>
+                </li>
+                <li class="show-for-role" data-roles="['Admin']" data-tab="staff">
+                    <img src="/static/images/dashboard/icon-staff.svg" alt="Staff"/>
+                    <div class="tab-text-container">
+                        <span class="tab-name">STAFF</span>
+                        <span class="tab-description">Manage staff members</span>
+                    </div>
+                </li>
+            </ul>
+            <div id="user-container">
+                <img src="" id="avatar"/>
+                <div id="user-text-container">
+                    <span id="user-name">{{discordname}}</span>
+                    <span id="role-list">
+                        {% if pos|length != 1 %}
+                        {{" | ".join(pos)}}
+                        {% else %}
+                        {{ pos[0] }}
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div id="content">
+            <div class="tab" data-tab="logs">
+                logs
+            <div class="tab selected default" data-tab="logs">
+                <h1 class="logs-header">LOGS</h1>
+            
+                <div class="logs-controls">
+                    <div class="dropdown">
+                        <button class="dropdown-toggle">Sort by: Date ▼</button>
+                        <div class="dropdown-menu">
+                            <label><input type="radio" name="sort" value="asc"> Date Ascending</label>
+                            <label><input type="radio" name="sort" value="desc"> Date Descending</label>
+                        </div>
+                    </div>
+            
+                    <div class="dropdown">
+                        <button class="dropdown-toggle">Filter by: Action ▼</button>
+                        <div class="dropdown-menu">
+                            <label><input type="checkbox" value="map_change"> Map Change</label>
+                            <label><input type="checkbox" value="progress_change"> Progress Change</label>
+                            <label><input type="checkbox" value="player_edit"> Player Edit</label>
+                            <label><input type="checkbox" value="backup_load"> Backup Load</label>
+                        </div>
+                    </div>
+            
+                    <div class="dropdown">
+                        <button class="dropdown-toggle">Filter by: Staff ▼</button>
+                        <div class="dropdown-menu">
+                            <label><input type="checkbox" value="staff1"> Staff 1</label>
+                            <label><input type="checkbox" value="staff2"> Staff 2</label>
+                            <label><input type="checkbox" value="staff3"> Staff 3</label>
+                        </div>
+                    </div>
+            
+                    <div class="date-picker">
+                        <label>Date Range:</label>
+                        <input type="date">
+                        <input type="date">
+                    </div>
+                </div>
+            
+                <p class="results-found">Results Found: 0</p>
+            </div>
+            
+
+            <div class="tab" data-tab="progress">
+                <div id="progress-container">
+                    <div id="progress-maps-container">
+                        <div class="search-container">
+                            <div class="search-bar">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" placeholder="Enter map name" id="map-search" autocomplete="off">
+                            </div>
+                        </div>
+                        <div id="progress-maps-list-container">
+                            <ul id="progress-gamemodes">
+                                <li class="progress-gamemode">
+                                    <span class="gamemode-name">RANKUP</span>
+                                    <ul class="progress-gamemode-maps">
+                                        <li data-mapid="123">Pandora's Box</li>
+                                        <li data-mapid="234">Mako Reactor</li>
+                                    </ul>
+                                </li>
+                                <li class="progress-gamemode">
+                                    <span class="gamemode-name">SEGMENTED</span>
+                                    <ul class="progress-gamemode-maps">
+                                        <li data-mapid="345">Ettc Section</li>
+                                        <li data-mapid="456">Mako Reactor</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div id="progress-sections-container">
+                        <div class="search-container">
+                            <div class="search-bar">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" placeholder="Enter player name" id="map-search" autocomplete="off">
+                            </div>
+                        </div>
+                        <div id="progress-sections-list-container">
+                            <ul id="progress-sections">
+                                <li class="progress-section">
+                                    <span class="progress-section-name">S1</span>
+                                    <ul class="progress-section-players">
+                                        <li>Texyle</li>
+                                        <li>RubyGemstoneCat</li>
+                                    </ul>
+                                </li>
+                                <li class="progress-section">
+                                    <span class="progress-section-name">S2</span>
+                                    <ul class="progress-section-players">
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="progress-victors-container">
+                            <span>VICTORS</span>
+                            <ul id="progress-victors">
+                                <li>
+                                    
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab" data-tab="players">
+                players
+            </div>
+
+            <div class="tab" data-tab="maps">
+                maps
+            </div>
+
+            <div class="tab" data-tab="backups">
+                backups
+            </div>
+
+            <div class="tab" data-tab="staff">
+                staff
+            </div>
+        </div>
+    </div>
+
+    <div class="switch-container" onclick="toggleTheme()">
+        <div class="switch-circle">
+            <i class="fas fa-moon"></i>
+        </div>
+    </div>
+
+    <script>
+        const discordId = {{ discordid | tojson }};
+        const userRoles = {{ pos | tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='js/dashboard/perms.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dashboard/utils.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dashboard/progress.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dashboard/design/progress.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dashboard/design/tabs.js') }}"></script>
+</body>
+</html>
+

@@ -1,0 +1,19 @@
+#main-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: rgba(44, 42, 42, 0.965);
+    min-height: 90%;
+    width: 60rem;
+    max-width: 100vw;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 4px black inset;
+    border: 3px solid gray;
+    position: relative;
+    z-index: 10;
+    margin-bottom: 5rem;
+}
+
+.hoverinfo {
+    background-color: rgba(44, 42, 42, 0.965) !important;
+}
