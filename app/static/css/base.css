@@ -1,0 +1,360 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    font-family: 'Montserrat';
+    font-size: 16px;
+    color: #e0e0e0;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    transition: background-image 1.5s ease-in-out;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0);
+    transition: background-color 0.2s ease;
+    pointer-events: none; 
+}
+body.darken::before {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+body button {
+    font-family: 'Montserrat';
+    font-size: 16px;
+    color: #e0e0e0;
+}
+
+#content {
+    height: 100%;
+    justify-content: center;
+    place-items: center;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-top: 2rem;
+    transition: opacity 0.2s;
+}
+
+#content::-webkit-scrollbar {
+    width: 8px;
+}
+
+#content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#content::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+}
+
+#content::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1a1a1a;
+    margin-bottom: 0rem;
+    padding: 0 1vh 0 1vh;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    flex-shrink: 0;
+    z-index: 10000;
+    height: 9vh;
+    /* flex-wrap: wrap; */
+    /* overflow-x: scroll; */
+}
+
+header > * {
+    display: flex;
+    justify-content: center;
+    max-height: 9vh;
+    flex-shrink: 0; /* Prevent items from shrinking */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-image {
+    width: 6vh;
+    height: auto;
+    margin-right: 1vw;
+    border-radius: 50%;
+}
+
+.logo a {
+    text-decoration: none;
+    color: #e0e0e0;
+    font-size: 2.5vh;
+    font-weight: bold;
+}
+
+.logo p {
+    font-size: 1.5vh;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1vh 0 0 0;
+}
+
+nav ul {
+    list-style: none;
+    display: contents;
+    gap: 2vh;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+}
+
+nav ul li a {
+    text-decoration: none;
+    font-size: 2vh;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    color: #e0e0e0;
+    padding: 1vh 1.5vh;
+    position: relative;
+    transition: color 0.4s ease-in-out;
+}
+
+nav ul .dropdown li a {
+    text-decoration: none;
+    font-size: 2vh;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    color: #e0e0e0;
+    padding: 1vh 1.5vh;
+    position: relative;
+    transition: color 0.4s ease-in-out;
+} 
+
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -0.3vh;
+    width: 0;
+    height: 0.3vh;
+    background-color: yellow;
+    transition: all 0.4s ease-in-out;
+    transform: translateX(-50%);
+}
+
+nav ul li a:hover {
+    color: yellow;
+    cursor: pointer;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+nav ul li a.active,
+nav ul li a:hover {
+    color: yellow;
+}
+
+nav ul li a.active::after,
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+header nav ul > li {
+    order: 1; /* Ensure <li> elements appear first */
+}
+
+header nav ul > div {
+    order: 2; /* Ensure <div> elements appear after <li> elements */
+}
+  
+.dropdown {
+    float: left;
+    /* overflow: hidden; */
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+  
+.dropdown .dropbtn {
+    font-size: 2vh;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 2vw 2vh;
+    background-color: inherit;
+    font-family: Arial; 
+    margin: 0; 
+}
+  
+.dropdown-content {
+    max-height: 0px;
+    overflow: hidden;
+    position: absolute;
+    background-color: rgb(40, 40, 40);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    margin-left: 1vw;
+    transition: max-height 0.3s;
+    top: 100%;
+}
+  
+.dropdown-content a {
+    float: none;
+    color: white;
+    padding: 1vh 1vw;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    width: auto;
+    font-size: 2vh;
+}
+  
+.dropdown-content a:hover {
+    color: yellow;
+    background-color: rgba(0, 0, 0, 0.2);
+    transition: ease-in-out 0.1s;
+}
+  
+.dropdown:hover .dropdown-content {
+    /* display: block; */
+    visibility: visible;
+    max-height: 6rem;
+}
+
+.dashboard-button a {
+    display: flex;
+    align-items: center;
+    gap: 1vh;
+    text-decoration: none;
+    background-color: #0cb143;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.dashboard-button i {
+    font-size: 2.5vh;
+}
+
+.dashboard-button a:hover {
+    background-color: #07642b;
+    transform: scale(1.05);
+}
+
+.discord-button a {
+    display: flex;
+    align-items: center;
+    gap: 1vh;
+    text-decoration: none;
+    background-color: #5865F2;
+    color: white;
+    padding: 1vh 1vw;
+    border-radius: 0.6vh;
+    font-weight: bold;
+    font-size: 2vh;
+}
+
+.discord-button i {
+    font-size: 2.5vh;
+}
+
+.discord-button a:hover {
+    background-color: #5b6eae;
+    transform: scale(1.05);
+}
+
+.discord-container {
+    position: relative;
+    display: flex;
+}
+
+.discord-widget {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 100%;
+    left: -370px;
+    z-index: 1;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out !important;
+}
+
+.discord-button:hover + .discord-widget {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+@media (max-width: 768px) {
+    header {
+        /* flex-direction: column;
+        align-items: flex-start; */
+    }
+
+    nav ul {
+        flex-direction: column;
+        /* margin-top: 10px; */
+        margin: 0;
+    }
+
+    nav ul li {
+        /* margin: 5px 0; */
+    }
+
+    .discord-button {
+        /* margin-top: 10px; */
+    }
+
+    .login-button {
+        /* margin-top: 10px; */
+    }
+}
+
+.flag {
+    height: 1rem;
+    width: 1.5rem;
+    border-radius: 15%;
+    box-shadow: 0px 0px 4px 1px rgb(20, 20, 20);
+}
+
+.eye-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 50%;
+    z-index: 1000;
+    transition: color 0.2s, font-size 0.2s;
+}
+
+.eye-icon:hover ~ .content {
+    opacity: 0;
+}
+
+.eye-icon:hover {
+    color: #ffeb3b;
+}

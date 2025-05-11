@@ -1,0 +1,9 @@
+flask
+mysql-connector-python
+flask-cors
+pycountry
+embeddify
+python-dotenv
+flask_discord
+cryptography
+Flask-SQLAlchemy
