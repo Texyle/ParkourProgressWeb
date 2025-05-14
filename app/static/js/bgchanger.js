@@ -1,4 +1,4 @@
-const interval = 5000;
+const interval = 20000;
 let cachedImages = [];
 
 document.addEventListener("DOMContentLoaded", function () {

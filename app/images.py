@@ -12,7 +12,7 @@ class Images:
     def load_all(self):
         static_folder = current_app.static_folder
         
-        maps_folder = "images/maps"
+        maps_folder = "images/maps/compressed_copies"
         small_maps_folder = "images/maps/small_copies"
         flags_folder = "images/flags"
         
@@ -41,12 +41,12 @@ class Images:
             return choice(list(self.map_images.values())) if self.map_images else None
 
     def get_map_image(self, map_name: str, small: bool = False):
-        file_name = re.sub(r"[^\w]", "", map_name)
+        file_name = re.sub(r"[^\w]", "", map_name.lower())
 
         if small:
             return self.small_map_images.get(file_name)
         else:
             return self.map_images.get(file_name)
-
+        
     def get_flag_image(self, country_code: str):
         return self.flag_images.get(country_code.lower())
