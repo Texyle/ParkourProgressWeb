@@ -6,6 +6,7 @@
 
 ### Changed
   - Running the project will now create local database file instead of having to connect to the server
+  - Significantly compressed map images (background on all pages) in hopes of improving load times
 
 ## [1.0.1] - 2025-05-09
 
