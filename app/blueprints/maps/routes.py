@@ -18,7 +18,6 @@ def map_page(map_id: int):
     
     if map is not None:
         return render_template('map.html', 
-                            map = map, 
-                            random_image=current_app.images.get_random_map_image())
+                            map = map)
     else:
         return render_template("notfound.html", random_image=current_app.images.get_random_map_image())

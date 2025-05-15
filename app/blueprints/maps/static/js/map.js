@@ -23,6 +23,18 @@ async function loadData() {
     });
 }
 
+async function loadMapImage(mapName) {
+    try {
+        const response = await fetch(`/mapImage/${mapName}`);
+        const data = await response.json();
+        const path = `/static/${data.image_url}`;
+        return path;
+    } catch (error) {
+        console.error("Error fetching background image:", error);
+        throw error;
+    }
+}
+
 function getAbsoluteHeight(el) {
     el = (typeof el === 'string') ? document.querySelector(el) : el; 
   

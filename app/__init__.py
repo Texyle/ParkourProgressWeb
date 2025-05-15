@@ -3,6 +3,18 @@ from config import Config
 from app.extensions import db
 from app.images import Images
 
+from app.models.gamemode import Gamemode
+from app.models.credentials import Credentials
+from app.models.log import Log
+from app.models.map import Map 
+from app.models.message import Message
+from app.models.player import Player
+from app.models.section_player import SectionPlayer
+from app.models.section import Section
+from app.models.staff import Staff
+from app.models.victor_separator import VictorSeparator
+from app.models.victor import Victor
+
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
@@ -13,7 +25,6 @@ def create_app(config_class=Config):
     app.images = Images()
     with app.app_context():
         app.images.load_all()
-
 
     from app.blueprints.home import bp as home_bp
     app.register_blueprint(home_bp, url_prefix='/home')
