@@ -7,6 +7,7 @@
 ### Changed
   - Running the project will now create local database file instead of having to connect to the server
   - Significantly compressed map images (background on all pages) in hopes of improving load times
+  - Fixed all date formats to be consistent (Jan 01, 1999)
   - Added missing indexes which should improve map list loading
 
 ## [1.0.1] - 2025-05-09
