@@ -1,5 +1,6 @@
 const interval = 20000;
-let cachedImages = [];
+let isCooldown = false;
+let changeTimeout = null;
 
 document.addEventListener("DOMContentLoaded", function () {
     function preloadImage(url) {
@@ -8,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function changeBackground() {
+        isCooldown = true;
         fetch("/randomImage")
             .then(response => response.json())
             .then(data => {
@@ -21,19 +23,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     preloadImage(path);
 
-                    setTimeout(changeBackground, interval);
+                    setTimeout(() => {
+                        isCooldown = false;
+                    }, 1500);
+
+                    clearTimeout(changeTimeout);
+                    changeTimeout = setTimeout(changeBackground, interval);
                 };
 
                 img.onerror = function () {
                     console.error("Error loading image:", path);
-                    setTimeout(changeBackground, interval);
+                    setTimeout(() => {
+                        isCooldown = false;
+                    }, 500);
+                    clearTimeout(changeTimeout);
+                    changeTimeout = setTimeout(changeBackground, interval);
                 };
             })
             .catch(error => {
                 console.error("Error fetching background image:", error);
-                setTimeout(changeBackground, interval);
+                setTimeout(() => {
+                    isCooldown = false;
+                }, 500);
+                clearTimeout(changeTimeout);
+                changeTimeout = setTimeout(changeBackground, interval);
             });
     }
 
-    setTimeout(changeBackground, interval);
+    changeTimeout = setTimeout(changeBackground, interval);
+
+    document.body.addEventListener("click", function (e) {
+        console.log(e.target);
+        if (e.target.classList.contains("eye-icon") && !isCooldown) {
+            changeBackground();
+        }
+    });
 });

@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Added
+  - Clicking on the eye icon will now force the background image to switch
 
 ### Changed
   - Running the project will now create local database file instead of having to connect to the server
