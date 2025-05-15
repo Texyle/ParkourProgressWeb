@@ -1,0 +1,203 @@
+#progress-container {
+    display: flex;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+#progress-maps-container {
+    width: 30rem;
+    height: 90%;
+    background-color: rgba(40, 40, 60, 1);
+    background: linear-gradient(180deg, rgba(43, 47, 66, 1) 0%, rgba(63, 67, 76, 1) 100%);
+    /* background: linear-gradient(180deg,rgba(55, 67, 196, 1) 0%, rgba(122, 130, 194, 1) 100%); */
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px 0px black;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 2;
+}
+
+#progress-maps-list-container {
+    flex-grow: 1;
+}
+
+#progress-gamemodes {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    gap: 1rem;
+}
+
+#progress-gamemodes li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.progress-gamemode:not(:last-child) {
+    margin-bottom: 1rem;
+}
+
+.progress-gamemode-name {
+    color: white !important;
+    font-size: 2.5rem;
+    font-weight: bold;
+    border-bottom: 1px solid white;
+    width: 75%;
+    text-align: center;
+}
+
+.progress-gamemode-maps {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.progress-gamemode-maps li {
+    margin-top: 0.3rem;
+    font-size: 1.3rem;
+    position: relative;
+    flex-direction: row !important;
+    cursor: pointer;
+    color: rgb(220, 220, 220);
+    transition: color 0.3s;
+}
+
+.progress-gamemode-maps li:hover {
+    color: white;
+}
+
+.progress-gamemode-maps li:before {
+    content: "|";
+    margin-right: 10px;
+    display: inline-block;
+    opacity: 0;
+    -webkit-transform: translateX(20px);
+    -moz-transform: translateX(20px);
+    transform: translateX(20px);
+    -webkit-transition: -webkit-transform 0.3s, opacity 0.2s;
+    -moz-transition: -moz-transform 0.3s, opacity 0.2s;
+    transition: transform 0.3s, opacity 0.2s;
+}
+  
+.progress-gamemode-maps li:after {
+    content: "|";
+    margin-left: 10px;
+    display: inline-block;
+    opacity: 0;
+    -webkit-transition: -webkit-transform 0.3s, opacity 0.2s;
+    -moz-transition: -moz-transform 0.3s, opacity 0.2s;
+    transition: transform 0.3s, opacity 0.2s;
+    -webkit-transform: translateX(-20px);
+    -moz-transform: translateX(-20px);
+    transform: translateX(-20px);
+}
+  
+.progress-gamemode-maps li:hover:before,
+.progress-gamemode-maps li:hover:after {
+    opacity: 1;
+    -webkit-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    transform: translateX(0px);
+}
+
+
+
+
+#progress-sections-container {
+    width: 30rem;
+    height: 90%;
+    background-color: rgba(40, 40, 50, 1);
+    /* background: linear-gradient(180deg,rgba(60, 80, 222, 1) 0%, rgba(101, 108, 167, 1) 100%); */
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px black inset;
+    position: relative;
+    transform: translateX(-0.5rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: hidden;
+}
+
+#progress-sections-list-container {
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#progress-sections {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 80%;
+}
+
+.progress-section {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    min-height: 1.5rem;
+}
+
+.progress-section-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.progress-section-players {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    /* border: 1px solid gray; */
+    border-radius: 1rem;
+    box-shadow: 0 0 6px 0 black inset;
+    padding: 10px;
+    background-color: rgba(200, 200, 255, 0.15);
+    width: 90%;
+    line-height: 1.6;
+    text-align: center;
+    transition: min-height 0.3s;
+}
+
+.progress-section-players li {
+    display: inline-block;
+    margin: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    padding: 0 4px 0 4px;
+    box-shadow: 0 0 4px 0 black;
+    cursor: grab; /* Change cursor to indicate draggable */
+    /*transition: transform 0.2s;*/
+}
+
+.progress-section-players li.sortable-drag {
+    opacity: 0.8;
+    transform: scale(1.05);
+    will-change: transform;
+}
+
+.progress-section-players li:not(:last-child) {
+    margin-bottom: 4px;
+}
+
+.progress-sortable-ghost {
+    border: 1px dashed rgb(200, 200, 200) !important;
+    color: rgb(200, 200, 200) !important;
+}
+
+#progress-victors {
+
+}

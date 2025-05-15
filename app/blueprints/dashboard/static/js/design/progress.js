@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", function () {
         selectProgressMap(event.target);
       });
     });
+
+    doDragAndDrop();
 });
 
 function selectProgressMap(mapButton) {
@@ -13,22 +15,16 @@ function selectProgressMap(mapButton) {
     sectionsContainer = document.getElementById("progress-sections-container");
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  var progressSections = document.querySelectorAll('.progress-section-players');
+function doDragAndDrop() {
+    var sectionPlayers = document.querySelectorAll('.progress-section-players');
 
-  progressSections.forEach(function (section) {
-    new Sortable(section, {
-      group: 'shared',
-      animation: 300,
-      ghostClass: 'sortable-drag',
-      dragClass: 'sortable-drag',
-      chosenClass: 'sortable-chosen',
-      fallbackOnBody: true,
-      fallbackTolerance: 5,
-      easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-      onEnd: function (evt) {
-        console.log('Item moved from', evt.from, 'to', evt.to);
-      }
+    const options = {
+        group: "section",
+        animation: 250,
+        ghostClass: "progress-sortable-ghost"
+    };
+
+    sectionPlayers.forEach(container => {
+        var sortable = Sortable.create(container, options);
     });
-  });
-});
+}
