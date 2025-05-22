@@ -66,7 +66,7 @@
                         {% if map.FailsMessage %}
                           <td>
                             <div style="font-style: italic; //color: #4e9aff; font-size: 1.1rem;">
-                              {{ victor.Date }}
+                              {{ victor.Date | format_date }}
                             </div>
                           </td>
                           <td>
@@ -78,7 +78,7 @@
                           <td></td> 
                           <td>
                             <div style="font-style: italic; //color: #4e9aff; font-size: 1.1rem;">
-                              {{ victor.Date }}
+                              {{ victor.Date | format_date }}
                             </div>
                           </td>
                         {% endif %}
