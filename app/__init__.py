@@ -25,6 +25,7 @@ def create_app(config_class=Config):
     app.images = Images()
     with app.app_context():
         app.images.load_all()
+        db.create_all()
 
     from app.blueprints.home import bp as home_bp
     app.register_blueprint(home_bp, url_prefix='/home')
