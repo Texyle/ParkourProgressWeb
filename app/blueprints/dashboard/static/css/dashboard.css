@@ -394,3 +394,72 @@ input:focus {
     font-size: 16px;
     color: rgba(44, 42, 42, 0.965);
 }
+
+.modal {
+    position: fixed;
+    z-index: 10000;
+    left: 50%;
+    top: 50%;
+    margin: -7.5rem -15rem;
+    width: 30rem;
+    height: 15rem;
+    background: linear-gradient(0deg,rgba(103, 97, 126, 1) 0%, rgba(71, 73, 109, 1) 100%);
+    border-radius: 1rem;
+    border: 2px solid white;
+    box-shadow: 0px 0px 20px 0px black;
+    display: block;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-out;
+}
+
+.modal-header {
+    display: flex;
+    min-height: 3rem;
+    border-bottom: 1px solid gray;
+    margin: 0;
+    justify-content: space-between;
+    padding: 0 1rem 0 1rem;
+    align-items: center;
+}
+
+.modal-title {
+    padding: 0;
+    margin: 0;
+    align-content: center;
+}
+
+.modal-close {
+  color: #aaa !important;
+  float: right;
+  font-size: 2rem;
+  font-weight: bold;
+  align-content: center;
+  line-height: 1rem;
+  padding: 3px;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  transition: border 0.2s, box-shadow 0.2s, color 0.2s;
+}
+
+.modal-close:hover {
+    border: 1px solid rgb(250, 200, 200);
+    box-shadow: 0 0 2px 2px #333 inset;
+    color: rgb(250, 130, 130) !important;
+}
+
+.modal-close:active {
+    color: rgb(250, 80, 80) !important;
+    border: 1px solid rgb(250, 100, 100);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    z-index: 999;
+    display: none;
+    transition: background-color 0.3s;
+}

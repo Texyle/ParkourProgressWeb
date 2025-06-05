@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 </head>
 <body class="dark-mode">
     <div id="container">
@@ -149,36 +149,63 @@
                     </div>
 
                     <div id="progress-sections-container">
-                        <div class="search-container">
-                            <div class="search-bar">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                <input type="text" placeholder="Enter player name" id="map-search" autocomplete="off">
+                        <div id="progress-list-wrapper">
+                            <div class="search-container">
+                                <div class="search-bar">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    <input type="text" placeholder="Enter player name" id="map-search" autocomplete="off">
+                                </div>
                             </div>
-                        </div>
-                        <div id="progress-sections-list-container">
-                            <ul id="progress-sections">
-                                <li class="progress-section">
-                                    <span class="progress-section-name">S1</span>
-                                    <ul class="progress-section-players">
-                                        <li>Texyle</li>
-                                        <li>RubyGemstoneCat</li>
-                                    </ul>
-                                </li>
-                                <li class="progress-section">
-                                    <span class="progress-section-name">S2</span>
-                                    <ul class="progress-section-players">
+                            <div id="progress-sections-list-container">
+                                <ul id="progress-sections">
+                                    <li class="progress-section">
+                                        <span class="progress-section-name">S1</span>
+                                        <ul class="progress-section-players">
+                                            <li class="progress-section-player">Texyle</li>
+                                            <li class="progress-section-player">RubyGemstoneCat</li>
+                                        </ul>
+                                    </li>
+                                    <li class="progress-section">
+                                        <span class="progress-section-name">S2</span>
+                                        <ul class="progress-section-players">
 
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div id="progress-victors-container">
-                            <span>VICTORS</span>
-                            <ul id="progress-victors">
-                                <li>
-                                    
-                                </li>
-                            </ul>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div id="progress-victors-container">
+                                <div id="progress-victors-overlay"></div>
+                                <span id="progress-victors-title">VICTORS</span>
+                                <ul id="progress-victors">
+                                    {% for i in range(20) %}
+                                    <li class="progress-victor-row">
+                                        <div class="progress-victor-info">
+                                            <div>
+                                                <span class="progress-victor-index">1. </span>
+                                                <span class="progress-victor-name">Texyle</span>
+                                            </div>
+                                            <div class="progress-victor-row-wrapper">
+                                                <span class="progress-victor-date">Feb 20, 2025</span>
+                                                <span> - </span>
+                                                <span class="progress-victor-fails">0</span>
+                                                <span>fails</span>
+                                            </div>
+                                        </div>
+                                        <div class="progress-victor-buttons">
+                                            <button class="progress-victor-button-move">
+                                                <img src="{{ url_for('dashboard.static', filename='icons/icon-doublearrow.svg') }}" alt="move"/>
+                                            </button>
+                                            <button class="progress-victor-button-edit">
+                                                <img src="{{ url_for('dashboard.static', filename='icons/icon-edit.svg') }}" alt="edit"/>
+                                            </button>
+                                            <button class="progress-victor-button-delete">
+                                                <img src="{{ url_for('dashboard.static', filename='icons/icon-delete.svg') }}" alt="delete"/>
+                                            </button>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -208,6 +235,34 @@
         </div>
     </div>
 
+    <template id="victor-row-template">
+        <li class="progress-victor-row">
+            <div class="progress-victor-info">
+                <div>
+                    <span class="progress-victor-index"></span>
+                    <span class="progress-victor-name"></span>
+                </div>
+                <div class="progress-victor-row-wrapper">
+                    <span class="progress-victor-date"></span>
+                    <span> - </span>
+                    <span class="progress-victor-fails"></span>
+                    <span>fails</span>
+                </div>
+            </div>
+            <div class="progress-victor-buttons">
+                <button class="progress-victor-button-move">
+                    <img src="{{ url_for('dashboard.static', filename='icons/icon-doublearrow.svg') }}" alt="move"/>
+                </button>
+                <button class="progress-victor-button-edit">
+                    <img src="{{ url_for('dashboard.static', filename='icons/icon-edit.svg') }}" alt="edit"/>
+                </button>
+                <button class="progress-victor-button-delete">
+                    <img src="{{ url_for('dashboard.static', filename='icons/icon-delete.svg') }}" alt="delete"/>
+                </button>
+            </div>
+        </li>
+    </template>
+
     <script>
         const discordId = {{ discordid | tojson }};
         const userRoles = {{ pos | tojson }};
@@ -217,6 +272,7 @@
     <script src="{{ url_for('dashboard.static', filename='js/progress.js') }}"></script>
     <script src="{{ url_for('dashboard.static', filename='js/design/progress.js') }}"></script>
     <script src="{{ url_for('dashboard.static', filename='js/design/tabs.js') }}"></script>
+    <script src="{{ url_for('dashboard.static', filename='js/modals.js') }}"></script>
 </body>
 </html>
 
