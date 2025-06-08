@@ -402,7 +402,7 @@ input:focus {
     top: 50%;
     margin: -7.5rem -15rem;
     width: 30rem;
-    height: 15rem;
+    height: auto;
     background: linear-gradient(0deg,rgba(103, 97, 126, 1) 0%, rgba(71, 73, 109, 1) 100%);
     border-radius: 1rem;
     border: 2px solid white;
@@ -462,4 +462,75 @@ input:focus {
     z-index: 999;
     display: none;
     transition: background-color 0.3s;
+}
+
+.modal-body {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-paste-area {
+    min-height: 4rem;
+
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 2px dashed rgb(130, 250, 250);
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: visible;
+    height: auto;
+    padding: 10px;
+}
+
+.modal-paste-area-image {
+    width: 80%;
+    height: auto;
+}
+
+.modal-paste-area-link {
+    background-color: rgba(0, 0, 50, 0.3);
+    padding: 2px 8px 2px 8px;
+    overflow-wrap: anywhere;
+    border: 1px solid white;
+    border-radius: 10px;
+    display: inline-flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-paste-area-link:hover {
+    background-color: rgba(0, 0, 20, 0.6);
+}
+
+.modal-paste-area-link img {
+    height: 1rem;
+    margin-right: 4px;
+}
+
+.modal-confirm-button {
+    background-color: rgb(0, 140, 0);
+    height: 2rem;
+    border-radius: 10px;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    outline: inherit;
+    border: none;
+    transition: background-color 0.3s;
+    box-shadow: 0 0 8px 0 black;
+}
+
+.modal-confirm-button .disabled {
+    background-color: rgba(150, 150, 150, 0.3);
+}
+
+.modal-confirm-button:hover {
+    background-color: rgb(0, 120, 0);
 }

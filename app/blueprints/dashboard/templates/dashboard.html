@@ -266,6 +266,7 @@
     <script>
         const discordId = {{ discordid | tojson }};
         const userRoles = {{ pos | tojson }};
+        const linkIconUrl = "{{ url_for('dashboard.static', filename='icons/icon-link.svg') }}";
     </script>
     <script src="{{ url_for('dashboard.static', filename='js/perms.js') }}"></script>
     <script src="{{ url_for('dashboard.static', filename='js/utils.js') }}"></script>

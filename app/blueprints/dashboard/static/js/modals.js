@@ -6,6 +6,8 @@ class Modal {
         this.marginLeft = 0;
         this.marginTop = 0;
 
+        this.handlePasteFn = (e) => this.handlePaste(e);
+
         this.createModal(id, title);
         this.setupEventListeners();
     }
@@ -24,6 +26,9 @@ class Modal {
         this.header = document.createElement('div');
         this.header.className = 'modal-header';
 
+        this.body = document.createElement('div');
+        this.body.className = 'modal-body';
+
         this.titleElement = document.createElement('h2');
         this.titleElement.className = 'modal-title';
         this.titleElement.textContent = title;
@@ -39,6 +44,7 @@ class Modal {
         this.header.appendChild(this.closeButton);
 
         this.modal.appendChild(this.header);
+        this.modal.appendChild(this.body);
 
         document.body.appendChild(this.modal);
         document.body.appendChild(this.overlay);
@@ -74,19 +80,6 @@ class Modal {
         let newLeft = e.clientX - this.offsetX - this.marginLeft;
         let newTop = e.clientY - this.offsetY - this.marginTop;
 
-        const modalRect = this.modal.getBoundingClientRect();
-        const modalWidth = modalRect.width;
-        const modalHeight = modalRect.height;
-
-        const minLeft = modalWidth / 2;
-        const minTop = modalHeight / 2;
-        const maxLeft = window.innerWidth - modalWidth / 2 - 2;
-        const maxTop = window.innerHeight - modalHeight / 2 - 2;
-
-        // prevent modal from going outside the window
-        newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
-        newTop = Math.max(minTop, Math.min(newTop, maxTop));
-
         this.modal.style.left = newLeft + "px";
         this.modal.style.top = newTop + "px";
     }
@@ -94,6 +87,76 @@ class Modal {
     stopDrag() {
         this.isDragging = false;
         document.body.style.userSelect = "";
+    }
+
+    initializePasteArea() {
+        if (this.pasteArea == null) {
+            return;
+        }
+
+        document.body.addEventListener('paste', this.handlePasteFn);
+    }
+
+    handlePaste(e) {
+        if (this.pasteArea == null) {
+            return;
+        }
+
+        e.preventDefault();
+
+        const pasteData = (e.clipboardData || window.clipboardData);
+        const items = pasteData.items;
+
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+                var blob = items[i].getAsFile();
+                var reader = new FileReader();
+
+                reader.onload = (e) => {
+                    var img = document.createElement('img');
+                    img.className = 'modal-paste-area-image';
+                    img.src = e.target.result;
+                    this.pasteArea.innerHTML = '';
+                    this.pasteArea.appendChild(img);
+                };
+
+                reader.readAsDataURL(blob);
+                return;
+            }
+        }
+
+        const pastedText = pasteData.getData('text/plain');
+        if (pastedText) {
+            if (isImageUrl(pastedText)) {
+                var img = document.createElement('img');
+                img.className = 'modal-paste-area-image';
+                img.src = pastedText;
+                this.pasteArea.innerHTML = '';
+                this.pasteArea.appendChild(img);
+            } else if (isValidUrl(pastedText)) {
+                var linkDiv = document.createElement('div');
+                linkDiv.className = 'modal-paste-area-link';
+
+                const domainName = extractDomainName(pastedText);
+                linkDiv.textContent = domainName || pastedText;
+
+                const icon = document.createElement('img');
+                icon.src = linkIconUrl;
+                icon.alt = 'Link Icon';
+                linkDiv.appendChild(icon);
+
+                linkDiv.onclick = function() {
+                    window.open(pastedText, '_blank');
+                };
+                this.pasteArea.innerHTML = '';
+                this.pasteArea.appendChild(linkDiv);
+            } else {
+                var textElement = document.createElement('p');
+                textElement.textContent = pastedText;
+                this.pasteArea.innerHTML = '';
+                this.pasteArea.appendChild(textElement);
+            }
+        }
     }
 
     show() {
@@ -123,6 +186,8 @@ class Modal {
                 this.overlay.parentNode.removeChild(this.overlay);
             }
         }, 300);
+
+        document.body.removeEventListener('paste', this.handlePasteFn);
     }
 }
 
@@ -130,12 +195,19 @@ class UpdateProgressModal extends Modal {
     constructor() {
         super('update-progress-modal', 'Updating progress');
         this.addElements();
+        this.initializePasteArea();
     }
 
     addElements() {
-        const paragraph = document.createElement('p');
-        paragraph.textContent = 'test';
-        this.modal.appendChild(paragraph);
+        this.pasteArea = document.createElement('div');
+        this.pasteArea.className = 'modal-paste-area';
+        this.pasteArea.innerText = 'Paste proof here (Ctrl+V)';
+        this.body.appendChild(this.pasteArea);
+
+        const confirmButton = document.createElement('button');
+        confirmButton.className = 'modal-confirm-button';
+        confirmButton.textContent = 'Confirm';
+        this.body.appendChild(confirmButton);
     }
 }
 
@@ -148,6 +220,32 @@ class SetVictorModal extends Modal {
     addElements() {
         const paragraph = document.createElement('p');
         paragraph.textContent = 'test';
-        this.modal.appendChild(paragraph);
+        this.header.appendChild(paragraph);
+    }
+}
+
+function isValidUrl(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+function isImageUrl(url) {
+    return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+}
+
+function extractDomainName(url) {
+    try {
+        const domain = new URL(url).hostname;
+        const domainWithoutWww = domain.replace(/^www\./, '');
+        const domainParts = domainWithoutWww.split('.');
+        const domainName = domainParts[0].charAt(0).toUpperCase() + domainParts[0].slice(1);
+        return domainName;
+    } catch (e) {
+        console.error("Invalid URL:", e);
+        return null;
     }
 }

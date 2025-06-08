@@ -41,7 +41,8 @@ function doDragAndDrop() {
             victorsOverlay.style.opacity = 0;
         },
         onAdd: function(evt) {
-            updateProgress(evt.item);
+            if (!draggedOverVictors)
+                updateProgress(evt.item);
         }
     };
 
