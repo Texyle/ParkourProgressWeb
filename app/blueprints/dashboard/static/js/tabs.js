@@ -1,3 +1,5 @@
+var progressTab = new ProgressTab();
+
 document.addEventListener("DOMContentLoaded", function () {
     const tabButtons = document.getElementById('tabs').querySelectorAll("li");
     tabButtons.forEach(item => {
