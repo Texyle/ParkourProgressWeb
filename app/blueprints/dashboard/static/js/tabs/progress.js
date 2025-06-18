@@ -2,7 +2,10 @@ class ProgressTab {
     constructor() {
         this.draggedPlayer = null;
         this.draggedOverVictors = false;
+    }
 
+    init() {
+        this.initMaps();
         this.initDragAndDrop();
     }
 
@@ -20,19 +23,50 @@ class ProgressTab {
         modal.show();
     }
 
-    switchMap(mapId) {
-        // generating random data for now
-        const mapData = generateRandomObject();
-        
+    async changeMap(mapId) {
+        this.selectMapAnimation(mapId);
 
-        this.createSections(mapData);
-        this.createPlayers(mapData);
+        const container = document.getElementById('progress-list-wrapper');
+        container.classList.add('blur');
 
-        this.initDragAndDrop();
+        // using this time to figure out remaining animation time
+        // (to make sure that the data doesnt change before blur is fully applied)
+        const startTime = Date.now();
+
+        // generating random map data for now, replace with actual function later
+        const mapData = generateRandomMapData();
+
+        const elapsedTime = Date.now() - startTime;
+        const remainingTransitionTime = Math.max(300 - elapsedTime, 0);
+
+        setTimeout(() => {
+            container.classList.remove('blur');
+
+            this.createSections(mapData);
+            this.createPlayers(mapData);
+
+            this.initDragAndDrop();
+
+            container.scrollTop = 0;
+        }, remainingTransitionTime);
     }
 
-    // create section list elements from data
+    selectMapAnimation(mapId) {
+        const maps = document.querySelectorAll('.progress-gamemode-maps li');
+
+        maps.forEach(map => {
+            var id = map.getAttribute('data-mapid');
+            if (id == mapId) {
+                map.classList.add('selected');
+            } else {
+                map.classList.remove('selected');
+            }
+        })
+    }
+
     createSections(mapData) {
+        // create
+
         const sectionsContainer = document.querySelector("#progress-sections");
         sectionsContainer.innerHTML = "";
 
@@ -64,10 +98,16 @@ class ProgressTab {
         });
     }
 
+    createPlayers(mapData) {
+
+    }
+
     initDragAndDrop() {
         const sectionPlayers = document.querySelectorAll('.progress-section-players');
         const victors = document.getElementById("progress-victors-container");
         const victorsOverlay = document.getElementById("progress-victors-overlay");
+
+        console.log(sectionPlayers);
 
         const options = {
             group: "progress-dnd",
@@ -109,22 +149,23 @@ class ProgressTab {
             victorsOverlay.style.opacity = 0;
         });
     }
+
+    initMaps() {
+        // map loading should happen here
+
+        const mapButtons = document.querySelectorAll(".progress-gamemode-maps li");
+
+        mapButtons.forEach(item => {
+            item.addEventListener("click", (evt) => {
+                this.changeMap(evt.target.getAttribute("data-mapid"));
+            });
+        });
+    }
 }
 
-// add click events on map buttons
-document.addEventListener("DOMContentLoaded", function() {
-    const mapButtons = document.querySelectorAll(".progress-gamemode-maps li");
 
-    mapButtons.forEach(item => {
-      item.addEventListener("click", function(event) {
-        progressTab.switchMap(event.target.getAttribute("data-mapid"));
-      });
-    });
-});
-
-
-
-function generateRandomObject() {
+// temporary function to generate random map data
+function generateRandomMapData() {
   const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
   const generateRandomString = (length) => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';

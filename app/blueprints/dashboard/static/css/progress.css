@@ -68,44 +68,56 @@
     cursor: pointer;
     color: rgb(220, 220, 220);
     transition: color 0.3s;
+    width: 100%;
+    justify-content: center;
 }
 
-.progress-gamemode-maps li:hover {
+.progress-gamemode-maps li:hover,
+.progress-gamemode-maps li.selected {
     color: white;
 }
 
-.progress-gamemode-maps li:before {
-    content: "|";
-    margin-right: 10px;
-    display: inline-block;
-    opacity: 0;
-    -webkit-transform: translateX(20px);
-    -moz-transform: translateX(20px);
-    transform: translateX(20px);
-    -webkit-transition: -webkit-transform 0.3s, opacity 0.2s;
-    -moz-transition: -moz-transform 0.3s, opacity 0.2s;
-    transition: transform 0.3s, opacity 0.2s;
-}
-  
+.progress-gamemode-maps li:before,
 .progress-gamemode-maps li:after {
-    content: "|";
-    margin-left: 10px;
-    display: inline-block;
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 1rem;
     opacity: 0;
-    -webkit-transition: -webkit-transform 0.3s, opacity 0.2s;
-    -moz-transition: -moz-transform 0.3s, opacity 0.2s;
-    transition: transform 0.3s, opacity 0.2s;
-    -webkit-transform: translateX(-20px);
-    -moz-transform: translateX(-20px);
-    transform: translateX(-20px);
+    transition: left 0.3s ease, right 0.3s ease, opacity 0.2s ease, width 0.3s ease;
 }
-  
+
+.progress-gamemode-maps li:before {
+    right: 90%;
+    background: linear-gradient(to left, rgb(209, 226, 255), rgba(209, 226, 255, 0));
+}
+
 .progress-gamemode-maps li:hover:before,
-.progress-gamemode-maps li:hover:after {
-    opacity: 1;
-    -webkit-transform: translateX(0px);
-    -moz-transform: translateX(0px);
-    transform: translateX(0px);
+.progress-gamemode-maps li.selected:before {
+    right: 105%;
+}
+
+.progress-gamemode-maps li:after {
+    left: 90%;
+    background: linear-gradient(to right, rgb(209, 226, 255), rgba(209, 226, 255, 0));
+}
+
+.progress-gamemode-maps li:hover:after,
+.progress-gamemode-maps li.selected:after {
+    left: 105%;
+}
+
+.progress-gamemode-maps li:hover:before,
+.progress-gamemode-maps li:hover:after,
+.progress-gamemode-maps li.selected:before,
+.progress-gamemode-maps li.selected:after {
+    opacity: 100;
+    transform: translateX(0);
+}
+
+.progress-gamemode-maps li.selected:before,
+.progress-gamemode-maps li.selected:after {
+    width: 100%;
 }
 
 #progress-sections-container {
@@ -127,6 +139,7 @@
     overflow-y: overlay;
     overflow-x: hidden;
     width: 100%;
+    transition: filter 0.3s ease;
 }
 
 #progress-list-wrapper::-webkit-scrollbar {

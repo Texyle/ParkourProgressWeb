@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
         selectTab(event.target);
       });
     });
+
+    progressTab.init();
 });
 
 function selectTab(tab) {
