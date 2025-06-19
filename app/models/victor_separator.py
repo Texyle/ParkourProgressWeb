@@ -10,5 +10,5 @@ class VictorSeparator(db.Model):
     
     map = db.relationship("Map", back_populates="victor_separators")
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<VictorSeparator {self.ID}: {self.MapID} - {self.Date} - {self.Message}>"

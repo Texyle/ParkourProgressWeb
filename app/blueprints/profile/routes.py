@@ -1,10 +1,11 @@
 from app.blueprints.profile import bp
 from flask import render_template, current_app
-from .load_data import *
 import pycountry
 
+from app.blueprints.profile.load_data import load_player_names, load_player, load_gamemodes, load_country_data
+
 @bp.route("/player")
-def player_profile_initial():
+def player_profile_initial() -> str:
     player_names = load_player_names()
     
     return render_template("player_profile.html", 
@@ -38,7 +39,7 @@ def player_profile_initial():
 #         return render_template("notfound.html", random_image=get_random_img())
 
 @bp.route('/player/<int:player_id>')
-def player_profile(player_id: int):
+def player_profile(player_id: int) -> str:
     player_names = load_player_names()
     player = load_player(player_id)
     gamemodes = load_gamemodes()
@@ -58,7 +59,7 @@ def player_profile(player_id: int):
         return render_template("notfound.html", random_image=current_app.images.get_random_map_image())
     
 @bp.route("/country")
-def country_profile_initial():
+def country_profile_initial() -> str:
     countries = [{'Code': country.alpha_2.lower(), 'Name': country.name} for country in pycountry.countries]
     return render_template("country_profile.html", 
                            countries = countries,
@@ -68,7 +69,7 @@ def country_profile_initial():
                            random_image=current_app.images.get_random_map_image())
 
 @bp.route("/country/<string:country_code>")
-def country_profile(country_code: str):
+def country_profile(country_code: str) -> str:
     countries = [{'Code': country.alpha_2.lower(), 'Name': country.name} for country in pycountry.countries]
     
     if not any(country['Code'] == country_code.lower() for country in countries):

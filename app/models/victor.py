@@ -13,5 +13,5 @@ class Victor(db.Model):
     map = db.relationship("Map", back_populates="victors")
     player = db.relationship("Player", back_populates="victors")
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Victor {self.MapID}: {self.PlayerID} - {self.Date}>"

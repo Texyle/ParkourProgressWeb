@@ -5,7 +5,7 @@ from app.models.section import Section
 from app.models.section_player import SectionPlayer
 from app.extensions import db 
 
-def load_all_maps():
+def load_all_maps() -> dict[str, dict[str, list[Map]]]:
     gamemodes = Gamemode.query.order_by(Gamemode.ID.asc()).all()
 
     maps = {gamemode.Name: {"Main": [], "Extra": []} for gamemode in gamemodes}
@@ -33,7 +33,7 @@ def load_all_maps():
 
     return maps
 
-def load_map(id: int):
+def load_map(id: int) -> Map | None:
     map_data = (
         Map.query
         .options(

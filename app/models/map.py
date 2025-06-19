@@ -27,5 +27,5 @@ class Map(db.Model):
     messages = db.relationship("Message", back_populates="map", cascade="all, delete-orphan")
     victor_separators = db.relationship("VictorSeparator", back_populates="map", cascade="all, delete-orphan")
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Map {self.ID}: {self.Name} - {self.GamemodeID}>"

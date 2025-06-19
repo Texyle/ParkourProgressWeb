@@ -1,4 +1,5 @@
 from flask import Flask, redirect, url_for
+from werkzeug import Response
 from config import Config
 from app.extensions import db
 from app.images import Images
@@ -15,7 +16,7 @@ from app.models.staff import Staff
 from app.models.victor_separator import VictorSeparator
 from app.models.victor import Victor
 
-def create_app(config_class=Config):
+def create_app(config_class: Config = Config) -> Flask:
     app = Flask(__name__)
     app.config.from_object(config_class)
 
@@ -51,7 +52,7 @@ def create_app(config_class=Config):
     
     # Redirect root URL to home blueprint
     @app.route('/')
-    def root():
+    def root() -> Response:
         return redirect(url_for('home.home'))
 
     return app

@@ -1,7 +1,7 @@
 from PIL import Image
 import os
 
-def create_smaller_copies(folder_path):
+def create_smaller_copies(folder_path: str) -> None:
     # Ensure the output directory exists
     output_folder = os.path.join(folder_path, 'small_copies')
     os.makedirs(output_folder, exist_ok=True)
