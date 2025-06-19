@@ -17,5 +17,5 @@ class Log(db.Model):
     BackupDate = db.Column(db.Date)
     ExtraInfo = db.Column(db.Text)
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Log {self.ID}: {self.Username} - {self.ActivityType} on {self.Timestamp}>"

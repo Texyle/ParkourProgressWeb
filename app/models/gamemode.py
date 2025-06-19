@@ -8,5 +8,5 @@ class Gamemode(db.Model):
     
     maps = db.relationship('Map', back_populates='gamemode', cascade='all, delete-orphan')
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Gamemode ID={self.ID}, Name={self.Name}>"
