@@ -67,9 +67,10 @@
     flex-direction: row !important;
     cursor: pointer;
     color: rgb(220, 220, 220);
-    transition: color 0.3s;
+    transition: color 0.3s, max-height 0.3s;
     width: 100%;
     justify-content: center;
+    max-height: 1.5rem;
 }
 
 .progress-gamemode-maps li:hover,

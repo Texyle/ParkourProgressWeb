@@ -2,11 +2,13 @@ class ProgressTab {
     constructor() {
         this.draggedPlayer = null;
         this.draggedOverVictors = false;
+        this.sortables = [];
     }
 
     init() {
         this.initMaps();
         this.initDragAndDrop();
+        this.initSearchBars();
     }
 
     updateProgress(playerItem) {
@@ -23,7 +25,8 @@ class ProgressTab {
         modal.show();
     }
 
-    async changeMap(mapId) {
+    // load and display map data
+    async selectMap(mapId) {
         this.selectMapAnimation(mapId);
 
         const container = document.getElementById('progress-list-wrapper');
@@ -43,7 +46,7 @@ class ProgressTab {
             container.classList.remove('blur');
 
             this.createSections(mapData);
-            this.createPlayers(mapData);
+            this.createVictors(mapData);
 
             this.initDragAndDrop();
 
@@ -51,6 +54,7 @@ class ProgressTab {
         }, remainingTransitionTime);
     }
 
+    // visually unselect previously selected map and select one that was clicked
     selectMapAnimation(mapId) {
         const maps = document.querySelectorAll('.progress-gamemode-maps li');
 
@@ -64,9 +68,8 @@ class ProgressTab {
         })
     }
 
+    // creating section elements from passed data
     createSections(mapData) {
-        // create
-
         const sectionsContainer = document.querySelector("#progress-sections");
         sectionsContainer.innerHTML = "";
 
@@ -87,7 +90,7 @@ class ProgressTab {
                 const playerElement = document.createElement('li');
                 playerElement.className = 'progress-section-player';
                 playerElement.textContent = player.name;
-                // add id
+                // add id here
 
                 playersList.appendChild(playerElement);
             });
@@ -98,16 +101,89 @@ class ProgressTab {
         });
     }
 
-    createPlayers(mapData) {
+    // creating victor elements from passed data
+    createVictors(mapData) {
+        const victorsContainer = document.querySelector("#progress-victors");
+        victorsContainer.innerHTML = "";
 
+        const template = document.getElementById('victor-row-template');
+        const templateContent = template.content;
+
+        let index = 1;
+
+        mapData.victors.forEach(victor => {
+            const newRow = templateContent.cloneNode(true);
+            newRow.querySelector('.progress-victor-index').textContent = `${victor.victorIndex}. `;
+            newRow.querySelector('.progress-victor-name').textContent = victor.name;
+            newRow.querySelector('.progress-victor-date').textContent = formatDate(victor.date);
+            newRow.querySelector('.progress-victor-fails').textContent = victor.fails;
+
+            victorsContainer.appendChild(newRow);
+        });
     }
 
+    // filter map list based on search bar input
+    searchMaps(inputText) {
+        const gamemodes = document.querySelectorAll('.progress-gamemode');
+        let foundMaps = 0;
+        let foundMapId;
+
+        gamemodes.forEach(gamemode => {
+            const maps = gamemode.querySelectorAll('.progress-gamemode-maps li');
+            let foundMapInGamemode = false;
+
+            maps.forEach(map => {
+                const mapName = map.innerHTML;
+
+                if (!mapName.toLowerCase().includes(inputText.toLowerCase())) {
+                    map.style.maxHeight = 0;
+                    map.style.visibility = 'hidden';
+                } else {
+                    map.style.maxHeight = null;
+                    map.style.visibility = 'visible';
+                    foundMaps += 1;
+                    foundMapId = map.getAttribute('data-mapid');
+                    foundMapInGamemode = true;
+                }
+            });
+
+            if (!foundMapInGamemode) {
+                gamemode.style.display = 'none';
+            } else {
+                gamemode.style.display = 'flex';
+            }
+        });
+
+        // if only a single map matched input text, automatically select it
+        if (foundMaps == 1) {
+            this.selectMap(foundMapId);
+        }
+    }
+    
+    // filter player list based on search bar input
+    // apparently there's no way to do this smoothly with sortableJS containers
+    searchPlayers(inputText) {
+        const sections = document.querySelectorAll('.progress-section');
+
+        sections.forEach(section => {
+            const players = section.querySelectorAll('.progress-section-player');
+
+            players.forEach(player => {
+                const playerName = player.innerHTML;
+                if (!playerName.toLowerCase().includes(inputText.toLowerCase())) {
+                    player.style.display = 'none';
+                } else {
+                    player.style.display = null;
+                }
+            });
+        });
+    }
+
+    // make players draggable
     initDragAndDrop() {
         const sectionPlayers = document.querySelectorAll('.progress-section-players');
         const victors = document.getElementById("progress-victors-container");
         const victorsOverlay = document.getElementById("progress-victors-overlay");
-
-        console.log(sectionPlayers);
 
         const options = {
             group: "progress-dnd",
@@ -132,8 +208,9 @@ class ProgressTab {
             }
         };
 
+        this.sortables = [];
         sectionPlayers.forEach(container => {
-            Sortable.create(container, options);
+            this.sortables.push(Sortable.create(container, options));
         });
 
         victors.addEventListener("mouseenter", () => {
@@ -150,15 +227,30 @@ class ProgressTab {
         });
     }
 
+    // load map list
     initMaps() {
-        // map loading should happen here
+        // insert map loading function
 
         const mapButtons = document.querySelectorAll(".progress-gamemode-maps li");
 
         mapButtons.forEach(item => {
             item.addEventListener("click", (evt) => {
-                this.changeMap(evt.target.getAttribute("data-mapid"));
+                this.selectMap(evt.target.getAttribute("data-mapid"));
             });
+        });
+    }
+
+    // assign event listeners to search bars
+    initSearchBars() {
+        const mapsSearchBar = document.getElementById('progress-map-search');
+        const playersSearchBar = document.getElementById('progress-player-search');
+
+        mapsSearchBar.addEventListener('input', (event) => {
+            this.searchMaps(event.target.value);
+        });
+
+        playersSearchBar.addEventListener('input', (event) => {
+            this.searchPlayers(event.target.value);
         });
     }
 }
@@ -167,10 +259,21 @@ class ProgressTab {
 // temporary function to generate random map data
 function generateRandomMapData() {
   const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-  const generateRandomString = (length) => {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-    return Array.from({ length }, () => characters[Math.floor(Math.random() * characters.length)]).join('');
+
+  // List of 32 English first names
+  const firstNames = [
+    "Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Helen",
+    "Ivy", "Jack", "Kate", "Leo", "Mia", "Nina", "Oscar", "Paul",
+    "Quinn", "Rose", "Sam", "Tara", "Ursula", "Victor", "Wendy", "Xena",
+    "Yara", "Zack", "Amy", "Brian", "Claire", "Diana", "Ethan", "Fiona"
+  ];
+
+  // Function to get a random name from the list of first names
+  const getRandomName = () => {
+    const randomIndex = getRandomInt(0, firstNames.length - 1);
+    return firstNames[randomIndex];
   };
+
   const generateRandomDate = () => {
     const start = new Date(2020, 0, 1);
     const end = new Date();
@@ -182,17 +285,18 @@ function generateRandomMapData() {
     const playersCount = getRandomInt(0, 10);
     const players = Array.from({ length: playersCount }, () => ({
       id: getRandomInt(1, 1000),
-      name: generateRandomString(getRandomInt(3, 10))
+      name: getRandomName() // Use the random name from the list
     }));
     return { name: `S${i + 1}`, players };
   });
 
   const victorsCount = getRandomInt(0, 20);
-  const victors = Array.from({ length: victorsCount }, () => ({
+  const victors = Array.from({ length: victorsCount }, (_, index) => ({
     id: getRandomInt(1, 1000),
-    name: generateRandomString(getRandomInt(3, 10)),
+    name: getRandomName(), // Use the random name from the list
     date: generateRandomDate(),
-    fails: getRandomInt(0, 20)
+    fails: getRandomInt(0, 20),
+    victorIndex: index + 1 // Adding victorIndex starting from 1
   }));
 
   const failsMessage = Math.random() > 0.5 ? "sky" : null;

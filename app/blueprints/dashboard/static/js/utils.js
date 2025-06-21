@@ -40,3 +40,8 @@ function toggleTheme() {
         document.querySelector(".switch-circle i").className = "fas fa-sun";
     }
 })();
+
+function formatDate(date) {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}
