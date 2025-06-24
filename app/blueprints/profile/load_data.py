@@ -1,3 +1,4 @@
+from typing import Any
 from app.models.player import Player
 from app.models.gamemode import Gamemode
 from app.models.victor import Victor
@@ -8,12 +9,12 @@ from app.extensions import db
 from collections import Counter, defaultdict
 import pycountry
 
-def load_player_names():
+def load_player_names() -> list[dict[str, Any]]:
     player_names = Player.query.with_entities(Player.Name, Player.ID).all()
     
     return [{"Name": name, "ID": id} for name, id in player_names]
 
-def load_player(id: int):
+def load_player(id: int) -> Player | None:
     player_data = (
         Player.query
         .options(
@@ -27,12 +28,12 @@ def load_player(id: int):
     
     return player_data
 
-def load_gamemodes():
+def load_gamemodes() -> list[Gamemode]:
     gamemodes = Gamemode.query.all()
     
     return gamemodes
 
-def load_country_data(country_code: str):
+def load_country_data(country_code: str) -> tuple[list[Player], list[Map], dict[str, Any]]:
     players_data = (
         Player.query
         .options(db.joinedload(Player.victors).joinedload(Victor.map))
@@ -82,7 +83,7 @@ def load_country_data(country_code: str):
     
     return countries[country_code]["Players"], maps, stats
 
-def load_country_maps(country_code: str):
+def load_country_maps(country_code: str) -> list[Map]:
     maps_data = (
         Map.query
         .options(
@@ -117,7 +118,7 @@ def load_country_maps(country_code: str):
     return maps_data
     
 
-def get_percent(a: int, b: int):
+def get_percent(a: int, b: int) -> float | str:
     percent = a / b * 100.0
     
     if percent < 0.1:

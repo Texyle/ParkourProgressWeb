@@ -4,12 +4,12 @@ import re
 from flask import current_app
 
 class Images:
-    def __init__(self):
+    def __init__(self) -> None:
         self.map_images = {}
         self.small_map_images = {}
         self.flag_images = {}
         
-    def load_all(self):
+    def load_all(self) -> None:
         static_folder = current_app.static_folder
         
         maps_folder = "images/maps/compressed_copies"
@@ -34,13 +34,13 @@ class Images:
             if f.endswith(".svg")
         }
 
-    def get_random_map_image(self, small: bool = False):
+    def get_random_map_image(self, small: bool = False) -> str | None:
         if small:
             return choice(list(self.small_map_images.values())) if self.small_map_images else None
         else:
             return choice(list(self.map_images.values())) if self.map_images else None
 
-    def get_map_image(self, map_name: str, small: bool = False):
+    def get_map_image(self, map_name: str, small: bool = False) -> str | None:
         file_name = re.sub(r"[^\w]", "", map_name.lower())
 
         if small:
@@ -48,5 +48,5 @@ class Images:
         else:
             return self.map_images.get(file_name)
         
-    def get_flag_image(self, country_code: str):
+    def get_flag_image(self, country_code: str) -> str | None:
         return self.flag_images.get(country_code.lower())

@@ -11,5 +11,5 @@ class Message(db.Model):
     
     map = db.relationship("Map", back_populates="messages")
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Message {self.ID}: {self.Guild} - {self.Channel} - {self.Message}>"
