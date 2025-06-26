@@ -192,13 +192,14 @@ class Modal {
 }
 
 class UpdateProgressModal extends Modal {
-    constructor() {
+    constructor(confirmCallback) {
         super('update-progress-modal', 'Updating progress');
-        this.addElements();
+
+        this.addElements(confirmCallback);
         this.initializePasteArea();
     }
 
-    addElements() {
+    addElements(confirmCallback) {
         this.pasteArea = document.createElement('div');
         this.pasteArea.className = 'modal-paste-area';
         this.pasteArea.innerText = 'Paste proof here (Ctrl+V)';
@@ -207,45 +208,48 @@ class UpdateProgressModal extends Modal {
         const confirmButton = document.createElement('button');
         confirmButton.className = 'modal-confirm-button';
         confirmButton.textContent = 'Confirm';
+        confirmButton.onclick = () => {
+            confirmCallback();
+            this.close();
+        };
         this.body.appendChild(confirmButton);
     }
 }
 
 class SetVictorModal extends Modal {
-    constructor() {
+    constructor(confirmCallback, showFails) {
         super('update-progress-modal', 'Adding victor');
-        this.addElements();
+
+        this.addElements(confirmCallback, showFails);
     }
 
-    addElements() {
-        const paragraph = document.createElement('p');
-        paragraph.textContent = 'test';
-        this.header.appendChild(paragraph);
-    }
-}
+    addElements(confirmCallback, showFails) {
+        this.dateInput = document.createElement('input');
+        const dateLabel = document.createElement('label');
+        dateLabel.textContent = 'Date:';
+        dateLabel.appendChild(this.dateInput);
+        this.body.appendChild(dateLabel);
 
-function isValidUrl(string) {
-    try {
-        new URL(string);
-        return true;
-    } catch (_) {
-        return false;
-    }
-}
+        if (showFails) {
+            this.failsInput = document.createElement('input');
+            const failsLabel = document.createElement('label');
+            failsLabel.textContent = 'Fails:';
+            failsLabel.appendChild(this.failsInput);
+            this.body.appendChild(failsLabel);
+        }
 
-function isImageUrl(url) {
-    return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
-}
+        this.pasteArea = document.createElement('div');
+        this.pasteArea.className = 'modal-paste-area';
+        this.pasteArea.innerText = 'Paste proof here (Ctrl+V)';
+        this.body.appendChild(this.pasteArea);
 
-function extractDomainName(url) {
-    try {
-        const domain = new URL(url).hostname;
-        const domainWithoutWww = domain.replace(/^www\./, '');
-        const domainParts = domainWithoutWww.split('.');
-        const domainName = domainParts[0].charAt(0).toUpperCase() + domainParts[0].slice(1);
-        return domainName;
-    } catch (e) {
-        console.error("Invalid URL:", e);
-        return null;
+        const confirmButton = document.createElement('button');
+        confirmButton.className = 'modal-confirm-button';
+        confirmButton.textContent = 'Confirm';
+        confirmButton.onclick = () => {
+            confirmCallback();
+            this.close();
+        };
+        this.body.appendChild(confirmButton);
     }
 }

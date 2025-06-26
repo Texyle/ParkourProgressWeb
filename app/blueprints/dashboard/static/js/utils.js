@@ -45,3 +45,29 @@ function formatDate(date) {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
 }
+
+function isValidUrl(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+function isImageUrl(url) {
+    return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+}
+
+function extractDomainName(url) {
+    try {
+        const domain = new URL(url).hostname;
+        const domainWithoutWww = domain.replace(/^www\./, '');
+        const domainParts = domainWithoutWww.split('.');
+        const domainName = domainParts[0].charAt(0).toUpperCase() + domainParts[0].slice(1);
+        return domainName;
+    } catch (e) {
+        console.error("Invalid URL:", e);
+        return null;
+    }
+}

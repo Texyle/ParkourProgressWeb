@@ -2,7 +2,6 @@ class ProgressTab {
     constructor() {
         this.draggedPlayer = null;
         this.draggedOverVictors = false;
-        this.sortables = [];
     }
 
     init() {
@@ -11,18 +10,26 @@ class ProgressTab {
         this.initSearchBars();
     }
 
-    updateProgress(playerItem) {
+    showUpdateProgressModal(playerItem) {
         let playerName = playerItem.innerHTML;
 
-        const modal = new UpdateProgressModal(playerItem);
+        const modal = new UpdateProgressModal(this.confirmUpdateProgress.bind(this));
         modal.show();
     }
 
-    setVictor(playerItem) {
+    showSetVictorModal(playerItem) {
         let playerName = playerItem.innerHTML;
         
-        const modal = new SetVictorModal(playerItem);
+        const modal = new SetVictorModal(this.confirmSetVictor, true);
         modal.show();
+    }
+
+    confirmUpdateProgress() {
+        console.log('test');
+    }
+
+    confirmSetVictor() {
+        console.log('test2');
     }
 
     // load and display map data
@@ -51,6 +58,9 @@ class ProgressTab {
             this.initDragAndDrop();
 
             container.scrollTop = 0;
+
+            this.draggedPlayer = null;
+            this.draggedOverVictors = false;
         }, remainingTransitionTime);
     }
 
@@ -127,6 +137,7 @@ class ProgressTab {
         const gamemodes = document.querySelectorAll('.progress-gamemode');
         let foundMaps = 0;
         let foundMapId;
+        let changed = false;
 
         gamemodes.forEach(gamemode => {
             const maps = gamemode.querySelectorAll('.progress-gamemode-maps li');
@@ -137,7 +148,11 @@ class ProgressTab {
 
                 if (!mapName.toLowerCase().includes(inputText.toLowerCase())) {
                     map.style.maxHeight = 0;
-                    map.style.visibility = 'hidden';
+                    console.log(map.style.visibility);
+                    if (map.style.visibility == 'visible' || map.style.visibility == '') {
+                        map.style.visibility = 'hidden';
+                        changed = true;
+                    }
                 } else {
                     map.style.maxHeight = null;
                     map.style.visibility = 'visible';
@@ -155,7 +170,7 @@ class ProgressTab {
         });
 
         // if only a single map matched input text, automatically select it
-        if (foundMaps == 1) {
+        if (foundMaps == 1 && changed) {
             this.selectMap(foundMapId);
         }
     }
@@ -179,11 +194,22 @@ class ProgressTab {
         });
     }
 
+    toggleAddVictorOverlay(visible) {
+        const victorsOverlay = document.getElementById("progress-victors-overlay");
+
+        if (visible) {
+            victorsOverlay.style.opacity = 1;
+            victorsOverlay.style.pointerEvents = 'all';
+        } else {
+            victorsOverlay.style.opacity = 0;
+            victorsOverlay.style.pointerEvents = 'none';
+        }
+    }
+
     // make players draggable
     initDragAndDrop() {
         const sectionPlayers = document.querySelectorAll('.progress-section-players');
         const victors = document.getElementById("progress-victors-container");
-        const victorsOverlay = document.getElementById("progress-victors-overlay");
 
         const options = {
             group: "progress-dnd",
@@ -196,34 +222,33 @@ class ProgressTab {
             },
             onEnd: (evt) => {
                 if (this.draggedOverVictors) {
-                    this.setVictor(evt.item);
+                    this.showSetVictorModal(evt.item);
                 }
 
                 this.draggedPlayer = null;
-                victorsOverlay.style.opacity = 0;
+                this.toggleAddVictorOverlay(false);
             },
             onAdd: (evt) => {
                 if (!this.draggedOverVictors)
-                    this.updateProgress(evt.item);
+                    this.showUpdateProgressModal(evt.item);
             }
         };
 
-        this.sortables = [];
         sectionPlayers.forEach(container => {
-            this.sortables.push(Sortable.create(container, options));
+            Sortable.create(container, options);
         });
 
         victors.addEventListener("mouseenter", () => {
             this.draggedOverVictors = true;
 
             if (this.draggedPlayer != null)
-                victorsOverlay.style.opacity = 1;
+                this.toggleAddVictorOverlay(true);
         });
 
         victors.addEventListener("mouseleave", () => {
             this.draggedOverVictors = false;
 
-            victorsOverlay.style.opacity = 0;
+            this.toggleAddVictorOverlay(false);
         });
     }
 
