@@ -2,7 +2,7 @@ from app.blueprints.dashboard import bp
 from flask import render_template
 
 @bp.route("/login")
-def login():
+def login() -> None:
     # scheme = request.scheme
     # host = request.host
     # port = request.environ.get('SERVER_PORT')
@@ -21,7 +21,7 @@ def login():
     pass
 
 @bp.route("/createcookie")
-def createcookie():
+def createcookie() -> None:
     # ip = request.remote_addr
     # discordname = session.get("discordname")
     # discordid = session.get("discordid")
@@ -38,7 +38,7 @@ def createcookie():
     pass
 
 @bp.route("/checkcookie")
-def checkcookie():
+def checkcookie() -> None:
     # bs64 = request.cookies.get("login")
     # if bs64 is None:
     #     return None
@@ -55,7 +55,7 @@ def checkcookie():
     pass
 
 @bp.route('/callback')
-def callback():
+def callback() -> None:
     # discord.callback()
     # user = discord.fetch_user()
     # guilds = discord.fetch_guilds()
@@ -95,7 +95,7 @@ def callback():
     pass
 
 @bp.route("", subdomain="")
-def dashboard():
+def dashboard() -> str:
     # cookie = checkcookie()
     # error = request.args.get("error")
     # # cookie = {"discordname": "texyle", "discordid": "540505831116898305", "pos": "Admin"}

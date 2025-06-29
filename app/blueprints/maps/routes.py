@@ -3,7 +3,7 @@ from flask import render_template, current_app
 from .load_data import load_all_maps, load_map
 
 @bp.route('')
-def map_list():
+def map_list() -> str:
     maps = load_all_maps()
         
     return render_template("maps.html", 
@@ -13,7 +13,7 @@ def map_list():
                            random_image=current_app.images.get_random_map_image())
 
 @bp.route('/<int:map_id>')
-def map_page(map_id: int):
+def map_page(map_id: int) -> str:
     map = load_map(map_id)
     
     if map is not None:

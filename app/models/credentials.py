@@ -5,5 +5,5 @@ class Credentials(db.Model):
     
     Fernet = db.Column(db.Text, nullable=False, primary_key=True)
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Credentials Fernet={self.Fernet}>"

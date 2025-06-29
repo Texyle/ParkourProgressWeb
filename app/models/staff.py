@@ -10,5 +10,5 @@ class Staff(db.Model):
     Moderator = db.Column(db.Boolean, nullable=False)
     Helper = db.Column(db.Boolean, nullable=False)
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Staff {self.Name}: {self.DiscordID} - Admin: {self.Admin}, Developer: {self.Developer}, Moderator: {self.Moderator}, Helper: {self.Helper}>"

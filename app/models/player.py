@@ -12,5 +12,5 @@ class Player(db.Model):
     victors = db.relationship("Victor", back_populates="player")
     sections = db.relationship("SectionPlayer", back_populates="player")
         
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Player {self.ID}: {self.Name}>"

@@ -4,7 +4,7 @@ from app.models.victor import Victor
 from app.extensions import db
   
 @bp.route("")
-def home():
+def home() -> str:
     latest_victors = (
         Victor.query
         .options(

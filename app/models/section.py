@@ -13,5 +13,5 @@ class Section(db.Model):
     map = db.relationship("Map", back_populates="sections")
     players = db.relationship("SectionPlayer", back_populates="section", cascade="all, delete-orphan")
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Section {self.ID}: {self.Name} - {self.MapID}>"
