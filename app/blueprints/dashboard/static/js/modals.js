@@ -224,7 +224,7 @@ class UpdateProgressModal extends Modal {
 
 class SetVictorModal extends Modal {
     constructor(confirmCallback, showFails) {
-        super('update-progress-modal', 'Adding victor');
+        super('set-victor-modal', 'Adding victor');
 
         this.addElements(confirmCallback, showFails);
     }
@@ -249,6 +249,7 @@ class SetVictorModal extends Modal {
             this.failsInput.type = 'number';
             this.failsInput.min = 0;
             this.failsInput.max = 200;
+            this.failsInput.value = 0;
             this.failsInput.className = 'progress-fails-input'
             const failsLabel = document.createElement('label');
             failsLabel.textContent = 'Fails:';
@@ -283,5 +284,98 @@ class SetVictorModal extends Modal {
         }
 
         return !error;
+    }
+}
+
+class EditVictorModal extends Modal {
+    constructor(confirmCallback, showFails, oldDate, oldFails) {
+        super('edit-victor-modal', 'Editing victor');
+
+        this.addElements(confirmCallback, showFails, oldDate, oldFails);
+    }
+
+    addElements(confirmCallback, showFails, oldDate, oldFails) {
+        this.dateInput = document.createElement('input');
+        this.dateInput.type = 'date';
+        this.dateInput.className = 'progress-date-input'
+        this.dateInput.value = oldDate.toISOString().split('T')[0];
+        console.log(oldDate.toISOString());
+
+        const dateLabel = document.createElement('label');
+        dateLabel.textContent = 'Date:';
+        dateLabel.appendChild(this.dateInput);
+        this.body.appendChild(dateLabel);
+
+        if (showFails) {
+            this.failsInput = document.createElement('input');
+            this.failsInput.type = 'number';
+            this.failsInput.min = 0;
+            this.failsInput.max = 200;
+            this.failsInput.value = oldFails;
+            this.failsInput.className = 'progress-fails-input'
+            const failsLabel = document.createElement('label');
+            failsLabel.textContent = 'Fails:';
+            failsLabel.appendChild(this.failsInput);
+            this.body.appendChild(failsLabel);
+        }
+
+        this.pasteArea = document.createElement('div');
+        this.pasteArea.className = 'modal-paste-area';
+        this.pasteArea.innerText = 'Paste proof here (Ctrl+V)';
+        this.body.appendChild(this.pasteArea);
+
+        const confirmButton = document.createElement('button');
+        confirmButton.className = 'modal-confirm-button';
+        confirmButton.textContent = 'Confirm';
+        confirmButton.onclick = () => {
+            if (this.validate()) {
+                confirmCallback();
+                this.close();
+            }
+        };
+        this.body.appendChild(confirmButton);
+    }
+
+    validate() {
+        let error = false;
+
+        this.failsInput.classList.remove('invalid');
+        if (this.failsInput.value < 0 || this.failsInput.value > 200) {
+            this.failsInput.classList.add('invalid');
+            error = true;
+        }
+
+        return !error;
+    }
+}
+
+class DeleteVictorModal extends Modal {
+    constructor(confirmCallback) {
+        super('delete-victor-modal', 'Deleting victor');
+
+        this.addElements(confirmCallback);
+        this.initializePasteArea();
+    }
+
+    addElements(confirmCallback) {
+        this.pasteArea = document.createElement('div');
+        this.pasteArea.className = 'modal-paste-area';
+        this.pasteArea.innerText = 'Paste proof here (Ctrl+V)';
+        this.body.appendChild(this.pasteArea);
+
+        const confirmButton = document.createElement('button');
+        confirmButton.className = 'modal-confirm-button';
+        confirmButton.textContent = 'Confirm';
+        confirmButton.onclick = () => {
+            if (this.validate()) {
+                confirmCallback();
+                this.close();
+            }
+        };
+        this.body.appendChild(confirmButton);
+    }
+
+    validate() {
+        return true;
     }
 }

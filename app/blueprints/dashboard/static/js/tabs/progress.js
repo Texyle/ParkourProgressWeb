@@ -24,12 +24,17 @@ class ProgressTab {
         modal.show();
     }
 
+
     confirmUpdateProgress() {
         console.log('test');
     }
 
     confirmSetVictor() {
         console.log('test2');
+    }
+
+    confirmEditVictor() {
+        console.log('Edited victor')
     }
 
     // load and display map data
@@ -119,18 +124,22 @@ class ProgressTab {
         const template = document.getElementById('victor-row-template');
         const templateContent = template.content;
 
-        mapData.victors.forEach((victor, index) => {
+        mapData.victors.forEach(victor => {
             const newRow = templateContent.cloneNode(true);
             const rowElement = newRow.querySelector('li');
             rowElement.setAttribute('data-playerid', victor.id);
+
+            // set info fields
             newRow.querySelector('.progress-victor-index').textContent = `${victor.victorIndex}. `;
             newRow.querySelector('.progress-victor-name').textContent = victor.name;
             newRow.querySelector('.progress-victor-date').textContent = formatDate(victor.date);
             newRow.querySelector('.progress-victor-fails').textContent = victor.fails;
 
-            // add move up/down buttons to victors with same dates
+            // assign events to buttons
             const moveUpButton = newRow.querySelector('.progress-victor-button-move-up');
             const moveDownButton = newRow.querySelector('.progress-victor-button-move-down');
+            const editButton = newRow.querySelector('.progress-victor-button-edit');
+            const deleteButton = newRow.querySelector('.progress-victor-button-delete');
 
             moveDownButton.onclick = () => {
                 this.moveVictor(victor.id, false);
@@ -138,26 +147,53 @@ class ProgressTab {
             moveUpButton.onclick = () => {
                 this.moveVictor(victor.id, true);
             };
-
-            if (index == 0 && moveUpButton) {
-                this.toggleMoveVictorButton(moveUpButton, false);
-            } else if (index > 0) {
-                const prevVictor = mapData.victors[index - 1];
-                if (prevVictor.date.getTime() != victor.date.getTime() && moveUpButton) {
-                    this.toggleMoveVictorButton(moveUpButton, false);
-                }
-            }
-
-            if (index == mapData.victors.length - 1 && moveDownButton) {
-                this.toggleMoveVictorButton(moveDownButton, false);
-            } else if (index < mapData.victors.length - 1) {
-                const nextVictor = mapData.victors[index + 1];
-                if (nextVictor.date.getTime() != victor.date.getTime() && moveDownButton) {
-                    this.toggleMoveVictorButton(moveDownButton, false);
-                }
-            }
+            editButton.onclick = () => {
+                this.editVictor(victor);
+            };
+            deleteButton.onclick = () => {
+                this.deleteVictor(victor.id);
+            };
 
             victorsContainer.appendChild(newRow);
+        });
+
+        this.fixMoveVictorButtons();
+    }
+
+    // show arrow buttons on victor rows with the same date
+    fixMoveVictorButtons() {
+        const victors = document.querySelectorAll("#progress-victors li");
+
+        victors.forEach((item, index) => {
+            const upButton = item.querySelector('.progress-victor-button-move-up');
+            const downButton = item.querySelector('.progress-victor-button-move-down');
+            const date = item.querySelector('.progress-victor-date').innerHTML;
+
+            if (index == 0) {
+                this.toggleMoveVictorButton(upButton, false);
+            } else {
+                const prevVictor = victors[index - 1];
+                const prevDate = prevVictor.querySelector('.progress-victor-date').innerHTML;
+
+                if (prevDate == date) {
+                    this.toggleMoveVictorButton(upButton, true);
+                } else {
+                    this.toggleMoveVictorButton(upButton, false);
+                }
+            }
+            
+            if (index == victors.length - 1) {
+                this.toggleMoveVictorButton(downButton, false);
+            } else {
+                const nextVictor = victors[index + 1];
+                const nextDate = nextVictor.querySelector('.progress-victor-date').innerHTML;
+
+                if (nextDate == date) {
+                    this.toggleMoveVictorButton(downButton, true);
+                } else {
+                    this.toggleMoveVictorButton(downButton, false);
+                }
+            }
         });
     }
 
@@ -165,7 +201,7 @@ class ProgressTab {
         const list = document.querySelector('#progress-victors');
         const victor = list.querySelector(`li[data-playerid="${id}"]`);
 
-        // remember old positions
+        // remember old positions for animation
         const items = Array.from(list.children);
         const firstRects = items.map(item => item.getBoundingClientRect());
 
@@ -183,7 +219,7 @@ class ProgressTab {
             }
         }
 
-        // get new positions
+        // get new positions for animation
         const lastRects = items.map(item => item.getBoundingClientRect());
 
         // animate smooth movement from old positions to new
@@ -203,24 +239,17 @@ class ProgressTab {
             }
         });
 
-        // fix up/down buttons
-        [victor, other].forEach(item => {
-            const upBtn = item.querySelector('.progress-victor-button-move-up');
-            const downBtn = item.querySelector('.progress-victor-button-move-down');
-            if (upBtn) this.toggleMoveVictorButton(upBtn, true);
-            if (downBtn) this.toggleMoveVictorButton(downBtn, true);
-        });
+        this.fixMoveVictorButtons();
+    }
 
-        const first = list.firstElementChild;
-        const last = list.lastElementChild;
-        if (first) {
-            const upBtn = first.querySelector('.progress-victor-button-move-up');
-            if (upBtn) this.toggleMoveVictorButton(upBtn, false);
-        }
-        if (last) {
-            const downBtn = last.querySelector('.progress-victor-button-move-down');
-            if (downBtn) this.toggleMoveVictorButton(downBtn, false);
-        }
+    editVictor(victor) {
+        const modal = new EditVictorModal(this.confirmEditVictor, true, victor.date, victor.fails);
+        modal.show();
+    }
+
+    deleteVictor(id) {
+        const modal = new DeleteVictorModal(this.confirmDeleteVictor);
+        modal.show();
     }
 
     // filter map list based on search bar input
@@ -403,11 +432,11 @@ function generateRandomMapData() {
   };
 
   const generateRandomDate = () => {
-    return new Date(2025, 5, 28);
-
-    const start = new Date(2025, 5, 28);
+    const start = new Date(2025, 5, 25);
     const end = new Date();
-    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+    let date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+    date.setUTCHours(0, 0, 0, 0);
+    return date;
   };
 
   const sectionsCount = getRandomInt(5, 10);
