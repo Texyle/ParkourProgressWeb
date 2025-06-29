@@ -209,10 +209,16 @@ class UpdateProgressModal extends Modal {
         confirmButton.className = 'modal-confirm-button';
         confirmButton.textContent = 'Confirm';
         confirmButton.onclick = () => {
-            confirmCallback();
-            this.close();
+            if (this.validate()) {
+                confirmCallback();
+                this.close();
+            }
         };
         this.body.appendChild(confirmButton);
+    }
+
+    validate() {
+        return true;
     }
 }
 
@@ -225,6 +231,14 @@ class SetVictorModal extends Modal {
 
     addElements(confirmCallback, showFails) {
         this.dateInput = document.createElement('input');
+        this.dateInput.type = 'date';
+        this.dateInput.className = 'progress-date-input'
+
+        // set date to today
+        let today = new Date();
+        let formattedDate = today.toISOString().split('T')[0];
+        this.dateInput.value = formattedDate;
+
         const dateLabel = document.createElement('label');
         dateLabel.textContent = 'Date:';
         dateLabel.appendChild(this.dateInput);
@@ -232,6 +246,10 @@ class SetVictorModal extends Modal {
 
         if (showFails) {
             this.failsInput = document.createElement('input');
+            this.failsInput.type = 'number';
+            this.failsInput.min = 0;
+            this.failsInput.max = 200;
+            this.failsInput.className = 'progress-fails-input'
             const failsLabel = document.createElement('label');
             failsLabel.textContent = 'Fails:';
             failsLabel.appendChild(this.failsInput);
@@ -247,9 +265,23 @@ class SetVictorModal extends Modal {
         confirmButton.className = 'modal-confirm-button';
         confirmButton.textContent = 'Confirm';
         confirmButton.onclick = () => {
-            confirmCallback();
-            this.close();
+            if (this.validate()) {
+                confirmCallback();
+                this.close();
+            }
         };
         this.body.appendChild(confirmButton);
+    }
+
+    validate() {
+        let error = false;
+
+        this.failsInput.classList.remove('invalid');
+        if (this.failsInput.value < 0 || this.failsInput.value > 200) {
+            this.failsInput.classList.add('invalid');
+            error = true;
+        }
+
+        return !error;
     }
 }

@@ -237,9 +237,14 @@
                 </div>
             </div>
             <div class="progress-victor-buttons">
-                <button class="progress-victor-button-move">
-                    <img src="{{ url_for('dashboard.static', filename='icons/icon-doublearrow.svg') }}" alt="move"/>
-                </button>
+                <div>
+                    <button class="progress-victor-button-move-up">
+                        <img src="{{ url_for('dashboard.static', filename='icons/icon-arrow-up.svg') }}" alt="move-up"/>
+                    </button>
+                    <button class="progress-victor-button-move-down">
+                        <img src="{{ url_for('dashboard.static', filename='icons/icon-arrow-down.svg') }}" alt="move-down"/>
+                    </button>
+                </div>
                 <button class="progress-victor-button-edit">
                     <img src="{{ url_for('dashboard.static', filename='icons/icon-edit.svg') }}" alt="edit"/>
                 </button>

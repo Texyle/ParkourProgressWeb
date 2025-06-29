@@ -111,7 +111,7 @@ class ProgressTab {
         });
     }
 
-    // creating victor elements from passed data
+    // creating victor elements from passed data (must be sorted beforehand!)
     createVictors(mapData) {
         const victorsContainer = document.querySelector("#progress-victors");
         victorsContainer.innerHTML = "";
@@ -119,17 +119,108 @@ class ProgressTab {
         const template = document.getElementById('victor-row-template');
         const templateContent = template.content;
 
-        let index = 1;
-
-        mapData.victors.forEach(victor => {
+        mapData.victors.forEach((victor, index) => {
             const newRow = templateContent.cloneNode(true);
+            const rowElement = newRow.querySelector('li');
+            rowElement.setAttribute('data-playerid', victor.id);
             newRow.querySelector('.progress-victor-index').textContent = `${victor.victorIndex}. `;
             newRow.querySelector('.progress-victor-name').textContent = victor.name;
             newRow.querySelector('.progress-victor-date').textContent = formatDate(victor.date);
             newRow.querySelector('.progress-victor-fails').textContent = victor.fails;
 
+            // add move up/down buttons to victors with same dates
+            const moveUpButton = newRow.querySelector('.progress-victor-button-move-up');
+            const moveDownButton = newRow.querySelector('.progress-victor-button-move-down');
+
+            moveDownButton.onclick = () => {
+                this.moveVictor(victor.id, false);
+            };
+            moveUpButton.onclick = () => {
+                this.moveVictor(victor.id, true);
+            };
+
+            if (index == 0 && moveUpButton) {
+                this.toggleMoveVictorButton(moveUpButton, false);
+            } else if (index > 0) {
+                const prevVictor = mapData.victors[index - 1];
+                if (prevVictor.date.getTime() != victor.date.getTime() && moveUpButton) {
+                    this.toggleMoveVictorButton(moveUpButton, false);
+                }
+            }
+
+            if (index == mapData.victors.length - 1 && moveDownButton) {
+                this.toggleMoveVictorButton(moveDownButton, false);
+            } else if (index < mapData.victors.length - 1) {
+                const nextVictor = mapData.victors[index + 1];
+                if (nextVictor.date.getTime() != victor.date.getTime() && moveDownButton) {
+                    this.toggleMoveVictorButton(moveDownButton, false);
+                }
+            }
+
             victorsContainer.appendChild(newRow);
         });
+    }
+
+    moveVictor(id, moveUp) {
+        const list = document.querySelector('#progress-victors');
+        const victor = list.querySelector(`li[data-playerid="${id}"]`);
+
+        // remember old positions
+        const items = Array.from(list.children);
+        const firstRects = items.map(item => item.getBoundingClientRect());
+
+        // move items in DOM
+        let other;
+        if (moveUp) {
+            other = victor.previousElementSibling;
+            if (other) {
+                list.insertBefore(victor, other);
+            }
+        } else {
+            other = victor.nextElementSibling;
+            if (other) {
+                list.insertBefore(other, victor);
+            }
+        }
+
+        // get new positions
+        const lastRects = items.map(item => item.getBoundingClientRect());
+
+        // animate smooth movement from old positions to new
+        items.forEach((item, i) => {
+            const dx = firstRects[i].left - lastRects[i].left;
+            const dy = firstRects[i].top - lastRects[i].top;
+            if (dx || dy) {
+                item.style.transition = 'none';
+                item.style.transform = `translate(${dx}px, ${dy}px)`;
+                item.offsetWidth;
+                item.style.transition = 'transform 0.3s';
+                item.style.transform = '';
+                item.addEventListener('transitionend', function handler() {
+                    item.style.transition = '';
+                    item.removeEventListener('transitionend', handler);
+                });
+            }
+        });
+
+        // fix up/down buttons
+        [victor, other].forEach(item => {
+            const upBtn = item.querySelector('.progress-victor-button-move-up');
+            const downBtn = item.querySelector('.progress-victor-button-move-down');
+            if (upBtn) this.toggleMoveVictorButton(upBtn, true);
+            if (downBtn) this.toggleMoveVictorButton(downBtn, true);
+        });
+
+        const first = list.firstElementChild;
+        const last = list.lastElementChild;
+        if (first) {
+            const upBtn = first.querySelector('.progress-victor-button-move-up');
+            if (upBtn) this.toggleMoveVictorButton(upBtn, false);
+        }
+        if (last) {
+            const downBtn = last.querySelector('.progress-victor-button-move-down');
+            if (downBtn) this.toggleMoveVictorButton(downBtn, false);
+        }
     }
 
     // filter map list based on search bar input
@@ -203,6 +294,18 @@ class ProgressTab {
         } else {
             victorsOverlay.style.opacity = 0;
             victorsOverlay.style.pointerEvents = 'none';
+        }
+    }
+
+    toggleMoveVictorButton(button, enabled) {
+        if (enabled) {
+            button.style.opacity = 1;
+            button.disabled = false;
+            button.style.cursor = 'pointer'
+        } else {
+            button.style.opacity = 0;
+            button.disabled = true;
+            button.style.cursor = 'default'
         }
     }
 
@@ -300,7 +403,9 @@ function generateRandomMapData() {
   };
 
   const generateRandomDate = () => {
-    const start = new Date(2020, 0, 1);
+    return new Date(2025, 5, 28);
+
+    const start = new Date(2025, 5, 28);
     const end = new Date();
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
   };

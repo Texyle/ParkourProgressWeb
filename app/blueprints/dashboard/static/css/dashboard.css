@@ -535,6 +535,38 @@ input:focus {
     background-color: rgb(0, 120, 0);
 }
 
+.modal input {
+    margin-left: 10px;
+    font-size: inherit;
+    font: inherit;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 6px;
+    padding: 2px;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.modal input:focus {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid white;
+}
+
+.modal input::-webkit-outer-spin-button,
+.modal input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.modal input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.modal input.invalid {
+    border-color: rgb(255, 100, 100);
+    color: rgb(255, 100, 100);
+}
+
 .blur {
     filter: blur(5px);
 }

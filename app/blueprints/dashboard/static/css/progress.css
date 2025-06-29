@@ -231,6 +231,12 @@
     opacity: 0.4 !important;
 }
 
+.progress-fails-input {
+    width: 3rem;
+    background-color: transparent;
+    color: white;
+}
+
 #progress-victors-container {
     display: flex;
     flex-direction: column;
@@ -281,6 +287,7 @@
     background-color: rgb(50, 50, 70);
     box-shadow: 0 0 10px 0 rgb(10, 10, 10);
     border-radius: 1rem;
+    transition: transform 0.3s ease;
 }
 
 .progress-victor-row {
@@ -315,6 +322,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    transition: opacity 0.3s;
 }
 
 .progress-victor-buttons img {
@@ -324,7 +332,28 @@
     transition: background-color 0.3s;
 }
 
-.progress-victor-button-move:hover img {
+.progress-victor-buttons div {
+    position: relative;
+    width: 1.8rem;
+}
+
+.progress-victor-button-move-up img {
+    position: absolute;
+    top: 10%;
+    height: 0.8rem;
+}
+
+.progress-victor-button-move-down img {
+    position: absolute;
+    bottom: 10%;
+    height: 0.8rem;
+}
+
+.progress-victor-button-move-up:hover img {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.progress-victor-button-move-down:hover img {
     background-color: rgba(255, 255, 255, 0.2);
 }
 

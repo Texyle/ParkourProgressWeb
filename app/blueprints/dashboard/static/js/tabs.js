@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     progressTab.init();
+    progressTab.selectMap(123);
 });
 
 function selectTab(tab) {
