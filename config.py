@@ -33,5 +33,6 @@ class Config:
                 host=DATABASE_HOST,
                 database=DATABASE_NAME
             )
+            print(SQLALCHEMY_DATABASE_URI)
         else:
             raise RuntimeError("Missing database variables in .env")

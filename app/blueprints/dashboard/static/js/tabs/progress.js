@@ -44,7 +44,7 @@ class ProgressTab {
         const startTime = Date.now();
 
         // generating random map data for now, replace with actual function later
-        const mapData = generateRandomMapData();
+        const mapData = this.loadMaps();
 
         const elapsedTime = Date.now() - startTime;
         const remainingTransitionTime = Math.max(300 - elapsedTime, 0);
@@ -380,6 +380,14 @@ class ProgressTab {
         playersSearchBar.addEventListener('input', (event) => {
             this.searchPlayers(event.target.value);
         });
+    }
+
+    loadMaps() {
+        fetch('/dashboard/load_maps')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            });
     }
 }
 

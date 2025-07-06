@@ -4,17 +4,17 @@ from config import Config
 from app.extensions import db
 from app.images import Images
 
-from app.models.gamemode import Gamemode
-from app.models.credentials import Credentials
-from app.models.log import Log
-from app.models.map import Map 
-from app.models.message import Message
-from app.models.player import Player
-from app.models.section_player import SectionPlayer
-from app.models.section import Section
-from app.models.staff import Staff
-from app.models.victor_separator import VictorSeparator
-from app.models.victor import Victor
+# from app.models.gamemode import Gamemode
+# from app.models.credentials import Credentials
+# from app.models.log import Log
+# from app.models.map import Map 
+# from app.models.message import Message
+# from app.models.player import Player
+# from app.models.section_player import SectionPlayer
+# from app.models.section import Section
+# from app.models.staff import Staff
+# from app.models.victor_separator import VictorSeparator
+# from app.models.victor import Victor
 
 def create_app(config_class: Config = Config) -> Flask:
     app = Flask(__name__)

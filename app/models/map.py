@@ -29,3 +29,6 @@ class Map(db.Model):
     
     def __repr__(self) -> str:
         return f"<Map {self.ID}: {self.Name} - {self.GamemodeID}>"
+    
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
