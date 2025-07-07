@@ -12,7 +12,7 @@ class Images:
     def load_all(self) -> None:
         static_folder = current_app.static_folder
         
-        maps_folder = "images/maps/compressed_copies"
+        maps_folder = "images/maps"
         small_maps_folder = "images/maps/small_copies"
         flags_folder = "images/flags"
         
